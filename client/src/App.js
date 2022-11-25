@@ -1,0 +1,36 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import AdminDashboardPage from './Pages/Admin/AdminDashboardPage'
+import AdminLoginPage from './Pages/Admin/AdminLoginPage'
+import ReportPostPage from './Pages/Admin/ReportPostPage'
+import UserManagementPage from './Pages/Admin/UserManagementPage'
+import LandingPages from './Pages/User/LandingPages'
+import LoginPage from './Pages/User/LoginPage'
+import SignupPage from './Pages/User/SignupPage'
+
+function App() {
+  return (
+    <div className='App'>
+
+      <Router>
+
+        <Routes> {/* userside */}
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/' element={<LandingPages />} />
+        </Routes>
+
+
+        <Routes> {/* adminside */}
+          <Route path='/adminlogin' element={<AdminLoginPage />} />
+          <Route path='/admindashboard' element={<AdminDashboardPage />} />
+          <Route path='/usermanagement' element={<UserManagementPage />} />
+          <Route path='/reportpost' element={<ReportPostPage />} />
+        </Routes>
+
+      </Router>
+
+    </div>
+  )
+}
+
+export default App
