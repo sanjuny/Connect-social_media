@@ -1,9 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import image from '../../../Images/logowhite.png'
+import { Login } from '../../../Api/UserRequest';
+import { useNavigate } from 'react-router';
 
 function Userlogin() {
-  return (
+const intialvalues = {email:'', password:''}
+const [formvalues, setformvalues] = useState(intialvalues)
+const navigate = useNavigate()
 
+const handleChange = (e)=>{
+  const {name, value} = e.target;
+  setformvalues({...formvalues,[name]:value})
+
+}
+
+const handleSubmit = async(e) =>{
+  e.preventDefault();
+  try {
+    const {data} = await Login(formvalues)
+    if(data.auth){
+
+    localStorage.setItem('userToken', data.token)
+    localStorage.setItem('user', JSON.stringify(data.users) )
+    navigate('/home')
+    }else{
+      console.log("bhnm,");
+      console.log(data.message);
+    }
+    console.log(data);
+  } catch (error) {
+    console.log(error,'error');
+  }
+
+}
+
+
+  return (
     <body>
       <section class="min-h-screen flex items-stretch text-white ">
         <div class="lg:flex w-1/2 bg-black bg-no-repeat bg-cover relative flex justify-center items-center">
@@ -29,12 +61,12 @@ function Userlogin() {
             <p class="text-gray-100">
               or sign in with email 
             </p>
-            <form action="" class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto">
+            <form class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto" onSubmit={handleSubmit}>
               <div class="pb-2 pt-4">
-                <input type="email" name="email" id="email" placeholder="Email" class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black" />
+                <input type="email" name="email" id="email" placeholder="Email" value={formvalues.email} onChange={handleChange} class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black" />
               </div>
               <div class="pb-2 pt-4">
-                <input class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black" type="password" name="password" id="password" placeholder="Password" />
+                <input class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black"  value={formvalues.password} onChange={handleChange} type="password" name="password" id="password" placeholder="Password" />
               </div>
               <div class="text-right text-gray-400 hover:underline hover:text-gray-100">
                 <a href="#">Forgot your password?</a>

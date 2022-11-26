@@ -1,15 +1,15 @@
-const users = require('../Models/SignupSchema')
-
+const Users = require('../Models/SignupSchema')
+const jwt = require('jsonwebtoken')
 
 const postSignup = async (req, res) => {
     try {
         let { name, email, phone, password, confirmpassword } = req.body;
-        const userExist = await users.findOne({email})
+        const userExist = await Users.findOne({email})
         if(userExist){
             res.status(400)
             throw new Error('user already exist with this email id')
         }else{
-           users.create({
+           Users.create({
                 name,
                 email,
                 phone,
@@ -26,14 +26,35 @@ const postSignup = async (req, res) => {
 
 }
 
-postLogin = ( req, res) =>{
+const postLogin = async( req, res) =>{
+    console.log('calll');
     try {
-        let { email, password } = req.body
-        
-
+        // let { email, password } = req.body
+        console.log(req.body,'reqbfcssody')
+        const users = await Users.findOne({email:req.body.email})
+        console.log(users,'jjjj');
+        if(users){
+            const id = users._id
+            if(users.password === req.body.password){
+                console.log('kkkkkkkkkk');
+                const token = jwt.sign({id}, process.env.JWT_SECERT,{
+                    expiresIn:300,
+                })
+                console.log('fffffffffff');
+                res.status(200).json({auth: true, token: token, users: users})
+            }else{   
+                console.log('uuuuuuuuuuuuuu');
+                res.status(200).json({message:'password doesnt exist'})
+            }   
+        }else{
+            console.log('mmmmmmmm');
+            res.status(200).json({message:'user doesnt exist'})
+        }
     } catch (error) {
-        
+        console.log('ggggg');
+        console.log(error);
+        res.status(500).json(error)      
     }
 }
 
-module.exports = {postSignup}
+module.exports = {postSignup, postLogin}
