@@ -3,6 +3,7 @@ import AdminDashboardPage from './Pages/Admin/AdminDashboardPage'
 import AdminLoginPage from './Pages/Admin/AdminLoginPage'
 import ReportPostPage from './Pages/Admin/ReportPostPage'
 import UserManagementPage from './Pages/Admin/UserManagementPage'
+import HomePages from './Pages/User/HomePages'
 import LandingPages from './Pages/User/LandingPages'
 import LoginPage from './Pages/User/LoginPage'
 import SignupPage from './Pages/User/SignupPage'
@@ -14,9 +15,10 @@ function App() {
       <Router>
 
         <Routes> {/* userside */}
+          <Route path='/' element={<LandingPages />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
-          <Route path='/' element={<LandingPages />} />
+          <Route path='/home' element={<HomePages />} />
         </Routes>
 
 
