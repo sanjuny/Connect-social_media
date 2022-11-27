@@ -16,7 +16,7 @@ const postSignup = async (req, res) => {
                 password,
                 confirmpassword    
             }).then((response) => {
-                res.json('hello')
+                res.status(200).json('hello')
             })
             console.log(req.body);
         }
@@ -41,6 +41,7 @@ const postLogin = async( req, res) =>{
                     expiresIn:300,
                 })
                 console.log('fffffffffff');
+                // res.status(200).json(";gfghjkl;")
                 res.status(200).json({auth: true, token: token, users: users})
             }else{   
                 console.log('uuuuuuuuuuuuuu');
