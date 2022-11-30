@@ -4,10 +4,12 @@ import UserManagement from '../../components/Admin/UserManagement/UserManagement
 
 function UserManagementPage() {
   return (
-    <div>
-        <AdminSidebar />
+    <>
+      <AdminSidebar />
+    <div className=' overflow-hidden pr-10 mt-10 ml-72'>
         <UserManagement />
     </div>
+    </>
   )
 }
 

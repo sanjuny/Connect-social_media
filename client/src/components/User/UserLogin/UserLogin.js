@@ -3,51 +3,26 @@ import { useForm } from 'react-hook-form'
 import image from '../../../Images/logowhite.png'
 import { Login } from '../../../Api/UserRequest';
 import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 function Userlogin() {
 
   const navigate = useNavigate()
 
   const { register, formState: { errors }, handleSubmit } = useForm();
-  // const intialvalues = {email:'', password:''}
-  // const [formvalues, setformvalues] = useState(intialvalues)
 
-  // const handleChange = (e)=>{
-  //   const {name, value} = e.target;
-  //   setformvalues({...formvalues,[name]:value})
-
-  // }
-
-  // const handleSubmit = async(e) =>{
-  //   e.preventDefault();
-  //   try {
-  //     const {data} = await Login(formvalues)
-  //     if(data.auth){
-  //     localStorage.setItem('userToken', data.token)
-  //     localStorage.setItem('user', JSON.stringify(data.users) )
-  //     navigate('/home')
-  //     }else{
-  //       console.log("bhnm,");
-  //       console.log(data.message);
-  //     }
-  //     console.log(data);
-  //   } catch (error) {
-  //     console.log(error,'error');
-  //   }
-
-  //  }
-
+  const [ err, seterr ] = useState('')
 
   const onSubmit = async (UserRequest) => {
     try {
       const { data } = await Login(UserRequest)
-      console.log(data,'kkk');
-
+      console.log(data, 'kkk');
       if (data.auth) {
         localStorage.setItem('userToken', data.token)
         localStorage.setItem('user', JSON.stringify(data.users))
         navigate('/home')
       } else {
+        seterr(data.message)
         console.log("getting");
         console.log(data.message);
       }
@@ -84,12 +59,13 @@ function Userlogin() {
             </p>
             <form class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto" onSubmit={handleSubmit(onSubmit)}>
               <div class="pb-2 pt-4">
+            {err && <div className=" w-98 px p-2 mb-2 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {err}</div>}
                 <input class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black"
                   type="email"
                   name="email"
                   id="email"
                   placeholder="Email"
-                  {...register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ })} />
+                  {...register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/})} />
                 <error className='text-red-600'>
                   {errors.email?.type === "required" && "Email is required"}
                   {errors.email?.type === "pattern" && "Email is invalid"}
@@ -106,6 +82,7 @@ function Userlogin() {
                   {errors.password?.type === "required" && "password is required"}
                   {errors.password?.type === "minLength" && "Password must be more than 8 characters"}
                   {errors.password?.type === "maxLength" && "Password cannot exceed more than 15 characters"}
+                  
                 </error>
               </div>
               <div class="text-right text-gray-400 hover:underline hover:text-gray-100">

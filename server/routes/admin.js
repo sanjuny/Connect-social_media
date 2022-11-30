@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const { getUserMangement, BlockUser, UnBlockUser, postAdminLogin } = require('../Controller/Admincontroller');
+
+router.get('/getusers', getUserMangement)
+router.post('/userBlock', BlockUser)
+router.post('/userUnBlock', UnBlockUser)
+router.post('/adminlogin', postAdminLogin)
 
 module.exports = router;

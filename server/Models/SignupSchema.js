@@ -25,14 +25,18 @@ const SignupSchema = mongoose.Schema({
         // required:[true, "Password is required"],
         // max:[10, "password does not exceed more than 10"]
     },
-
-    confirmpassword:{
-        type:String,
-        // required:[true, "Confirm Password is required"],
+    verified:{
+        type: String,
+        default:"false"
+        // required:[true, "Password is required"],
         // max:[10, "password does not exceed more than 10"]
+    },
+    status:{
+        type:String,
+        default:"active"
     }
 })
 
-const users = mongoose.model('users',SignupSchema)
+const users = mongoose.model('users',SignupSchema)  
 
 module.exports = users
