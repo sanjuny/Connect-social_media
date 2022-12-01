@@ -68,12 +68,12 @@ const sendOtp = async (OtpResult, res) => {
       if (error) {
         console.log(error, 'hello');
       } else {
-        res.json({
-          status: "pending",
-          message: "OTPverification mail sent",
-          mail: OtpResult.email,
-          user: OtpResult
-        })
+        // res.json({
+        //   status: "pending",
+        //   message: "OTPverification mail sent",
+        //   mail: OtpResult.email,
+        //   user: OtpResult
+        // })
       }
     })
     console.log("Message sent: %s", info.messageId);
@@ -85,7 +85,6 @@ const sendOtp = async (OtpResult, res) => {
 
 
 const postSignup = async (req, res) => {
-
   try {
     console.log(req.body, 'pp');
     let { name, email, phone, password } = req.body;
@@ -95,15 +94,17 @@ const postSignup = async (req, res) => {
       res.status(200).json({ message: 'user already exisit with this mail id' })
     } else {
       password = await bcrypt.hash(password, 10)
-      Users.create({
+      const newUser = await new Users({
         name,
         email,
-        phone,
+        phone: parseInt(phone),
         password,
-      }).then((OtpResult) => {
+      })
+      console.log(newUser, "hgf");
+      newUser.save().then((OtpResult) => {
         console.log(OtpResult, 'mmmm');
-        res.status(200).json({ auth: true, data: OtpResult })
         sendOtp(OtpResult, res)
+        res.status(200).json({ auth: true, data: OtpResult })
       })
       console.log(req.body);
     }
@@ -121,10 +122,12 @@ const postLogin = async (req, res) => {
     if (users.status == 'inactive') {
       res.status(200).json({ message: 'Entered Email is blocked' })
     } else {
-
       if (users) {
         const id = users._id
         const pass = await bcrypt.compare(req.body.password, users.password)
+        if (users.verified == 'false') {
+          res.status(200).json({ message: 'You verification is not complete' })
+        }else{
         if (pass) {
           console.log('kkkkkkkkkk');
           const token = jwt.sign({ id }, process.env.JWT_SECERT, {
@@ -136,11 +139,13 @@ const postLogin = async (req, res) => {
           console.log('uuuuuuuuuuuuuu');
           res.status(200).json({ message: 'password is not match' })
         }
+      }
       } else {
         console.log('mmmmmmmm');
         res.status(200).json({ message: 'user doesnt exist' })
       }
     }
+
   } catch (error) {
     console.log('ggggg');
     console.log(error);

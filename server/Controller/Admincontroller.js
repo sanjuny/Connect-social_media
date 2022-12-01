@@ -90,5 +90,8 @@ const postAdminLogin = async (req, res)=>{
     }
 }
 
+
+
+
 module.exports={ getUserMangement, BlockUser, UnBlockUser, postAdminLogin }
 
