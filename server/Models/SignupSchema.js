@@ -1,40 +1,40 @@
-const mongoose = require ('mongoose')
+const mongoose = require('mongoose')
 
 const SignupSchema = mongoose.Schema({
-    name:{
-        type:String,
+    username: {
+        type: String,
+    },
+    name: {
+        type: String,
         // required:[true, 'Name is required']
     },
-
-    email:{
-        type:String,
+    email: {
+        type: String,
         // validate:[emailValidation, "invalid mail"],
         // required:[true, "Email is required"],
         // unique:true
     },
-
-    phone:{
-        type: Number, 
+    phone: {
+        type: Number,
         require: true
     },
-
-    password:{
-        type:String,
-        // required:[true, "Password is required"],
-        // max:[10, "password does not exceed more than 10"]
-    },
-    verified:{
+    password: {
         type: String,
-        default:"false"
         // required:[true, "Password is required"],
         // max:[10, "password does not exceed more than 10"]
     },
-    status:{
-        type:String,
-        default:"active"
+    verified: {
+        type: String,
+        default: "Not Verified"
+        // required:[true, "Password is required"],
+        // max:[10, "password does not exceed more than 10"]
+    },
+    status: {
+        type: String,
+        default: "active"
     }
 })
 
-const users = mongoose.model('users',SignupSchema)  
+const users = mongoose.model('users', SignupSchema)
 
 module.exports = users

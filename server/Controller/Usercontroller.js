@@ -9,28 +9,25 @@ const OtpVerification = require('../Models/OtpSchema')
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: `connectmedia06@gmail.com`, // generated ethereal user
-    pass: `hoatonwjofupkanh`, // generated ethereal password
+    user: process.env.OTP_USER, // generated ethereal user
+    pass: process.env.OTP_PASSWORD, // generated ethereal password
   },
 });
+
 
 const sendOtp = async (OtpResult, res) => {
   try {
     const OTP = Math.floor(100000 + Math.random() * 900000).toString();
     console.log(OTP, 'LLLL');
     let info = await transporter.sendMail({
-      from: 'connectmedia06@gmail.com', // sender address
-      to: "sanjuny07@gmail.com", // list of receivers
+      from: process.env.OTP_USER, // sender address
+      to: OtpResult.email, // list of receivers
       subject: "Meassage From Connect", // Subject line
       html: `
-          <div style="width: 100%; background-color: white; padding: 5rem 0">
-          <div style="max-width: 700px; background-color: #D5D6D2; margin: 0 auto">
-            <div style="width: 100%; background-color: black; padding: 20px 0">
-            <a href="" ><img
-                src="https://res.cloudinary.com/zpune/image/upload/v1652256707/random/favicon_hybtfj.png"
-                style="width: 100%; height: 70px; object-fit: contain"
-              /></a> 
-            
+          <div style="width: 100%; background-color: azure; padding: 5rem 0">
+          <div style="max-width: 700px; background-color: lightcyan; margin: 0 auto">
+            <div style="background-color:lightblue;display:flex;justify-content: center;">
+            <a href="https://ibb.co/MBLxG17"><img src="https://i.ibb.co/MBLxG17/connect-logos-black.png" alt="connect-logos-black" border="0"></a>
             </div>
             <div style="width: 100%; gap: 10px; padding: 30px 0; display: grid">
               <p style="font-weight: 800; font-size: 1.2rem; padding: 0 30px">
@@ -87,7 +84,7 @@ const sendOtp = async (OtpResult, res) => {
 const postSignup = async (req, res) => {
   try {
     console.log(req.body, 'pp');
-    let { name, email, phone, password } = req.body;
+    let { username, name, email, phone, password } = req.body;
     const userExist = await Users.findOne({ email })
     if (userExist) {
       console.log('userwxis');
@@ -95,6 +92,7 @@ const postSignup = async (req, res) => {
     } else {
       password = await bcrypt.hash(password, 10)
       const newUser = await new Users({
+        username,
         name,
         email,
         phone: parseInt(phone),
@@ -125,13 +123,13 @@ const postLogin = async (req, res) => {
       if (users) {
         const id = users._id
         const pass = await bcrypt.compare(req.body.password, users.password)
-        if (users.verified == 'false') {
+        if (users.verified == 'Not Verified') {
           res.status(200).json({ message: 'You verification is not complete' })
         }else{
         if (pass) {
           console.log('kkkkkkkkkk');
           const token = jwt.sign({ id }, process.env.JWT_SECERT, {
-            expiresIn: 300,
+            expiresIn: "365d",
           })
           console.log('fffffffffff');
           res.status(200).json({ auth: true, token: token, users: users })
@@ -154,8 +152,6 @@ const postLogin = async (req, res) => {
 }
 
 
-
-
 const postverifyOtp = async (req, res) => {
   console.log("reached");
   console.log(req.body.OTP);
@@ -167,66 +163,15 @@ const postverifyOtp = async (req, res) => {
   if (correctOtp) {
     await Users.updateOne(
       { _id: req.body.user },
-      { $set: { verified: "true" } }
+      { $set: { verified: "Verified" } }
     );
     res.status(200).json({ verified: true });
   } else {
     res.status(200).json({ verified: false, msg: "Incorrect OTP" });
+    console.log('jjujuju');
   }
 };
 
 
-
-
-
-
-// const sendOtp = async (result, res) => {
-//     console.log(result, "hey there");
-//     try {
-//       const OTP = await Math.floor(100000 + Math.random() * 900000).toString();
-//       console.log("OTP");
-//       console.log(OTP);
-//       var senEMail = {
-//         from: "sanjuny07@gmail.com",
-//         to: result.email,
-//         subject: "Sending Email My Instagram",
-//         text: `Hi ${result.username} Your OTP pin has been generated `,
-//         html: `<h1>Hi ${result.username}</h1><p>Your OTP is ${OTP}</p>`,
-//       };
-
-//       let hashOTP = await bcrypt.hash(OTP, 10);
-//       let verify = await userVerification.findOne({ userId: result._id });
-//       if (!verify) {
-//         const userverification = new userVerification({
-//           userId: result._id,
-//           Otp: hashOTP,
-//           Created: Date.now(),
-//           Expiry: Date.now() + 100000,
-//         });
-//         await userverification.save();
-//       } else {
-//         await userVerification.updateOne(
-//           { userId: result._id },
-//           { otp: hashOTP }
-//         );
-//       }
-
-//       transporter.sendMail(senEMail, function (error, info) {
-//         console.log("oioioioi");
-//         if (error) {
-//           console.log(error, "yuyuuy");
-//         } else {
-//           res.json({
-//             status: "pending",
-//             msg: "Verification otp mail sent",
-//             mail: result.email,
-//             user: result,
-//           });
-//         }
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
 
 module.exports = { postSignup, postLogin, sendOtp, postverifyOtp }

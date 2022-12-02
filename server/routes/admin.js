@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-const { getUserMangement, BlockUser, UnBlockUser, postAdminLogin, getUserById } = require('../Controller/Admincontroller');
+const { getUserMangement, BlockUser, UnBlockUser, postAdminLogin } = require('../Controller/Admincontroller');
+const check = require('../Middleware/AuthMiddleware');
 
-router.get('/getusers', getUserMangement)
-router.post('/userBlock', BlockUser)
-router.post('/userUnBlock', UnBlockUser)
 router.post('/adminlogin', postAdminLogin)
+router.get('/getusers',check, getUserMangement)
+router.post('/userBlock',check, BlockUser)
+router.post('/userUnBlock',check, UnBlockUser)
 
 
 module.exports = router;

@@ -6,82 +6,63 @@ function UserHome() {
 
 
 
-    <div class="flex flex-col items-center justify-center mt-32" x-cloak x-data="appData()" x-init="appInit()">
-      <div class="flex flex-col">
+    <div className="flex flex-col items-center justify-center mt-32" x-cloak x-data="appData()" x-init="appInit()">
+      <div className="flex flex-col">
 
 
-        <div class="flex justify-around py-4 bg-black/80
+        <div className="flex justify-around py-4 bg-black/80
                 backdrop-blur-md shadow-md w-full
                 fixed top-0 left-0 right-0 z-10">
 
 
-          <div class="flex items-center">
+          <div className="flex items-center">
 
-            <a class="cursor-pointer">
-              <h3 class="text-2xl font-medium text-blue-500">
+            <a className="cursor-pointer">
+              <h3 className="text-2xl font-medium text-blue-500">
                 <img src={image} style={{ height: '50px' }}></img>
               </h3>
             </a>
           </div>
-
-
-
-
-          <div class="max-w-2xl mx-auto">
-
-            <form>
-              <label for="default-search" class="mb-2  text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
-              <div class="relative">
-                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </div>
-                <input type="search" id="default-search" class="block p-4  pl-10 w-96 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
-                <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
-              </div>
-            </form>
-          </div>
-
-
-          {/* <div class="items-center hidden space-x-8 lg:flex">
-                    <a class="flexhover:text-blue-500
+          {/* <div className="items-center hidden space-x-8 lg:flex">
+                    <a className="flexhover:text-blue-500
                         cursor-pointer transition-colors duration-300">
                         Home
                     </a>
     
-                    <a class="flex
+                    <a className="flex
                         cursor-pointer transition-colors duration-300
                         font-semibold text-blue-600">
                         Themes
                     </a>
     
-                    <a class="flexhover:text-blue-500
+                    <a className="flexhover:text-blue-500
                         cursor-pointer transition-colors duration-300">
                         Developers
                     </a>
     
-                    <a class="flexhover:text-blue-500
+                    <a className="flexhover:text-blue-500
                         cursor-pointer transition-colors duration-300">
                         Pricing
                     </a>
     
-                    <a class="flexhover:text-blue-500
+                    <a className="flexhover:text-blue-500
                         cursor-pointer transition-colors duration-300">
                         Blog
                     </a>
     
-                    <a class="flexhover:text-blue-500
+                    <a className="flexhover:text-blue-500
                         cursor-pointer transition-colors duration-300">
                         About Us
                     </a>
                 </div> */}
 
 
-          <div class="flex items-center space-x-5">
+          <div className="flex items-center space-x-5">
 
-            {/* <a class="flexhover:text-blue-500
+            {/* <a className="flexhover:text-blue-500
                         cursor-pointer transition-colors duration-300">
     
-                        <svg class="fill-current h-5 w-5 mr-2 mt-0.5" xmlns="http://www.w3.org/2000/svg"
+                        <svg className="fill-current h-5 w-5 mr-2 mt-0.5" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24"
                             viewBox="0 0 24 24">
                             <path
@@ -92,11 +73,11 @@ function UserHome() {
                     </a> */}
 
 
-            <a class="
+            <a className="
                         cursor-pointer transition-colors duration-300
                         font-semibold text-blue-600">
 
-              {/* <svg class="fill-current h-5 w-5 mr-2 mt-0.5" xmlns="http://www.w3.org/2000/svg"
+              {/* <svg className="fill-current h-5 w-5 mr-2 mt-0.5" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24"
                             viewBox="0 0 24 24">
                             <path

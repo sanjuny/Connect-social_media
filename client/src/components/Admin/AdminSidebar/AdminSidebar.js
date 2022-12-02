@@ -94,7 +94,7 @@ const [open, setOpen] = useState(true);
                         </Link>
                     ))}
                 </div>
-                <button  onClick={Logout} class="bg-red-500 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full mt-5 mr-14">
+                <button  onClick={Logout} className="bg-red-500 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full mt-5 mr-14">
                     LogOut
                 </button>
             </div>

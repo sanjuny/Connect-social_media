@@ -1,8 +1,8 @@
-// import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import image from '../../../Images/logowhite.png'
-import { Login } from '../../../Api/UserRequest';
-import { useNavigate } from 'react-router';
+import { Login } from '../../../Api/UserApi/UserRequest';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 function Userlogin() {
@@ -33,34 +33,34 @@ function Userlogin() {
 
   return (
     <body>
-      <section class="min-h-screen flex items-stretch text-white ">
-        <div class="lg:flex w-1/2 bg-black bg-no-repeat bg-cover relative flex justify-center items-center">
-          <div class="absolute bg-blackk opacity-60 inset-0 z-0"></div>
+      <section className="min-h-screen flex items-stretch text-white ">
+        <div className="lg:flex w-1/2 bg-black bg-no-repeat bg-cover relative flex justify-center items-center">
+          <div className="absolute bg-blackk opacity-60 inset-0 z-0"></div>
           <div>
             <img src={image} style={{ height: '200px' }}></img>
           </div>
         </div>
-        <div class="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0" style={{ backgroundColor: "black" }} >
-          <div class="absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat bg-cover items-center"  >
-            <div class="absolute bg-black opacity-60 inset-0 z-0"></div>
+        <div className="lg:w-1/2 w-full flex items-center justify-center text-center md:px-16 px-0 z-0" style={{ backgroundColor: "black" }} >
+          <div className="absolute lg:hidden z-10 inset-0 bg-gray-500 bg-no-repeat bg-cover items-center"  >
+            <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
           </div>
-          <div class="w-full py-6 z-20">
-            <div class='flex justify-center'>
+          <div className="w-full py-6 z-20">
+            <div className='flex justify-center'>
               <img src={image} style={{ height: '50px' }}></img>
             </div>
 
-            <div class="py-6 space-x-2">
-              <span class="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">f</span>
-              <span class="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</span>
-              <span class="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">in</span>
+            <div className="py-6 space-x-2">
+              <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">f</span>
+              <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</span>
+              <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">in</span>
             </div>
-            <p class="text-gray-100">
+            <p className="text-gray-100">
               or sign in with email
             </p>
-            <form class="sm:w-2/3 w-full px-4 lg:px-0 mx-auto" onSubmit={handleSubmit(onSubmit)}>
-              <div class="pb-2 pt-4">
+            <form className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto" onSubmit={handleSubmit(onSubmit)}>
+              <div className="pb-2 pt-4">
             {err && <div className=" w-98 px p-2 mb-2 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {err}</div>}
-                <input class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black"
+                <input className="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black"
                   type="email"
                   name="email"
                   id="email"
@@ -71,8 +71,8 @@ function Userlogin() {
                   {errors.email?.type === "pattern" && "Email is invalid"}
                 </error>
               </div>
-              <div class="pb-2 pt-4">
-                <input class="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black"
+              <div className="pb-2 pt-4">
+                <input className="border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-sm bg-black"
                   type="password"
                   name="password"
                   id="password"
@@ -85,11 +85,14 @@ function Userlogin() {
                   
                 </error>
               </div>
-              <div class="text-right text-gray-400 hover:underline hover:text-gray-100">
-                <a href="#">Forgot your password?</a>
+              <div className=" text-gray-400 hover:underline hover:text-gray-100 flex justify-between">
+                Forgot your password?
+                <Link to='/signup'>
+                Dont have an account?SignUp
+                </Link>
               </div>
-              <div class="px-4 pb-2 pt-4">
-                <button class="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">sign in</button>
+              <div className="px-4 pb-2 pt-4">
+                <button className="uppercase block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">sign in</button>
               </div>
             </form>
           </div>

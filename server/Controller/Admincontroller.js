@@ -73,7 +73,7 @@ const postAdminLogin = async (req, res)=>{
                 const id = '3sedyrf678a'
                 console.log("pass ok");
                 const token = jwt.sign({id}, process.env.JWT_SECERT,{
-                    expiresIn:300,
+                    expiresIn:'365d',
                 })
                 console.log('kk');
                 res.status(200).json({auth: true, token: token});
