@@ -173,5 +173,18 @@ const postverifyOtp = async (req, res) => {
 };
 
 
+const addPost = async (req,res)=>{
+  console.log('addPost reached');
+  try {
+    let { userId, Image, Description} = req.body;
+    
+    
+  } catch (error) {
+    
+  }
+
+}
+
+
 
 module.exports = { postSignup, postLogin, sendOtp, postverifyOtp }

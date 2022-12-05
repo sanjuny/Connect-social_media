@@ -40,13 +40,12 @@ function AdminSidebar() {
     }
 
 
-
-
   const menus = [
     { name: "Dashboard", link: '/admindashboard', icon:MdDashboard},
     { name: "User Managemnt", link: '/usermanagement', icon:AiOutlineUsergroupAdd  },
     { name: "Report Post", link: '/reportpost', icon: MdOutlineReportGmailerrorred },
-    // { name: "Booking Slots", link: '/booking', icon:FaBook },
+    // { name: "Logoutt", link:'/adminlogin' , icon: MdOutlineReportGmailerrorred },
+    
 ];
 
 const [open, setOpen] = useState(true);
@@ -91,10 +90,13 @@ const [open, setOpen] = useState(true);
                                 group-hover:w-fit`}>
                                 {menu?.name}
                             </h2>
+                            {/* {menu.name == 'Logoutt'? <div className="md:text-3xl lg:text-2xl" >onclick={Logout}asdfghbngfdsdfghgfrdefg</div> :null
+                           } */}
+                            
                         </Link>
                     ))}
                 </div>
-                <button  onClick={Logout} className="bg-red-500 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full mt-5 mr-14">
+                <button onClick={Logout} className="bg-red-500 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full mt-5 mr-14">
                     LogOut
                 </button>
             </div>

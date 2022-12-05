@@ -7,6 +7,8 @@ import HomePages from './Pages/User/HomePages'
 import LandingPages from './Pages/User/LandingPages'
 import LoginPage from './Pages/User/LoginPage'
 import SignupPage from './Pages/User/SignupPage'
+import UserProfilePages from './Pages/User/UserProfilePages'
+
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
           <Route path='/home' element={<HomePages />} />
+          <Route path='/profile' element={<UserProfilePages />} />
+        
+  
         </Routes>
 
 
