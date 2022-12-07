@@ -13,7 +13,7 @@ function UserManagement() {
   useEffect(() => {
     const getUse = async () => {
       try {
-        const { data } = await getusers()
+        const { data } = await getusers() 
         console.log(data, 'userdata');
         setForm(data)
       } catch (error) {

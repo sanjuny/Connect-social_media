@@ -2,13 +2,20 @@ import React from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { FaRegComment } from 'react-icons/fa'
 import { FcLike } from 'react-icons/fc'
+import dummy from '../../../Images/dummy.jpg'
 import meone from '../../../Images/meone.jpg'
 import metwo from '../../../Images/metwo.jpg'
 import methree from '../../../Images/methree.jpg'
 import mefour from '../../../Images/mefour.jpg'
+import { useSelector } from 'react-redux'
 
 
 function UserProfile() {
+
+
+    const userData = useSelector(state => state.user)
+    console.log(userData,'lolololooololo');
+    
     return (
         <div className="flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px' }}>
             <div className="w-3/5 border border-y-0 border-gray-800" style={{ maxWidth: '600px' }}>
@@ -18,7 +25,7 @@ function UserProfile() {
                             <BiArrowBack className='w-7 h-7 text-white' />
                         </div>
                         <div className="mx-2">
-                            <h2 className="mb-0 text-xl font-bold text-white">Sanjay</h2>
+                            <h2 className="mb-0 text-xl font-bold text-white">{userData.name}</h2>
                             <p className="mb-0 w-48 text-xs text-gray-400">916 Photos & videos</p>
                         </div>
                     </div>
@@ -38,10 +45,10 @@ function UserProfile() {
                                         className="md rounded-full relative avatar">
                                         <img style={{ height: '144px', width: '144px' }}
                                             className="md rounded-full relative border-4 border-gray-900"
-                                            src={meone}
+                                            src={dummy}
                                             alt="" />
                                         <div className="absolute"></div>
-                                    </div>
+                                    </div>   
                                 </div>
                             </div>
                             <div className="flex flex-col text-right">
@@ -54,8 +61,8 @@ function UserProfile() {
                         <div className="space-y-1 justify-center w-full mt-3 ml-3">
 
                             <div>
-                                <h2 className="text-xl leading-6 font-bold text-white">Sanjay</h2>
-                                <p className="text-sm leading-5 font-medium text-gray-600">@sanjuny07</p>
+                                <h2 className="text-xl leading-6 font-bold text-white">{userData.name}</h2>
+                                <p className="text-sm leading-5 font-medium text-gray-600">@{userData.username}</p>
                             </div>
 
                             <div className="mt-3">
@@ -86,10 +93,10 @@ function UserProfile() {
                                         </div>
                                         <div className="ml-3">
                                             <p className="text-base leading-6 font-medium text-white">
-                                                Sanjay
+                                                {userData.name}
                                                 <span
                                                     className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                    @sanjuny07 . 1 day ago
+                                                    @{userData.username} . 1 day ago
                                                 </span>
                                             </p>
                                         </div>

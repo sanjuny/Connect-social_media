@@ -1,20 +1,22 @@
 const mongoose = require ('mongoose')
+const { array } = require('../helpers/Multer')
  
 const PostSchema = mongoose.Schema({
     userId:{
         type:String
     },
-    Image:{
+    image:{
         type:String
     },
-    Created:{
-        type:Date
-    },
-    Description:{
+    description:{
         type:String
+    },
+    likes:{
+        type:Array,
+        default:[]
     }
 
-})
+},{timestamps:true})
 
 const Post = mongoose.model('PostSchema',PostSchema)
 

@@ -1,36 +1,85 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import image from '../../../Images/logowhite.png'
-import messi from '../../../Images/messi.jpg'
+import dummy from '../../../Images/dummy.jpg'
 import { BiHome } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { addpost } from '../../../Api/UserApi/UserRequest'
+import { useSelector } from 'react-redux'
+import { confirmAlert } from 'react-confirm-alert';
 
 
 function LeftBar() {
+    const navigate = useNavigate()
+
+
+    
+    useEffect(()=>{
+        const token = localStorage.getItem('userToken')
+        if(!token){
+            navigate('/login')
+        }
+    })
+
+    const Logout = () => {
+        confirmAlert({
+            title: 'Approve Application',
+            message: "Are you sure to Approve this Application",
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        localStorage.removeItem('userToken')
+                        navigate('/login')
+    
+                    }
+    
+                },
+                {
+                    label: 'No'
+                }
+    
+    
+            ]
+        });
+    }
+
+
+    const userData = useSelector(state => state.user)
+    console.log(userData,'lolololooololo');
+    
 
     const [desc, setDesc] = useState('')
-    const [post, setPost] = useState( )
+    const [post, setPost] = useState()
 
-    const handlechange=(e)=>{
-        console.log(e,'kijhgf');
-        setDesc(e.target.value)
+    const handlechange = (e) => {
        
+        console.log(e, 'kijhgf');
+        setDesc(e.target.value)
+
     }
 
-    const handleimage=(e)=>{
-        console.log(e,'post');
+    const handleimage = (e) => {
+        console.log(e, 'post');
         setPost(e.target.files[0])
-        console.log(e.target.value,'hello');
-        console.log(e.target.files,'hy');
+        console.log(e.target.value, 'hello');
+        console.log(e.target.files, 'hy');
     }
 
-    const handleSubmit = () =>{
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        console.log('call tebhkbasbjs');
+        try {
         let data = new FormData()
-        data.append('file',post)
-        data.append('description',desc)
-        data.append('userId')
-
+            data.append('file', post)
+            data.append('description', desc)
+            data.append('userId',userData._id)
+            await addpost(data)
+            setOpen(false)
+        } catch (error) {
+            console.log(error,'catch error');
+        }
     }
 
     const [open, setOpen] = useState(false)
@@ -44,8 +93,6 @@ function LeftBar() {
     }
 
 
-
-
     return (
         <>
             <div className="text-white py-4 h-auto">
@@ -53,10 +100,10 @@ function LeftBar() {
                     <div className="overflow-y-auto h-screen pr-3" style={{ width: "275px" }}>
                         <div className="mt-5 px-2">
                             <img src={image} style={{ height: '70px' }}></img>
-                            <div className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
+                            <Link to='/home' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-semibold rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <BiHome className='w-7 h-7' />
                                 <h2 className='pl-4'>Home</h2>
-                            </div>
+                            </Link>
                             <a href="#" className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <IoIosNotifications className='w-7 h-7' />
                                 <h2 className='pl-4'>Notifications</h2>
@@ -64,6 +111,10 @@ function LeftBar() {
                             <a href="#" className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <AiOutlineMessage className='w-7 h-7' />
                                 <h2 className='pl-4'>Messages</h2>
+                            </a>
+                            <a onClick={Logout} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
+                                <AiOutlineMessage className='w-7 h-7' />
+                                <h2 className='pl-4'>logout</h2>
                             </a>
                             <button onClick={openMODAL} className="bg-blue-400 hover:bg-blue-500 w-full mt-5 text-white font-bold py-2 px-4 rounded-full">
                                 <h2 className='pl-4'>Add Post</h2>
@@ -75,16 +126,16 @@ function LeftBar() {
                                     <Link to='/profile' v className="flex items-center">
                                         <div>
                                             <img className="inline-block h-10 w-10 rounded-full"
-                                                src={messi}
+                                                src={dummy}
                                                 alt="" />
                                         </div>
                                         <div className="ml-3">
                                             <p className="text-base leading-6 font-medium text-white">
-                                                Sanjuny_07
+                                                {userData.name}
                                             </p>
                                             <p
-                                                className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                @Sanjuny_07
+                                                className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">@
+                                                {userData.username}
                                             </p>
                                         </div>
                                     </Link>
@@ -116,17 +167,16 @@ function LeftBar() {
                                     </h2>
 
                                 </div>
-                                <form className="mt-8 space-y-3" action="#" method="POST">
+                                <form className="mt-8 space-y-3">
                                     <div className="grid grid-cols-1 space-y-2">
                                         <label className="text-sm font-bold text-gray-500 tracking-wide">Description</label>
-                                        <input 
-                                         type="text"
-                                         name='description'
-                                         placeholder='Description'
-                                         value={desc} 
-                                         onChange={handlechange}
-                                
-                                         className="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"/>
+                                        <input
+                                            type="text"
+                                            name='description'
+                                            placeholder='Description'
+                                            value={desc}
+                                            onChange={handlechange}
+                                            className="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500" />
                                     </div>
                                     <div className="grid grid-cols-1 space-y-2">
                                         <label className="text-sm font-bold text-gray-500 tracking-wide">Attach Document</label>
@@ -138,19 +188,18 @@ function LeftBar() {
                                                     </svg>
                                                     <p className="pointer-none text-gray-500 "><span className="text-sm">Drag and drop</span> files here <br /> or <a href="" id="" className="text-blue-600 hover:underline">select a file</a> from your computer</p>
                                                 </div>
-                                                <input 
-                                                type="file" 
-                                                name='file'
-                                                
-                                                onChange={handleimage}
-                                                className="hidden" />
+                                                <input
+                                                    type="file"
+                                                    name='file'
+                                                    onChange={handleimage}
+                                                    className="hidden" />
                                             </label>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <button type="submit" className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                    font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
+                                        <button onClick={(e)=> handleSubmit(e)} type="button" className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                                            font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
                                             Upload
                                         </button>
                                     </div>

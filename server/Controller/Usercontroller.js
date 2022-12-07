@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const OtpVerification = require('../Models/OtpSchema')
-
+const Post = require('../Models/PostSchema')
+const Comment = require('../Models/CommentSchema')
 
 
 let transporter = nodemailer.createTransport({
@@ -85,11 +86,12 @@ const postSignup = async (req, res) => {
   try {
     console.log(req.body, 'pp');
     let { username, name, email, phone, password } = req.body;
-    const userExist = await Users.findOne({ email })
+    const userExist = await Users.findOne({ email, verified: 'verified' })
     if (userExist) {
       console.log('userwxis');
       res.status(200).json({ message: 'user already exisit with this mail id' })
     } else {
+      console.log('opopoopopop');
       password = await bcrypt.hash(password, 10)
       const newUser = await new Users({
         username,
@@ -109,14 +111,11 @@ const postSignup = async (req, res) => {
   } catch (error) {
     res.json('something went wrong')
   }
-
 }
 
 const postLogin = async (req, res) => {
-  console.log('calll');
   try {
     const users = await Users.findOne({ email: req.body.email })
-    console.log(users, 'jjjj');
     if (users.status == 'inactive') {
       res.status(200).json({ message: 'Entered Email is blocked' })
     } else {
@@ -125,21 +124,17 @@ const postLogin = async (req, res) => {
         const pass = await bcrypt.compare(req.body.password, users.password)
         if (users.verified == 'Not Verified') {
           res.status(200).json({ message: 'You verification is not complete' })
-        }else{
-        if (pass) {
-          console.log('kkkkkkkkkk');
-          const token = jwt.sign({ id }, process.env.JWT_SECERT, {
-            expiresIn: "365d",
-          })
-          console.log('fffffffffff');
-          res.status(200).json({ auth: true, token: token, users: users })
         } else {
-          console.log('uuuuuuuuuuuuuu');
-          res.status(200).json({ message: 'password is not match' })
+          if (pass) {
+            const token = jwt.sign({ id }, process.env.JWT_SECERT, {
+              expiresIn: "365d",
+            })
+            res.status(200).json({ auth: true, token: token, users: users })
+          } else {
+            res.status(200).json({ message: 'password is not match' })
+          }
         }
-      }
       } else {
-        console.log('mmmmmmmm');
         res.status(200).json({ message: 'user doesnt exist' })
       }
     }
@@ -150,6 +145,8 @@ const postLogin = async (req, res) => {
     res.status(500).json(error)
   }
 }
+
+
 
 
 const postverifyOtp = async (req, res) => {
@@ -173,18 +170,81 @@ const postverifyOtp = async (req, res) => {
 };
 
 
-const addPost = async (req,res)=>{
+const postUpload = async (req, res) => {
   console.log('addPost reached');
   try {
-    let { userId, Image, Description} = req.body;
-    
-    
+    console.log(req.body, 'jhgfddfghj');
+    console.log(req?.file?.filename, 'mmmmmmmmmmmm');
+    let { userId, description } = req.body;
+    let image = req?.file?.filename
+    await Post.create({ userId, description, image }).then((response) => {
+      res.status(200).json({ message: 'post added sucessfully' })
+    }).catch((err) => {
+      res.status(500).json({ message: 'Unabel to add the post' })
+    })
   } catch (error) {
-    
+    console.log(error, 'catch error');
   }
 
 }
 
 
+const getUsersPost = async (req, res) => {
+  // console.log(req.body, 'getpost reached');
+  // console.log(req.params.id, 'wretyu');
+  try {
+    let posts = await Post.find()
+    console.log(posts, 'kjhgf');
+    res.status(200).json(posts)
+  } catch (error) {
+    res.status(500).json(error)
 
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp }
+  }
+}
+
+
+const postaddlikes = async (req, res) => {
+  console.log(req.body, 'kkkkk');
+  console.log(req.params.id, 'kikkk');
+  console.log('call like');
+  const post = await Post.findById(req.params.id)
+  console.log(post, 'gfdvc');
+  if (!post?.likes?.includes(req.body.userId)) {
+    await post.updateOne({ $push: { likes: req.body.userId } })
+    res.status(200).json({ message: 'post liked' })
+  } else {
+    await post.updateOne({ $pull: { likes: req.body.userId } })
+    res.status(200).json({ message: 'post disliked' })
+  }
+}
+
+
+const postaddcomment = async (req,res)=>{
+  const {comment,userId} = req.body.data
+  // console.log(req.body.data,'commentvgh');
+  const postId = req.params.id
+  // console.log(req.body,'reqbody');
+  // console.log(req.params.id,'rehcbdskhcscbs');
+  try {
+    await Comment.create({userId,comment,postId})
+      res.status(200).json({message:'comment added'})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+const getcomments = async (req,res)=>{
+  console.log('hegeeg');
+  // const postId = req.params.id
+  // console.log(req.params.id,'id hefre');
+  try {
+    let comments = await Comment.find()
+    console.log(comments,'gettting');
+    res.status(200).json(comments)
+  } catch (error) {
+    res.status(500).json({message:'failed'})
+    
+  }
+}
+module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments }

@@ -1,3 +1,4 @@
+import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import AdminDashboardPage from './Pages/Admin/AdminDashboardPage'
 import AdminLoginPage from './Pages/Admin/AdminLoginPage'
@@ -8,6 +9,7 @@ import LandingPages from './Pages/User/LandingPages'
 import LoginPage from './Pages/User/LoginPage'
 import SignupPage from './Pages/User/SignupPage'
 import UserProfilePages from './Pages/User/UserProfilePages'
+import store from './Redux/Store'
 
 
 function App() {
@@ -15,16 +17,20 @@ function App() {
     <div className='App'>
 
       <Router>
-
         <Routes> {/* userside */}
           <Route path='/' element={<LandingPages />} />
-          <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<SignupPage />} />
-          <Route path='/home' element={<HomePages />} />
-          <Route path='/profile' element={<UserProfilePages />} />
-        
-  
         </Routes>
+
+        <Provider store={store}>
+          <Routes> {/* userside */}
+
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/home' element={<HomePages />} />
+            <Route path='/profile' element={<UserProfilePages />} />
+
+          </Routes>
+        </Provider>
 
 
         <Routes> {/* adminside */}

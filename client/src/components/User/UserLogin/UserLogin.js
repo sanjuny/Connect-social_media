@@ -4,10 +4,14 @@ import { Login } from '../../../Api/UserApi/UserRequest';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux'
+import { update } from '../../../Redux/StoreSlice';
 
 function Userlogin() {
 
   const navigate = useNavigate()
+
+  const dispatch  = useDispatch()
 
   const { register, formState: { errors }, handleSubmit } = useForm();
 
@@ -20,13 +24,15 @@ function Userlogin() {
       if (data.auth) {
         localStorage.setItem('userToken', data.token)
         localStorage.setItem('user', JSON.stringify(data.users))
+        dispatch(update(data?.users))
         navigate('/home')
       } else {
-        seterr(data.message)
+        seterr(data.message)    
         console.log("getting");
         console.log(data.message);
       }
     } catch (error) {
+      seterr('User does not Exist')
       console.log(error, 'error');
     }
   }
