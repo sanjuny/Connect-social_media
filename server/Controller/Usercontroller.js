@@ -1,10 +1,13 @@
 const Users = require('../Models/SignupSchema')
+const OtpVerification = require('../Models/OtpSchema')
+const Comment = require('../Models/CommentSchema')
+const Post = require('../Models/PostSchema')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
-const OtpVerification = require('../Models/OtpSchema')
-const Post = require('../Models/PostSchema')
-const Comment = require('../Models/CommentSchema')
+const { Promise } = require('mongoose')
+const { post } = require('../routes/users')
+
 
 
 let transporter = nodemailer.createTransport({
@@ -147,8 +150,6 @@ const postLogin = async (req, res) => {
 }
 
 
-
-
 const postverifyOtp = async (req, res) => {
   console.log("reached");
   console.log(req.body.OTP);
@@ -174,7 +175,7 @@ const postUpload = async (req, res) => {
   console.log('addPost reached');
   try {
     console.log(req.body, 'jhgfddfghj');
-    console.log(req?.file?.filename, 'mmmmmmmmmmmm');
+    console.log(req?.file?.filename, 'mmmmmmmmgggggmmmm');
     let { userId, description } = req.body;
     let image = req?.file?.filename
     await Post.create({ userId, description, image }).then((response) => {
@@ -185,22 +186,34 @@ const postUpload = async (req, res) => {
   } catch (error) {
     console.log(error, 'catch error');
   }
-
 }
 
 
 const getUsersPost = async (req, res) => {
-  // console.log(req.body, 'getpost reached');
-  // console.log(req.params.id, 'wretyu');
+  console.log(req.params.id, 'wretyu');
   try {
-    let posts = await Post.find()
-    console.log(posts, 'kjhgf');
-    res.status(200).json(posts)
-  } catch (error) {
-    res.status(500).json(error)
+    let currentuser = await Users.findById(req.params.id)
+    console.log(currentuser, "nnj");
 
+    let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
+    console.log("posts");
+    console.log(posts);
+    let friendpost = await Promise.all(currentuser.following?.map( (postId) => {
+      return  Post.find({ userId: postId }).populate('userId').sort({ createdAt: -1 })
+
+    }))
+    console.log("kkkkkkk");
+    let data = posts.concat(...friendpost)
+    // (...friendpost.concat(posts?.posts));
+    // console.log(posts?.concat(...friendpost), "fkkfkfk");
+    console.log(data,"hihii");
+    res.status(200).json(data) 
+  } catch (error) {
+    console.log(error,"lknjn");
+    res.status(500).json(error)
   }
 }
+
 
 
 const postaddlikes = async (req, res) => {
@@ -219,32 +232,73 @@ const postaddlikes = async (req, res) => {
 }
 
 
-const postaddcomment = async (req,res)=>{
-  const {comment,userId} = req.body.data
-  // console.log(req.body.data,'commentvgh');
+const postaddcomment = async (req, res) => {
+  const { comment, userId } = req.body.data
+  console.log(req.body.data, 'commentvgh');
   const postId = req.params.id
-  // console.log(req.body,'reqbody');
-  // console.log(req.params.id,'rehcbdskhcscbs');
+  console.log(req.body, 'reqbody');
+  console.log(req.params.id, 'rehcbdskhcscbs');
   try {
-    await Comment.create({userId,comment,postId})
-      res.status(200).json({message:'comment added'})
+    await Comment.create({ userId, comment, postId })
+    res.status(200).json({ message: 'comment added' })
   } catch (error) {
     console.log(error);
   }
 }
 
 
-const getcomments = async (req,res)=>{
+const getcomments = async (req, res) => {
   console.log('hegeeg');
-  // const postId = req.params.id
-  // console.log(req.params.id,'id hefre');
+  const postId = req.params.id
+  console.log(req.params.id, 'id hefre');
   try {
-    let comments = await Comment.find()
-    console.log(comments,'gettting');
+    let comments = await Comment.find({ postId: req.params.id })
+    console.log(comments, 'gettting');
     res.status(200).json(comments)
   } catch (error) {
-    res.status(500).json({message:'failed'})
-    
+    res.status(500).json({ message: 'failed' })
+
   }
 }
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments }
+
+
+const getsuggestions = async (req, res) => {
+  console.log('getsuggestions');
+  try {
+    let suggestions = await Users.find().limit(4)
+    // console.log(suggestions,'helllllllllo');
+    res.status(200).json(suggestions)
+  } catch (error) {
+    res.status(500).json({ message: 'failed' })
+
+  }
+}
+
+
+const postfollow = async (req, res) => {
+  console.log('follow reached');
+  console.log(req.body, 'req.body');
+  console.log(req.params.id, 'req.params.id,');
+  try {
+    let follow = await Users.findById(req.params.id)
+    let following = await Users.findById(req.body.id)
+    if (!follow?.following?.includes(req.body.id)) {
+      console.log("followed");
+      await follow.updateOne({ $push: { following: req.body.id } })
+      await following.updateOne({ $push: { followers: req.params.id } })
+      res.status(200).json("Followed")
+    } else {
+      console.log("unfollowed");
+      await follow.updateOne({ $pull: { following: req.body.id } })
+      await following.updateOne({ $pull: { followers: req.params.id } })
+      res.status(200).json("You unfollowed this user")
+    }
+  } catch (error) {
+    console.log(error, 'catch error');
+  }
+}
+
+
+
+
+module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow }

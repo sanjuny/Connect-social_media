@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { array } = require('../helpers/Multer')
 
 const SignupSchema = mongoose.Schema({
     username: {
@@ -32,6 +33,14 @@ const SignupSchema = mongoose.Schema({
     status: {
         type: String,
         default: "active"
+    },
+    followers:{
+        type: Array,
+        default:[]
+    },
+    following:{
+        type:Array,
+        default:[]
     }
 })
 

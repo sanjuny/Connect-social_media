@@ -1,9 +1,11 @@
 const mongoose = require ('mongoose')
 const { array } = require('../helpers/Multer')
+const users = require('./SignupSchema')
  
-const PostSchema = mongoose.Schema({
+const PostSchema = new mongoose.Schema({
     userId:{
-        type:String
+        type:String,
+        ref: users
     },
     image:{
         type:String

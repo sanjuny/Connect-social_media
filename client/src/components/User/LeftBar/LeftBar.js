@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import image from '../../../Images/logowhite.png'
 import dummy from '../../../Images/dummy.jpg'
-import { BiHome } from 'react-icons/bi'
+import { BiHome, BiLogOutCircle } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
@@ -12,7 +12,6 @@ import { confirmAlert } from 'react-confirm-alert';
 
 function LeftBar() {
     const navigate = useNavigate()
-
 
     
     useEffect(()=>{
@@ -32,15 +31,12 @@ function LeftBar() {
                     onClick: () => {
                         localStorage.removeItem('userToken')
                         navigate('/login')
-    
                     }
     
                 },
                 {
                     label: 'No'
                 }
-    
-    
             ]
         });
     }
@@ -71,10 +67,12 @@ function LeftBar() {
         e.preventDefault()
         console.log('call tebhkbasbjs');
         try {
-        let data = new FormData()
-            data.append('file', post)
+            console.log(post, 'llll');
+            let data = new FormData()
+            data.append('file',post)
             data.append('description', desc)
             data.append('userId',userData._id)
+            console.log(data,'daaaaaaaaaaaaaaaaaaaatttttttttttttttttttaaaaaaaaaaaaaaaaaa');
             await addpost(data)
             setOpen(false)
         } catch (error) {
@@ -91,7 +89,6 @@ function LeftBar() {
     const openMODAL = () => {
         setOpen(true)
     }
-
 
     return (
         <>
@@ -113,7 +110,7 @@ function LeftBar() {
                                 <h2 className='pl-4'>Messages</h2>
                             </a>
                             <a onClick={Logout} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
-                                <AiOutlineMessage className='w-7 h-7' />
+                                <BiLogOutCircle className='w-7 h-7' />
                                 <h2 className='pl-4'>logout</h2>
                             </a>
                             <button onClick={openMODAL} className="bg-blue-400 hover:bg-blue-500 w-full mt-5 text-white font-bold py-2 px-4 rounded-full">
@@ -196,9 +193,8 @@ function LeftBar() {
                                             </label>
                                         </div>
                                     </div>
-
                                     <div>
-                                        <button onClick={(e)=> handleSubmit(e)} type="button" className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                                    <button onClick={(e)=> handleSubmit(e)} type="button" className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                             font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
                                             Upload
                                         </button>
@@ -209,7 +205,6 @@ function LeftBar() {
                     </div>
                 ) : null
             }
-
         </>
 
     )

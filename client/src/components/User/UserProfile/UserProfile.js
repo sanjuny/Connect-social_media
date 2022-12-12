@@ -1,21 +1,54 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { FaRegComment } from 'react-icons/fa'
 import { FcLike } from 'react-icons/fc'
 import dummy from '../../../Images/dummy.jpg'
 import meone from '../../../Images/meone.jpg'
 import metwo from '../../../Images/metwo.jpg'
-import methree from '../../../Images/methree.jpg'
-import mefour from '../../../Images/mefour.jpg'
 import { useSelector } from 'react-redux'
+import { getpost } from '../../../Api/UserApi/UserRequest'
+import { format, render, cancel, register } from 'timeago.js';
 
 
 function UserProfile() {
 
 
     const userData = useSelector(state => state.user)
-    console.log(userData,'lolololooololo');
-    
+    console.log(userData, 'lolololooololo');
+
+
+
+    /* ------------------------------ getaddedpost ------------------------------ */
+
+    // const Profile = () => {
+    //     const [pics, setpics] = useState([])
+    //     useEffect(() => {
+    //         const { data } = getpost()
+    //         console.log(data);
+    //         setpics(data)
+    //     })
+    // }
+
+    const [post, setpost] = useState([])
+
+    useEffect(()=>{
+        const Profile = async ()=>{
+            try {
+                const {data} = await getpost(userData._id)
+                console.log(data,'lllllll');
+                setpost(data.sort((p1,p2)=>{
+                    return new Date(p2.createdAt) - new Date(p1.createdAt)
+                }))
+            } catch (error) {
+                console.log(error,'userfffgsg');
+            }
+        }
+        Profile()
+    },[])
+
+
+    /* ------------------------------ getaddedpost ------------------------------ */
+
     return (
         <div className="flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px' }}>
             <div className="w-3/5 border border-y-0 border-gray-800" style={{ maxWidth: '600px' }}>
@@ -48,7 +81,7 @@ function UserProfile() {
                                             src={dummy}
                                             alt="" />
                                         <div className="absolute"></div>
-                                    </div>   
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex flex-col text-right">
@@ -80,105 +113,61 @@ function UserProfile() {
                     <hr className="border-gray-800" />
                 </div>
                 <ul className="list-none">
-
                     <li>
-                        <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
-                            <div className="flex flex-shrink-0 p-4 pb-0">
-                                <div className="flex-shrink-0 group block">
-                                    <div className="flex items-center">
-                                        <div>
-                                            <img className="inline-block h-10 w-10 rounded-full"
-                                                src={meone}
-                                                alt="" />
-                                        </div>
-                                        <div className="ml-3">
-                                            <p className="text-base leading-6 font-medium text-white">
-                                                {userData.name}
-                                                <span
-                                                    className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                    @{userData.username} . 1 day ago
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="pl-16">
-                                <p className="text-base width-auto font-medium text-white flex-shrink">
-                                    I dreamed a lot about this day and thank God it came. I have no words
-                                    to thank you for all the love.What a beautiful night enjoyed it so
-                                    much. Unforgettable🇦🇷🇦🇷
-                                    <a className="text-blue-400"> #CopaAmerica #Argentina</a>
-                                </p>
-                                <div className="md:flex-shrink pr-6 pt-3">
-                                    <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
-                                        style={{ height: 'auto' }}>
-                                        <img src={methree} style={{ height: 'auto', width: 'auto' }}></img>
-                                    </div>
-                                </div>
-                                <div className="flex gap-5 items-center py-4">
-                                    <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                                        <FaRegComment className='w-6 h-6' />12.5k
-                                    </div>
-                                    <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
-                                        <FcLike className='w-6 h-6' />10.5k
-                                    </div>
-                                </div>
-                            </div>
-                            <hr className="border-gray-800" />
-                        </div>
-                    </li>
+                        {post.map((obj) => {
+                            return (
 
-                    <li>
-                        <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
-                            <div className="flex flex-shrink-0 p-4 pb-0">
-                                <div className="flex-shrink-0 group block">
-                                    <div className="flex items-center">
-                                        <div>
-                                            <img className="inline-block h-10 w-10 rounded-full"
-                                                src={meone}
-                                                alt="" />
+                                <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
+                                    <div className="flex flex-shrink-0 p-4 pb-0">
+                                        <div className="flex-shrink-0 group block">
+                                            <div className="flex items-center">
+                                                <div>
+                                                    <img className="inline-block h-10 w-10 rounded-full"
+                                                        src={meone}
+                                                        alt="" />
+                                                </div>
+                                                <div className="ml-3">
+                                                    <p className="text-base leading-6 font-medium text-white">
+                                                        {obj.userId.name}
+                                                        <span
+                                                            className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                                            @{obj.userId.username} {format(obj.createdAt)}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="ml-3">
-                                            <p className="text-base leading-6 font-medium text-white">
-                                                Sanjay
-                                                <span
-                                                    className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                    @sanjuny07 . 1 day ago
-                                                </span>
-                                            </p>
+                                    </div>
+                                    <div className="pl-16">
+                                        <p className="text-base width-auto font-medium text-white flex-shrink">
+                                           {obj.description}
+                                            <a className="text-blue-400"> #CopaAmerica #Argentina</a>
+                                        </p>
+                                        <div className="md:flex-shrink pr-6 pt-3">
+                                            <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
+                                                style={{ height: 'auto' }}>
+                                                <img src={'/images/' + obj.image} style={{ height: 'auto', width: 'auto' }}></img>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-5 items-center py-4">
+                                            <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
+                                                <FaRegComment className='w-6 h-6' />12.5k
+                                            </div>
+                                            <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
+                                                <FcLike className='w-6 h-6' />10.5k
+                                            </div>
                                         </div>
                                     </div>
+                                    <hr className="border-gray-800" />
                                 </div>
-                            </div>
-                            <div className="pl-16">
-                                <p className="text-base width-auto font-medium text-white flex-shrink">
-                                    I dreamed a lot about this day and thank God it came. I have no words
-                                    to thank you for all the love.What a beautiful night enjoyed it so
-                                    much. Unforgettable🇦🇷🇦🇷
-                                    <a className="text-blue-400"> #CopaAmerica #Argentina</a>
-                                </p>
-                                <div className="md:flex-shrink pr-6 pt-3">
-                                    <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
-                                        style={{ height: 'auto' }}>
-                                        <img src={mefour} style={{ height: 'auto', width: 'auto' }}></img>
-                                    </div>
-                                </div>
-                                <div className="flex gap-5 items-center py-4">
-                                    <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                                        <FaRegComment className='w-6 h-6' />12.5k
-                                    </div>
-                                    <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
-                                        <FcLike className='w-6 h-6' />10.5k
-                                    </div>
-                                </div>
-                            </div>
-                            <hr className="border-gray-800" />
-                        </div>
+                            )
+                        })}
                     </li>
                 </ul>
             </div>
         </div>
+
+
 
 
     )
