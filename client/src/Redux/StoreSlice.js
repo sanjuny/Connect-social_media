@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const defaultUser = JSON.parse(localStorage.getItem('user'))
 
 if(defaultUser){
-    var { name, username, _id, followers, following} = defaultUser
+    var { name, username, _id, phone, bio, profilePic, followers, following} = defaultUser
 }else{
 
 }
@@ -16,6 +16,9 @@ const userSlice = createSlice({
         _id,
         name,
         username,
+        phone,
+        bio,
+        profilePic,
         followers,
         following
     },
@@ -24,6 +27,9 @@ const userSlice = createSlice({
             state._id = action.payload._id
             state.name = action.payload.name
             state.username = action.payload.username
+            state.phone = action.payload.phone
+            state.bio = action.payload.bio
+            state.profilePic = action.payload.profilePic
             state.followers = action.payload.followers
             state.following = action.payload.following
         }

@@ -184,7 +184,19 @@ const postUpload = async (req, res) => {
       res.status(500).json({ message: 'Unabel to add the post' })
     })
   } catch (error) {
-    console.log(error, 'catch error');
+    res.status(500).json({ message: 'Unabel to add the post file' })
+  }
+}
+
+
+const profilePicUpload = async (req,res)=>{
+  console.log(req.params.id,'profilePicUpload');
+  console.log(req.body,'req,bodu');
+  try {
+    // let { userId, bio, name, username, phone, profilePic} = req.body
+    
+  } catch (error) {
+    
   }
 }
 
@@ -198,20 +210,31 @@ const getUsersPost = async (req, res) => {
     let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
     console.log("posts");
     console.log(posts);
-    let friendpost = await Promise.all(currentuser.following?.map( (postId) => {
-      return  Post.find({ userId: postId }).populate('userId').sort({ createdAt: -1 })
-
+    let friendpost = await Promise.all(currentuser.following?.map((postId) => {
+      return Post.find({ userId: postId }).populate('userId').sort({ createdAt: -1 })
     }))
     console.log("kkkkkkk");
     let data = posts.concat(...friendpost)
-    // (...friendpost.concat(posts?.posts));
-    // console.log(posts?.concat(...friendpost), "fkkfkfk");
-    console.log(data,"hihii");
-    res.status(200).json(data) 
+    console.log(data, "hihii");
+    res.status(200).json(data)
   } catch (error) {
-    console.log(error,"lknjn");
-    res.status(500).json(error)
+    console.log(error, "lknjn");
+    res.status(500).json({message:'this file'})
   }
+}
+
+
+const getProfilePost = async (req, res) => {
+  try {
+    let currentuser = await Users.findById(req.params.id)
+    let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
+    res.status(200).json(posts)
+  } catch (error) {
+    console.log(error, "lknjn");
+    res.status(500).json(error)
+
+  }
+
 }
 
 
@@ -252,7 +275,7 @@ const getcomments = async (req, res) => {
   const postId = req.params.id
   console.log(req.params.id, 'id hefre');
   try {
-    let comments = await Comment.find({ postId: req.params.id })
+    let comments = await Comment.find({ postId: req.params.id }).populate('userId','name username')
     console.log(comments, 'gettting');
     res.status(200).json(comments)
   } catch (error) {
@@ -266,7 +289,6 @@ const getsuggestions = async (req, res) => {
   console.log('getsuggestions');
   try {
     let suggestions = await Users.find().limit(4)
-    // console.log(suggestions,'helllllllllo');
     res.status(200).json(suggestions)
   } catch (error) {
     res.status(500).json({ message: 'failed' })
@@ -301,4 +323,6 @@ const postfollow = async (req, res) => {
 
 
 
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow }
+
+
+module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload }

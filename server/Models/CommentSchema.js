@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+// const users = require('./SignupSchema')
 
 const CommentSchema = mongoose.Schema({
     postId:{
@@ -6,7 +7,8 @@ const CommentSchema = mongoose.Schema({
         required:[true]
     },
     userId:{
-        type:String
+        type:String,
+        ref:'users'
     },
     comment:{
         type:String

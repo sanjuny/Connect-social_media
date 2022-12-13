@@ -76,7 +76,7 @@ function LeftBar() {
             await addpost(data)
             setOpen(false)
         } catch (error) {
-            console.log(error,'catch error');
+            console.log(error,'catch error eroor rororor');
         }
     }
 
@@ -105,10 +105,10 @@ function LeftBar() {
                                 <IoIosNotifications className='w-7 h-7' />
                                 <h2 className='pl-4'>Notifications</h2>
                             </a>
-                            <a href="#" className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
+                            <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <AiOutlineMessage className='w-7 h-7' />
                                 <h2 className='pl-4'>Messages</h2>
-                            </a>
+                            </Link>
                             <a onClick={Logout} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <BiLogOutCircle className='w-7 h-7' />
                                 <h2 className='pl-4'>logout</h2>

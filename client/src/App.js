@@ -4,6 +4,7 @@ import AdminDashboardPage from './Pages/Admin/AdminDashboardPage'
 import AdminLoginPage from './Pages/Admin/AdminLoginPage'
 import ReportPostPage from './Pages/Admin/ReportPostPage'
 import UserManagementPage from './Pages/Admin/UserManagementPage'
+import ChatPage from './Pages/User/ChatPage'
 import HomePages from './Pages/User/HomePages'
 import LandingPages from './Pages/User/LandingPages'
 import LoginPage from './Pages/User/LoginPage'
@@ -28,6 +29,7 @@ function App() {
             <Route path='/login' element={<LoginPage />} />
             <Route path='/home' element={<HomePages />} />
             <Route path='/profile' element={<UserProfilePages />} />
+            <Route path='/chat' element={<ChatPage />} />
 
           </Routes>
         </Provider>

@@ -22,6 +22,9 @@ export const getSuggestionUser = () => axios.get('/getsuggestion')
 
 export const addfollow = (currentUserId,id) => axios.post(`/addfollow/${currentUserId}`,{id:id})
 
-// export const unfollow = (currentUserId,id) => axios.post(`/unfollow/${currentUserId}`,{id})
+export const getProfilePost = (userId) => axios.get(`/getprofilepost/${userId}`)
 
+export const editProfile = (data,userId) => axios.post(`/geteditProfile/${userId}`,{data})
+
+export const userChat = (id) => axios.get(`/chat/${id}`)
 
