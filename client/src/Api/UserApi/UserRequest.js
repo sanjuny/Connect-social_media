@@ -29,7 +29,9 @@ export const editProfile = (data,userId) => axios.post(`/geteditProfile/${userId
 export const userChats = (id) => axios.get(`/chat/${id}`)
 
 export const getUser = (userId) => axios.get(`/getUser/${userId}`)
-export const getUserrrr = (userId) => axios.get(`/getUser/${userId}`)
 
 export const getMessages = (id) => axios.get(`/message/${id}`)
+
+
+
 

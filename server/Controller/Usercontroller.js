@@ -329,7 +329,6 @@ const getUser = async (req,res)=>{
    const { phone , password, ...details} = user._doc
    res.status(200).json(details)
    console.log(details,'llllllllllllllllll');
-
   } catch (error) {
     res.status(500).json(error);
     

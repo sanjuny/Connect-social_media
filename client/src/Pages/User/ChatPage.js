@@ -10,9 +10,12 @@ function ChatPage() {
                     <div className='container w-3/12 p-5 pl-20 hidden md:block max-w-[100%] '>
                         <LeftBar />
                     </div>
-                    <div className='container w-9/12 p-5  flex-row justify-center max-w-[100%]'>
+                    <div className='container md:w-9/12 p-5  flex-row justify-center max-w-[100%]'>
                         <Chat />
                     </div>
+                    {/* <div className='container w-5/12 p-5 pr-20 hidden md:block max-w-[100%]  ' >
+                       
+                    </div> */}
                 </div>
             </div>
         </>
