@@ -26,5 +26,10 @@ export const getProfilePost = (userId) => axios.get(`/getprofilepost/${userId}`)
 
 export const editProfile = (data,userId) => axios.post(`/geteditProfile/${userId}`,{data})
 
-export const userChat = (id) => axios.get(`/chat/${id}`)
+export const userChats = (id) => axios.get(`/chat/${id}`)
+
+export const getUser = (userId) => axios.get(`/getUser/${userId}`)
+export const getUserrrr = (userId) => axios.get(`/getUser/${userId}`)
+
+export const getMessages = (id) => axios.get(`/message/${id}`)
 

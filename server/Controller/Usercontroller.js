@@ -320,9 +320,25 @@ const postfollow = async (req, res) => {
   }
 }
 
+const getUser = async (req,res)=>{
+  const {userId} = req.params
+  console.log(userId,'ooooooooooooooo');
+  try {
+   const user = await Users.findById(userId)
+   console.log(user,'pppppppppp');
+   const { phone , password, ...details} = user._doc
+   res.status(200).json(details)
+   console.log(details,'llllllllllllllllll');
+
+  } catch (error) {
+    res.status(500).json(error);
+    
+  }
+}
 
 
 
 
 
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload }
+
+module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser }

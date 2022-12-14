@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { addfollow, getSuggestionUser } from '../../../Api/UserApi/UserRequest'
 import image from '../../../Images/messi.jpg'
 
+
 function RightBar() {
 
   /* ---------------------------- current userdata ---------------------------- */
@@ -67,9 +68,7 @@ function RightBar() {
   return (
     <>
       <div class="relative text-gray-600 flex justify-center ">
-        <input type="search" name="serch" placeholder="Search" class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none" />
-        <button type="submit" class="absolute right-0 top-0 mt-3 mr-4">
-        </button>
+        <input  type="search" name="serch" placeholder="Search" class="bg-[#16181c] h-10 px-5 pr-10 w-full rounded-full text-sm focus:outline-none" />
       </div>
       <div className="w-2/5 h-12 position-relative ">
         <div style={{ maxWidth: '350px' }}>

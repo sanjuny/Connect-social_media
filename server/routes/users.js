@@ -1,7 +1,8 @@
 var express = require('express');
+const { userChats } = require('../Controller/ChatConroller');
 var router = express.Router();
 
-const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload } = require('../Controller/Usercontroller');
+const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser } = require('../Controller/Usercontroller');
 const upload = require('../helpers/Multer')
 // const check = require('../Middleware/AuthMiddleware');
 
@@ -17,5 +18,6 @@ router.get('/getsuggestion', getsuggestions)
 router.post('/addfollow/:id', postfollow)
 router.get('/getprofilepost/:id', getProfilePost)
 router.post('/geteditProfile/:id',upload.single('profilePic'), profilePicUpload)
+router.get('/getUser/:userId',getUser)
 
 module.exports = router;
