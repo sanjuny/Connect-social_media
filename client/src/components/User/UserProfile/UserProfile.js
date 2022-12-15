@@ -3,12 +3,13 @@ import { BiArrowBack } from 'react-icons/bi'
 import { FaRegComment } from 'react-icons/fa'
 import { FcLike } from 'react-icons/fc'
 import dummy from '../../../Images/dummy.jpg'
-import meone from '../../../Images/meone.jpg'
-import metwo from '../../../Images/metwo.jpg'
+// import connect from '../../../Images/connect.png'
+// import connect from '../../../Images/connect.jpg'
+import connect from '../../../Images/dummy.jpg'
 import { useSelector } from 'react-redux'
 import { editProfile, getProfilePost } from '../../../Api/UserApi/UserRequest'
 import { format, render, cancel, register } from 'timeago.js';
-
+// C:\Users\sanju\OneDrive\Desktop\SECOND PROJECT\client\public\images\file_1671098280157_connect.jpg
 
 function UserProfile() {
 
@@ -124,9 +125,9 @@ console.log(edit,"details of profile");
                     </div>
                     <div>
                         <div className="w-full bg-cover bg-no-repeat bg-center"
-                            style={{ height: '200px', backgroundImage: `url(${metwo})` }}>
+                            style={{ height: '200px', backgroundImage: `url(${connect})` }}>
                             <img className="opacity-0 w-full h-full"
-                                src={metwo} alt="" />
+                                src={connect} alt="" />
                         </div>
                         <div className="p-4">
                             <div className="relative flex w-full">
@@ -181,7 +182,7 @@ console.log(edit,"details of profile");
                                                 <div className="flex items-center">
                                                     <div>
                                                         <img className="inline-block h-10 w-10 rounded-full"
-                                                            src={meone}
+                                                            src={dummy}
                                                             alt="" />
                                                     </div>
                                                     <div className="ml-3">
@@ -204,7 +205,7 @@ console.log(edit,"details of profile");
                                             <div className="md:flex-shrink pr-6 pt-3">
                                                 <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
                                                     style={{ height: 'auto' }}>
-                                                    <img src={'/images/' + obj.image} style={{ height: 'auto', width: 'auto' }}></img>
+                                                    <img src={'/images/' + obj.image} style={{ height: '480px', width: '500px' }}></img>
                                                 </div>
                                             </div>
                                             <div className="flex gap-5 items-center py-4">

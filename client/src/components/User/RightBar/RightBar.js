@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { addfollow, getSuggestionUser } from '../../../Api/UserApi/UserRequest'
-import image from '../../../Images/messi.jpg'
+import dummy from '../../../Images/dummy.jpg'
 
 
 function RightBar() {
@@ -91,7 +91,7 @@ function RightBar() {
                           <div className="flex items-center w-48">
                             <div>
                               <img className="inline-block h-10 w-auto rounded-full ml-4 mt-2"
-                                src={image}
+                                src={dummy}
                                 alt="" />
                             </div>
                             <div className="ml-3 mt-3">

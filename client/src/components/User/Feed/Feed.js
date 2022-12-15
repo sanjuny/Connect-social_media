@@ -22,21 +22,20 @@ function Feed() {
     console.log(post, 'datafeed');
 
     useEffect(() => {
-        getUserPost()
-    }, [])
-
-
-    const getUserPost = async () => {
-        try {
-            const { data } = await getpost(userData._id)
-            console.log(data, 'koko');
-            setpost(data.sort((p1, p2) => {
-                return new Date(p2.createdAt) - new Date(p1.createdAt)
-            }))
-        } catch (error) {
-            console.log(error, 'catch error');
+        const getUserPost = async () => {
+            try {
+                const { data } = await getpost(userData._id)
+                console.log(data, 'koko');
+                setpost(data.sort((p1, p2) => {
+                    return new Date(p2.createdAt) - new Date(p1.createdAt)
+                }))
+            } catch (error) {
+                console.log(error, 'catch error');
+            }
         }
-    }
+        getUserPost()
+    }, [post])
+
 
     /* --------------------------- handling user post --------------------------- */
 

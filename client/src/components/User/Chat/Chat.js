@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { getUser, userChats } from '../../../Api/UserApi/UserRequest';
 import ChatRight from '../ChatRight/ChatRight';
 import Conversation from '../Conversation/Conversation';
+import { io } from 'socket.io-client'
+import { useRef } from 'react';
 
 
 function Chat() {
@@ -14,6 +16,40 @@ function Chat() {
 
     const [chats, setChats] = useState([])
     const [currentChat, setCurrentChat] = useState(null)
+    const [onlineUsers, setOnlineUsers] = useState([])
+    const [sendMessage, setSendMessage] = useState(null)
+    const [recieveMessage, setRecieveMessage] = useState(null)
+    const socket = useRef()
+
+
+    // send messgae to the socket server
+    useEffect(() => {
+        if (sendMessage !== null) {
+            socket.current.emit('send-message', sendMessage)
+        }
+    }, [sendMessage])
+
+
+
+
+    useEffect(() => {
+        socket.current = io('http://localhost:8800');
+        socket.current.emit('new-user-add', userData._id)
+        socket.current.on('get-users', (users) => {
+            setOnlineUsers(users)
+            console.log(onlineUsers, 'onlineUsers');
+        })
+    }, [userData])
+
+    // receive message from socket server
+    useEffect(() => {
+        socket.current.on('receive-message', (data) => {
+            setRecieveMessage(data)
+        })
+    }, [])
+
+
+
 
     useEffect(() => {
         const getChats = async () => {
@@ -45,10 +81,16 @@ function Chat() {
         }
     };
 
+    const checkOnlineStatus = (chat) =>{
+        const chatMember = chat.members.find((member)=> member !== userData._id)
+        const online = onlineUsers.find((user)=> user.userId === chatMember)
+        return online? true : false
+    }
+
     return (
         <>
             <div className="flex h-screen  antialiased text-gray-800">
-                <div className="  h-full w-5/12 overflow-x-hidden no-scrollbar">
+                <div className="  h-full w-4/12 overflow-x-hidden no-scrollbar">
                     <div className="w-9/4  border border-y-0 border-gray-800 h-full">
                         <div className="flex justify-start">
                             <div className="px-4 py-2 mx-2">
@@ -67,13 +109,11 @@ function Chat() {
                                 {chats.map((chat, index) => {
                                     return (
                                         <div className="flex flex-col space-y-1 mt-4 max-h-screen overflow-y-auto  no-scrollbar" key={index}>
-                                            <button
-                                            //  onClick={() => setCurrentChat(chat.members.find((id) => id !== userData._id))}
-                                             onClick={() => setCurrentChat(chat)} 
-                                             className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2" >
+                                            <button onClick={() => setCurrentChat(chat)}
+                                                className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2" >
                                                 <div className="flex items-center justify-center h-8 w-8 bg-gray-200 rounded-full"> M</div>
-                                                <div className="ml-2 text-sm font-semibold text-white"> <Conversation data={chat} currentUserId={userData._id} /></div>
-                                                <div className="flex items-center justify-center ml-auto text-xs text-white bg-red-500 h-4 w-4 rounded leading-none">2</div>
+                                                <div className="ml-2 text-sm font-semibold text-white"> <Conversation data={chat} currentUserId={userData._id} online={checkOnlineStatus(chat)}/></div>
+                                                {/* <div className="flex items-center justify-center ml-auto text-xs text-white bg-red-500 h-4 w-4 rounded leading-none">2</div> */}
                                             </button>
                                         </div>
                                     )
@@ -82,8 +122,8 @@ function Chat() {
                         </div>
                     </div>
                 </div>
-                <div className='w-7/12'>
-                <ChatRight chat={currentChat} currentUser={userData._id} />
+                <div className='w-8/12'>
+                    <ChatRight chat={currentChat} currentUser={userData._id} setSendMessage={setSendMessage} recieveMessage={recieveMessage} />
                 </div>
             </div>
         </>

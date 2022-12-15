@@ -23,28 +23,36 @@ function Post({ post }) {
 
     /* ------------------------------- handle like ------------------------------- */
 
+    useEffect(() => {
+        setLikeState(post.likes.includes(userData._id))
+
+    }, [userData._id, post._id])
+
     const [Like, setLike] = useState(post?.likes?.length)
     const [LikeState, setLikeState] = useState(false)
 
     const [posted, setposted] = useState([])
+
     const [comments, setcomments] = useState([])
 
 
-    useEffect(() => {
-        getUserPost()
-    }, [])
 
-    const getUserPost = async () => {
-        try {
-            const { data } = await getpost(userData._id)
-            console.log(data, 'koko');
-            setposted(data.sort((p1, p2) => {
-                return new Date(p2.createdAt) - new Date(p1.createdAt)
-            }))
-        } catch (error) {
-            console.log(error, 'catch error');
+    useEffect(() => {
+        const getUserPost = async () => {
+            try {
+                const { data } = await getpost(userData._id)
+                console.log(data, 'koko');
+                setposted(data.sort((p1, p2) => {
+                    return new Date(p2.createdAt) - new Date(p1.createdAt)
+                }))
+            } catch (error) {
+                console.log(error, 'catch error');
+            }
         }
-    }
+        getUserPost()
+    }, [LikeState])
+
+
 
 
     const handlelike = async (postId) => {
@@ -52,9 +60,9 @@ function Post({ post }) {
         try {
             const { data } = await addlike(userData._id, postId)
             console.log(data, 'likesss');
-            setLikeState(!LikeState)
             setLike(LikeState ? Like - 1 : Like + 1)
-            getUserPost()
+            setLikeState(!LikeState)
+            // getUserPost()
         } catch (error) {
             console.log(error, 'catch error');
         }
@@ -82,6 +90,7 @@ function Post({ post }) {
         try {
             setcomment(e.target.value)
 
+
         } catch (error) {
             console.log(error, 'catch error comment one');
 
@@ -97,6 +106,7 @@ function Post({ post }) {
         console.log(datas, 'kjhgfdfgh');
         try {
             const { data } = await addcomment(datas, postId)
+            setcomment('')
             console.log(data, 'kkkkiiii');
         } catch (error) {
             console.log(error, 'catch error comment');
@@ -110,6 +120,7 @@ function Post({ post }) {
             const { data } = await getcomments(postId)
             console.log(data, 'comment data');
             setcomments(data)
+
             setOpen(true)
         } catch (error) {
             console.log(error, 'catching hjbdjshfd');
@@ -156,7 +167,7 @@ function Post({ post }) {
                 <div className="flex gap-5 items-center py-4">
 
                     <div onClick={(e) => getUserComment(post._id)} className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                        <FaRegComment className='w-6 h-6' />12.5k
+                        <FaRegComment className='w-6 h-6' />
                     </div>
                     <div onClick={(e) => handlelike(post._id)} className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
                         {
@@ -172,7 +183,6 @@ function Post({ post }) {
             {/* modal */}
             {
                 open ? (
-
                     <div className=" px-0 mx-auto  w-[700px] max-h-[200px] overflow-y-scroll no-scrollbar">
                         <div className="flex-col  w-[590px]   bg-black border-b-2 border-r-2 border-black sm:px-4 sm:py-4 md:px-4 sm:rounded-lg sm:shadow-sm">
                             <button onClick={closeMODAl} type="button" className="float-left rounded-md p-2 inline-flex items-center justify-center text-white hover:text-black hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black">
@@ -185,9 +195,8 @@ function Post({ post }) {
                                 <FiSend className='w-6 h-6' />
                             </div>
                             <div className="flex-1 px-2 ml-2 text-sm  w-full font-medium leading-loose text-white">
-                                <textarea className=' w-[400px] focus:outline-none flex flex-wrap no-scrollbar bg-black' onChange={handleStateComment} type='text' placeholder='Comment Here'></textarea>
+                                <textarea className=' w-[400px] focus:outline-none flex flex-wrap no-scrollbar bg-black' onChange={handleStateComment} type='text' placeholder='Comment Here' value={comment}></textarea>
                             </div>
-
                             {comments?.map((item) => {
                                 return (
                                     <div className="flex flex-row">

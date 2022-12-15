@@ -13,9 +13,6 @@ function ChatPage() {
                     <div className='container md:w-9/12 p-5  flex-row justify-center max-w-[100%]'>
                         <Chat />
                     </div>
-                    {/* <div className='container w-5/12 p-5 pr-20 hidden md:block max-w-[100%]  ' >
-                       
-                    </div> */}
                 </div>
             </div>
         </>
