@@ -1,38 +1,36 @@
+import instance from "../../Axios/AxiosUserAuth"
 
-import axios from '../../Axios/AxiosUserAuth'
+export const addpost = (data) => instance.post('/addNewPost',data)
 
+export const getpost = (userId) => instance.get(`/getpost/${userId}`)
 
-export const Signup = (data)=> axios.post('/signup',data)
-export const Login = (data)=> axios.post('/login',data)
-export const VerifyOtp = (data) => axios.post('/Verifyotp',data)
+export const addlike = (userId,postId) => instance.post(`/addlike/${postId}`,{userId:userId})
 
+export const addcomment = (data,postId) => instance.post(`/addcomment/${postId}`,  {data})
 
+export const getcomments = (postId) => instance.get(`/getcomment/${postId}`)
 
-export const addpost = (data) => axios.post('/addNewPost',data)
+export const getSuggestionUser = () => instance.get('/getsuggestion')
 
-export const getpost = (userId) => axios.get(`/getpost/${userId}`)
+export const addfollow = (currentUserId,id) => instance.post(`/addfollow/${currentUserId}`,{id:id})
 
-export const addlike = (userId,postId) => axios.post(`/addlike/${postId}`,{userId:userId})
+export const getProfilePost = (userId) => instance.get(`/getprofilepost/${userId}`)
 
-export const addcomment = (data,postId) => axios.post(`/addcomment/${postId}`,  {data})
+export const editProfile = (data,userId) => instance.post(`/geteditProfile/${userId}`,{data})
 
-export const getcomments = (postId) => axios.get(`/getcomment/${postId}`)
+export const userChats = (id) => instance.get(`/chat/${id}`)
 
-export const getSuggestionUser = () => axios.get('/getsuggestion')
+export const getUser = (userId) => instance.get(`/getUser/${userId}`)
 
-export const addfollow = (currentUserId,id) => axios.post(`/addfollow/${currentUserId}`,{id:id})
+export const getMessages = (id) => instance.get(`/message/${id}`)
 
-export const getProfilePost = (userId) => axios.get(`/getprofilepost/${userId}`)
+export const addMessage = (data) => instance.post(`/message/`,data)
 
-export const editProfile = (data,userId) => axios.post(`/geteditProfile/${userId}`,{data})
+export const getUserByUsername = (username) => instance.get(`/users?username=${username}`)
 
-export const userChats = (id) => axios.get(`/chat/${id}`)
+export const getUserFollowers = (userId) => instance.get(`/myFollowers/${userId}`)
 
-export const getUser = (userId) => axios.get(`/getUser/${userId}`)
-
-export const getMessages = (id) => axios.get(`/message/${id}`)
-
-export const addMessage = (data) => axios.post(`/message/`,data)
+export const getUserFollowing = (userId) => instance.get(`/myFollowing/${userId}`)
 
 
 

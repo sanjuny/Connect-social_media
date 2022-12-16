@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
 const { Promise } = require('mongoose')
 const { post } = require('../routes/users')
+const users = require('../Models/SignupSchema')
 
 
 
@@ -189,14 +190,14 @@ const postUpload = async (req, res) => {
 }
 
 
-const profilePicUpload = async (req,res)=>{
-  console.log(req.params.id,'profilePicUpload');
-  console.log(req.body,'req,bodu');
+const profilePicUpload = async (req, res) => {
+  console.log(req.params.id, 'profilePicUpload');
+  console.log(req.body, 'req,bodu');
   try {
     // let { userId, bio, name, username, phone, profilePic} = req.body
-    
+
   } catch (error) {
-    
+
   }
 }
 
@@ -219,23 +220,12 @@ const getUsersPost = async (req, res) => {
     res.status(200).json(data)
   } catch (error) {
     console.log(error, "lknjn");
-    res.status(500).json({message:'this file'})
+    res.status(500).json({ message: 'this file' })
   }
 }
 
 
-const getProfilePost = async (req, res) => {
-  try {
-    let currentuser = await Users.findById(req.params.id)
-    let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
-    res.status(200).json(posts)
-  } catch (error) {
-    console.log(error, "lknjn");
-    res.status(500).json(error)
 
-  }
-
-}
 
 
 
@@ -275,12 +265,11 @@ const getcomments = async (req, res) => {
   const postId = req.params.id
   console.log(req.params.id, 'id hefre');
   try {
-    let comments = await Comment.find({ postId: req.params.id }).populate('userId','name username')
+    let comments = await Comment.find({ postId: req.params.id }).populate('userId', 'name username')
     console.log(comments, 'gettting');
     res.status(200).json(comments)
   } catch (error) {
     res.status(500).json({ message: 'failed' })
-
   }
 }
 
@@ -320,18 +309,95 @@ const postfollow = async (req, res) => {
   }
 }
 
-const getUser = async (req,res)=>{
-  const {userId} = req.params
-  console.log(userId,'ooooooooooooooo');
+const getUser = async (req, res) => {
+  const { userId } = req.params
+  console.log(userId, 'ooooooooooooooo');
   try {
-   const user = await Users.findById(userId)
-   console.log(user,'pppppppppp');
-   const { phone , password, ...details} = user._doc
-   res.status(200).json(details)
-   console.log(details,'llllllllllllllllll');
+    const user = await Users.findById(userId)
+    console.log(user, 'pppppppppp');
+    const { phone, password, ...details } = user._doc
+    res.status(200).json(details)
+    console.log(details, 'llllllllllllllllll');
   } catch (error) {
     res.status(500).json(error);
-    
+
+  }
+}
+
+
+const getProfilePost = async (req, res) => {
+  try {
+    let currentuser = await Users.findById(req.params.id)
+    let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
+    res.status(200).json(posts)
+  } catch (error) {
+    console.log(error, "lknjn");
+    res.status(500).json(error)
+
+  }
+
+}
+
+/* --------------------- GET USER DETAILS WITH USERNAME --------------------- */
+
+const getUserData = async (req,res)=>{
+  console.log('backend getuserdata');
+  const username = req.query.username
+  console.log(username,'backend username');
+  try {
+    const user = await Users.findOne({ username : username})
+    console.log(user,'backend user');
+    const { phone, password, ...details } = user._doc
+    res.status(200).json(details)
+    console.log(details,'backend details');
+  } catch (error) {
+    console.log(error,'error here');
+    res.status(500).json(error)
+  }
+} 
+
+
+/* ---------------------------- GET MY FOLLOWERS ---------------------------- */
+
+const getMyFollowers = async (req,res) =>{
+  console.log(req.params.id,'my followers');
+  try {
+    const user = await Users.findById(req.params.id)
+    if(user){
+      const followers = await Promise.all(
+        user?.followers?.map((id)=>{
+          return Users.findOne({_id: id}, { username:1, name:1, profilePic:1})
+        })
+      )
+      res.status(200).json(followers)
+    }else{
+      res.status(402).json('pleadse tru again')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
+/* ---------------------------- GET MY FOLLOWING ---------------------------- */
+
+const getMyFollowing = async (req,res) =>{
+  console.log(req.params.id,'my following');
+  try {
+    const user = await Users.findById(req.params.id)
+    if(user){
+      const following = await Promise.all(
+        user?.following?.map((id)=>{
+          return Users.findOne({_id: id}, { username:1, name:1, profilePic:1})
+        })
+      )
+      res.status(200).json(following)
+    }else{
+      res.status(402).json('pleadse tru again')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
   }
 }
 
@@ -340,4 +406,6 @@ const getUser = async (req,res)=>{
 
 
 
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser }
+
+
+module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser, getUserData, getMyFollowers, getMyFollowing }

@@ -12,6 +12,7 @@ import { confirmAlert } from 'react-confirm-alert';
 
 function LeftBar() {
     const navigate = useNavigate()
+    const [err, seterr] = useState('')
 
     
     useEffect(()=>{
@@ -75,8 +76,10 @@ function LeftBar() {
             console.log(data,'daaaaaaaaaaaaaaaaaaaatttttttttttttttttttaaaaaaaaaaaaaaaaaa');
             await addpost(data)
             setOpen(false)
+
         } catch (error) {
             console.log(error,'catch error eroor rororor');
+            seterr('Please upload a valid image file')
         }
     }
 
@@ -143,7 +146,6 @@ function LeftBar() {
                 </div>
             </div>
 
-
             {/* open modal */}
 
             {
@@ -164,6 +166,7 @@ function LeftBar() {
                                     </h2>
 
                                 </div>
+                                {err && <div className=" w-98 px p-2 mb-2 text-sm text-center text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {err}</div>}
                                 <form className="mt-8 space-y-3">
                                     <div className="grid grid-cols-1 space-y-2">
                                         <label className="text-sm font-bold text-gray-500 tracking-wide">Description</label>

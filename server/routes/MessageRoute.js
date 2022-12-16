@@ -1,9 +1,15 @@
-var express = require ('express')
+var express = require('express')
+var router = express.Router()
 const { addMessage, getMessages } = require('../Controller/MessageController')
 
-var router = express.Router()
+const check = require('../Middleware/AuthMiddleware')
 
-router.post('/',addMessage)
-router.get('/:chatId', getMessages)
+/* ------------------------ Datas protected with jwt ------------------------ */
+
+router.post('/', check, addMessage)
+
+router.get('/:chatId', check, getMessages)
+
+/* ------------------------ Datas protected with jwt ------------------------ */
 
 module.exports = router

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router';
-import { Signup, VerifyOtp } from '../../../Api/UserApi/UserRequest';
 import image from '../../../Images/logowhite.png'
 import OTPInput, { ResendOTP } from "otp-input-react";
 import { Link } from 'react-router-dom'
+import { Signup, VerifyOtp } from '../../../Api/UserApi/UserLogin';
 
 
 function UserSignup() {

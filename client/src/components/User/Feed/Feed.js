@@ -17,6 +17,7 @@ function Feed() {
     // const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const [post, setpost] = useState([])
     const [comments, setcomments] = useState([])
+    
 
     console.log(comments, 'kkkkkkkkkkkkkkkk');
     console.log(post, 'datafeed');
@@ -34,7 +35,7 @@ function Feed() {
             }
         }
         getUserPost()
-    }, [post])
+    }, [])
 
 
     /* --------------------------- handling user post --------------------------- */

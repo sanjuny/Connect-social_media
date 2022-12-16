@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-
-
-
-
-
 import messi from '../../../Images/messi.jpg'
 import dummy from '../../../Images/dummy.jpg'
 import { FaRegComment, FaRegHeart } from 'react-icons/fa'
@@ -37,6 +32,8 @@ function Post({ post }) {
 
 
 
+
+
     useEffect(() => {
         const getUserPost = async () => {
             try {
@@ -62,7 +59,6 @@ function Post({ post }) {
             console.log(data, 'likesss');
             setLike(LikeState ? Like - 1 : Like + 1)
             setLikeState(!LikeState)
-            // getUserPost()
         } catch (error) {
             console.log(error, 'catch error');
         }
@@ -137,7 +133,7 @@ function Post({ post }) {
                     <div className="flex items-center">
                         <div>
                             <img className="inline-block h-10 w-10 rounded-full"
-                                src={messi}
+                                src={dummy}
                                 alt="" />
                         </div>
                         <div className="ml-3">

@@ -3,29 +3,92 @@ import { BiArrowBack } from 'react-icons/bi'
 import { FaRegComment } from 'react-icons/fa'
 import { FcLike } from 'react-icons/fc'
 import dummy from '../../../Images/dummy.jpg'
-// import connect from '../../../Images/connect.png'
-// import connect from '../../../Images/connect.jpg'
 import connect from '../../../Images/dummy.jpg'
 import { useSelector } from 'react-redux'
-import { editProfile, getProfilePost } from '../../../Api/UserApi/UserRequest'
+import { addfollow, editProfile, getProfilePost, getUserByUsername, getUserFollowers, getUserFollowing } from '../../../Api/UserApi/UserRequest'
 import { format, render, cancel, register } from 'timeago.js';
-// C:\Users\sanju\OneDrive\Desktop\SECOND PROJECT\client\public\images\file_1671098280157_connect.jpg
+import { useParams } from 'react-router'
+
 
 function UserProfile() {
-
-
+    /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
     console.log(userData, 'lolololooololo');
+    /* ---------------------------- current userdata ---------------------------- */
 
-    const [open, setOpen] = useState(false)
 
-    const closeMODAl = () => {
-        setOpen(false)
+
+    /* ------------------------ follow and unfollow user ------------------------ */
+    const [user, setUser] = useState({})
+
+    let username = useParams().username
+    if (!username) {
+        username = userData.username
     }
 
-    const openMODAL = () => {
-        setOpen(true)
+    useEffect(() => {
+        const getUserData = async () => {
+            try {
+                const { data } = await getUserByUsername(username)
+                console.log(data, 'getUserData');
+                setUser(data)
+
+
+            } catch (error) {
+                console.log(error, 'catch error');
+            }
+        }
+        getUserData()
+    }, [username])
+
+    /* ------------------------ follow and unfollow user ------------------------ */
+
+    /* ------------------------------ show followers ----------------------------- */
+
+    const [myFollowers, setMyFollowers] = useState([])
+    const showFollowers  = async () =>{
+        let id;
+        if(!username){
+            id = userData._id
+        }else{
+            id = user._id
+        }
+        try {
+            const { data } = await getUserFollowers(id)
+            console.log(data,'userFollowers');
+            setMyFollowers(data)
+            // setShowModal({status:true,value:'Followers'})
+        } catch (error) {
+            console.log(error,'catch error');
+            
+        }
     }
+
+    /* ------------------------------ show followers ----------------------------- */
+
+    /* ----------------------------- show following ----------------------------- */
+
+    const showFollowing  = async () =>{
+        let id;
+        if(!username){
+            id = userData._id
+        }else{
+            id = user._id
+        }
+        try {
+            const { data } = await getUserFollowing(id)
+            console.log(data,'userFollowing');
+            setMyFollowers(data)
+            // setShowModal({status:true,value:'Followers'})
+        } catch (error) {
+            console.log(error,'catch error');
+            
+        }
+    }
+
+    /* ----------------------------- show following ----------------------------- */
+
+
 
     /* ------------------------------ getaddedpost ------------------------------ */
 
@@ -51,7 +114,18 @@ function UserProfile() {
 
     /* ------------------------------- editprofile ------------------------------ */
 
-    const [edit, setedit] = useState({ username: userData.username, name: userData.name, phone: userData.phone, bio: userData.bio, profilePic:'' })
+
+    const [open, setOpen] = useState(false)
+
+    const closeMODAl = () => {
+        setOpen(false)
+    }
+
+    const openMODAL = () => {
+        setOpen(true)
+    }
+
+    const [edit, setedit] = useState({ username: userData.username, name: userData.name, phone: userData.phone, bio: userData.bio, profilePic: '' })
     console.log(edit, 'editttttttttt');
     // const [file, setfile] = useState('')
 
@@ -63,26 +137,26 @@ function UserProfile() {
     const handleProfile = (e) => {
         const { name, value } = e.target;
         setedit({
-          ...edit,
-          [name]: value,
+            ...edit,
+            [name]: value,
         });
-    
+
         console.log(edit);
-      };
+    };
 
 
 
     const fileUpload = (e) => {
         console.log("file upload ann");
         // setImage(URL.createObjectURL(e.target.files[0]));
-    
+
         setedit({
-          ...edit,
-          profilePic: e.target.files[0],
+            ...edit,
+            profilePic: e.target.files[0],
         });
-        console.log(e.target.files[0],'e,taret klxznk');
-      };
-console.log(edit,"details of profile");
+        console.log(e.target.files[0], 'e,taret klxznk');
+    };
+    console.log(edit, "details of profile");
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log('call tebhkbasbjs');
@@ -130,7 +204,7 @@ console.log(edit,"details of profile");
                                 src={connect} alt="" />
                         </div>
                         <div className="p-4">
-                            <div className="relative flex w-full">
+                            <div className="relative flex w-full space-x-4 space-x-reverse">
                                 <div className="flex flex-1">
                                     <div style={{ marginTop: '-96px' }}>
                                         <div style={{ height: '144px', width: '144px' }}
@@ -143,6 +217,12 @@ console.log(edit,"details of profile");
                                         </div>
                                     </div>
                                 </div>
+                                <div className="flex flex-col text-right ">
+                                    <button
+                                        className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                                        Follow
+                                    </button>
+                                </div>
                                 <div className="flex flex-col text-right">
                                     <button
                                         onClick={openMODAL}
@@ -153,19 +233,28 @@ console.log(edit,"details of profile");
                             </div>
                             <div className="space-y-1 justify-center w-full mt-3 ml-3">
 
-                                <div>
-                                    <h2 className="text-xl leading-6 font-bold text-white">{userData.name}</h2>
-                                    <p className="text-sm leading-5 font-medium text-gray-600">@{userData.username}</p>
-                                </div>
+                                {!username ? <>
+                                    <div>
+                                        <h2 className="text-xl leading-6 font-bold text-white">{userData?.name}</h2>
+                                        <p className="text-sm leading-5 font-medium text-gray-600">@{userData?.username}</p>
+                                    </div>
+                                </>
+                                    : <>
+                                        <div>
+                                            <h2 className="text-xl leading-6 font-bold text-white">{user?.name}</h2>
+                                            <p className="text-sm leading-5 font-medium text-gray-600">@{user?.username}</p>
+                                        </div>
+                                    </>
+                                }
 
                                 <div className="mt-3">
                                     <p className="text-white leading-tight mb-2">Vibe high the magic will unfold you.....</p>
                                 </div>
                                 <div
                                     className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
-                                    <div className="text-center pr-3"><span className="font-bold text-white">520</span><span
+                                    <div className="text-center pr-3"><span className="font-bold text-white">{user?.following?.length}</span><span
                                         className="text-gray-600"> Following</span></div>
-                                    <div className="text-center px-3"><span className="font-bold text-white">650
+                                    <div  onClick={showFollowers} className="text-center px-3"><span className="font-bold text-white">{user?.followers?.length}
                                     </span><span className="text-gray-600"> Followers</span></div>
                                 </div>
                             </div>
@@ -273,7 +362,7 @@ console.log(edit,"details of profile");
                                             </div>
                                             <div>
                                                 <label htmlFor="UserName" className="text-sm font-bold text-gray-500">User Name
-                                                    <input type="text"  onChange={handleProfile} name="username" className="bg-white rounded-lg   w-full text-black p-1 pl-3" value={edit.username} />
+                                                    <input type="text" onChange={handleProfile} name="username" className="bg-white rounded-lg   w-full text-black p-1 pl-3" value={edit.username} />
                                                 </label>
                                                 <p className="text-red-500"></p>
                                             </div>
