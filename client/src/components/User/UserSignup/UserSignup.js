@@ -58,7 +58,7 @@ function UserSignup() {
   const closeMODAl=()=>{
     setOpen(false)
   }
-
+  
   return (
     <>
         <section className="min-h-screen w-full flex items-stretch text-white absolute">

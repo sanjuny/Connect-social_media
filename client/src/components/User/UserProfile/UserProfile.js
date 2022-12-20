@@ -46,21 +46,20 @@ function UserProfile() {
     /* ------------------------------ show followers ----------------------------- */
 
     const [myFollowers, setMyFollowers] = useState([])
-    const showFollowers  = async () =>{
+    const showFollowers = async () => {
         let id;
-        if(!username){
+        if (!username) {
             id = userData._id
-        }else{
+        } else {
             id = user._id
         }
         try {
             const { data } = await getUserFollowers(id)
-            console.log(data,'userFollowers');
+            console.log(data, 'userFollowers');
             setMyFollowers(data)
-            // setShowModal({status:true,value:'Followers'})
         } catch (error) {
-            console.log(error,'catch error');
-            
+            console.log(error, 'catch error');
+
         }
     }
 
@@ -68,21 +67,23 @@ function UserProfile() {
 
     /* ----------------------------- show following ----------------------------- */
 
-    const showFollowing  = async () =>{
+    const [followMod, setFollowMod] = useState(false)
+
+    const showFollowing = async () => {
         let id;
-        if(!username){
+        if (!username) {
             id = userData._id
-        }else{
+        } else {
             id = user._id
         }
         try {
             const { data } = await getUserFollowing(id)
-            console.log(data,'userFollowing');
+            console.log(data, 'userFollowing');
             setMyFollowers(data)
-            // setShowModal({status:true,value:'Followers'})
+            setFollowMod(!followMod)
         } catch (error) {
-            console.log(error,'catch error');
-            
+            console.log(error, 'catch error');
+
         }
     }
 
@@ -114,6 +115,45 @@ function UserProfile() {
 
     /* ------------------------------- editprofile ------------------------------ */
 
+    // const handleEdit  = async(e) =>{
+    //     e.preventDefault()
+    //     const newEdit ={
+    //         ...edit
+    //     }
+
+    //     if(file){
+    //         const datas = new FormData();
+    //         const filename = file.name
+    //         datas.append("file",file)
+    //         datas.append("name",filename)
+    //         edit.profilePic = filename
+    //         try {
+    //             const  { data } = editphoto(datas)
+    //             console.log(data,'datas profile pic');
+    //         } catch (error) {
+    //             console.log(error,'catch error handle error');
+    //         }
+    //     }
+    // }
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     const [open, setOpen] = useState(false)
 
@@ -125,14 +165,14 @@ function UserProfile() {
         setOpen(true)
     }
 
-    const [edit, setedit] = useState({ username: userData.username, name: userData.name, phone: userData.phone, bio: userData.bio, profilePic: '' })
+    const [edit, setedit] = useState({
+        username: userData.username,
+        name: userData.name,
+        phone: userData.phone,
+        bio: userData.bio,
+        profilePic: ''
+    })
     console.log(edit, 'editttttttttt');
-    // const [file, setfile] = useState('')
-
-    // const handlechange = (e) => {
-    //     setedit({ ...edit, [e.target.name]: e.target.value })
-
-    // }
 
     const handleProfile = (e) => {
         const { name, value } = e.target;
@@ -144,12 +184,8 @@ function UserProfile() {
         console.log(edit);
     };
 
-
-
     const fileUpload = (e) => {
         console.log("file upload ann");
-        // setImage(URL.createObjectURL(e.target.files[0]));
-
         setedit({
             ...edit,
             profilePic: e.target.files[0],
@@ -160,19 +196,19 @@ function UserProfile() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log('call tebhkbasbjs');
+        console.log(edit, 'helooooeoeoeoeoe');
+        let formData = new FormData()
+        // formData.append('file',edit.profilePic)
+        // formData.append('bio', edit.bio)
+        // formData.append('phone',edit.phone)
+        // formData.append('username',edit.username)
+        // formData.append('name',edit.name)
+        // formData.append('userId',userData._id)
+        for (let key in edit) {
+            formData.append(key, edit[key])
+        }
+        console.log(formData, 'lkjhgfdddddddddddddddddd');
         try {
-            console.log(edit, 'helooooeoeoeoeoe');
-            let formData = new FormData()
-            // data.append('file',edit.profilePic)
-            // data.append('bio', edit.bio)
-            // data.append('phone',edit.phone)
-            // data.append('username',edit.username)
-            // data.append('name',edit.name)
-            // data.append('userId',userData._id)
-            for (let key in edit) {
-                formData.append(key, edit[key])
-            }
-            console.log(formData, 'lkjhgfdddddddddddddddddd');
             await editProfile(formData, userData._id)
         } catch (error) {
             console.log(error, 'catch error');
@@ -203,34 +239,55 @@ function UserProfile() {
                             <img className="opacity-0 w-full h-full"
                                 src={connect} alt="" />
                         </div>
+
                         <div className="p-4">
-                            <div className="relative flex w-full space-x-4 space-x-reverse">
-                                <div className="flex flex-1">
-                                    <div style={{ marginTop: '-96px' }}>
-                                        <div style={{ height: '144px', width: '144px' }}
-                                            className="md rounded-full relative avatar">
-                                            <img style={{ height: '144px', width: '144px' }}
-                                                className="md rounded-full relative border-4 border-gray-900"
-                                                src={dummy}
-                                                alt="" />
-                                            <div className="absolute"></div>
+                            {username !== userData.username ?
+                                <div className="relative flex w-full space-x-4 space-x-reverse">
+                                    <div className="flex flex-1">
+                                        <div style={{ marginTop: '-96px' }}>
+                                            <div style={{ height: '144px', width: '144px' }}
+                                                className="md rounded-full relative avatar">
+                                                <img style={{ height: '144px', width: '144px' }}
+                                                    className="md rounded-full relative border-4 border-gray-900"
+                                                    src={dummy}
+                                                    alt="" />
+                                                <div className="absolute"></div>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div className="flex flex-col text-right">
+                                        <button
+                                            onClick={openMODAL}
+                                            className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                                            Edit Profile
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col text-right ">
-                                    <button
-                                        className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                                        Follow
-                                    </button>
+                                :
+                                <div className="relative flex w-full space-x-4 space-x-reverse">
+                                    <div className="flex flex-1">
+                                        <div style={{ marginTop: '-96px' }}>
+                                            <div style={{ height: '144px', width: '144px' }}
+                                                className="md rounded-full relative avatar">
+                                                <img style={{ height: '144px', width: '144px' }}
+                                                    className="md rounded-full relative border-4 border-gray-900"
+                                                    src={dummy}
+                                                    alt="" />
+                                                <div className="absolute"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col text-right">
+                                        <button
+                                            onClick={openMODAL}
+                                            className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                                            Edit Profile
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col text-right">
-                                    <button
-                                        onClick={openMODAL}
-                                        className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                                        Edit Profile
-                                    </button>
-                                </div>
-                            </div>
+                            }
+
+
                             <div className="space-y-1 justify-center w-full mt-3 ml-3">
 
                                 {!username ? <>
@@ -253,65 +310,113 @@ function UserProfile() {
                                 <div
                                     className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
                                     <div className="text-center pr-3"><span className="font-bold text-white">{user?.following?.length}</span><span
-                                        className="text-gray-600"> Following</span></div>
-                                    <div  onClick={showFollowers} className="text-center px-3"><span className="font-bold text-white">{user?.followers?.length}
-                                    </span><span className="text-gray-600"> Followers</span></div>
+                                        className="text-gray-600" onClick={showFollowing}> Following</span></div>
+                                    <div className="text-center px-3"><span className="font-bold text-white">{user?.followers?.length}
+                                    </span><span className="text-gray-600" onClick={showFollowers}> Followers</span></div>
                                 </div>
                             </div>
                         </div>
                         <hr className="border-gray-800" />
                     </div>
-                    <ul className="list-none">
-                        <li>
-                            {post.map((obj) => {
-                                return (
-                                    <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
-                                        <div className="flex flex-shrink-0 p-4 pb-0">
-                                            <div className="flex-shrink-0 group block">
-                                                <div className="flex items-center">
-                                                    <div>
-                                                        <img className="inline-block h-10 w-10 rounded-full"
-                                                            src={dummy}
-                                                            alt="" />
+
+                    {/* showing followers modal */}
+
+                    {
+                        myFollowers.map((persons) => {
+                            return (
+                                <div class=" z-10 w-60 bg-white rounded shadow dark:bg-gray-700">
+                                    <ul class="overflow-y-auto py-1 h-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
+                                        <li>
+                                            <a class="flex items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                <img class="mr-2 w-6 h-6 rounded-full" src={dummy} alt="Jese image" />
+                                                {persons.username}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            )
+                        })
+                    }
+
+
+
+
+
+
+
+
+                    {/* tabs */}
+
+                    <div class="border-b border-gray-200 dark:border-gray-700">
+                        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+                            <li class="mr-2">
+                                <a href="#" class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                                    <svg aria-hidden="true" class="mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd"></path></svg>Profile
+                                </a>
+                            </li>
+                            <li class="mr-2">
+                                <a href="#" class="inline-flex p-4 text-blue-600 rounded-t-lg border-b-2 border-blue-600 active dark:text-blue-500 dark:border-blue-500 group" aria-current="page">
+                                    <svg aria-hidden="true" class="mr-2 w-5 h-5 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard
+                                </a>
+                            </li>
+                        </ul>
+
+                        {/* tabs */}
+
+
+                        <ul className="list-none">
+                            <li>
+                                {post.map((obj) => {
+                                    return (
+                                        <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
+                                            <div className="flex flex-shrink-0 p-4 pb-0">
+                                                <div className="flex-shrink-0 group block">
+                                                    <div className="flex items-center">
+                                                        <div>
+                                                            <img className="inline-block h-10 w-10 rounded-full"
+                                                                src={dummy}
+                                                                alt="" />
+                                                        </div>
+                                                        <div className="ml-3">
+                                                            <p className="text-base leading-6 font-medium text-white">
+                                                                {obj.userId.name}
+                                                                <span
+                                                                    className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                                                    @{obj.userId.username} {format(obj.createdAt)}
+                                                                </span>
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                    <div className="ml-3">
-                                                        <p className="text-base leading-6 font-medium text-white">
-                                                            {obj.userId.name}
-                                                            <span
-                                                                className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                                @{obj.userId.username} {format(obj.createdAt)}
-                                                            </span>
-                                                        </p>
+                                                </div>
+                                            </div>
+                                            <div className="pl-16">
+                                                <p className="text-base width-auto font-medium text-white flex-shrink">
+                                                    {obj.description}
+                                                    <a className="text-blue-400"> #CopaAmerica #Argentina</a>
+                                                </p>
+                                                <div className="md:flex-shrink pr-6 pt-3">
+                                                    <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
+                                                        style={{ height: 'auto' }}>
+                                                        <img src={'/images/' + obj.image} style={{ height: '480px', width: '500px' }}></img>
+                                                    </div>
+                                                </div>
+                                                <div className="flex gap-5 items-center py-4">
+                                                    <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
+                                                        <FaRegComment className='w-6 h-6' />12.5k
+                                                    </div>
+                                                    <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
+                                                        <FcLike className='w-6 h-6' />10.5k
                                                     </div>
                                                 </div>
                                             </div>
+                                            <hr className="border-gray-800" />
                                         </div>
-                                        <div className="pl-16">
-                                            <p className="text-base width-auto font-medium text-white flex-shrink">
-                                                {obj.description}
-                                                <a className="text-blue-400"> #CopaAmerica #Argentina</a>
-                                            </p>
-                                            <div className="md:flex-shrink pr-6 pt-3">
-                                                <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
-                                                    style={{ height: 'auto' }}>
-                                                    <img src={'/images/' + obj.image} style={{ height: '480px', width: '500px' }}></img>
-                                                </div>
-                                            </div>
-                                            <div className="flex gap-5 items-center py-4">
-                                                <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                                                    <FaRegComment className='w-6 h-6' />12.5k
-                                                </div>
-                                                <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
-                                                    <FcLike className='w-6 h-6' />10.5k
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr className="border-gray-800" />
-                                    </div>
-                                )
-                            })}
-                        </li>
-                    </ul>
+                                    )
+                                })}
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 

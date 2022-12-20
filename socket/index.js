@@ -34,6 +34,18 @@ io.on("connection",(socket)=> {
         }
      })
 
+
+     //send notification
+     socket.on("send-notification",(data)=>{
+        console.log(data,'hellllllllooo');
+        const {receiverId, senderId, type} = data;
+        const receiver = activeUsers.find((user)=> user.userId === receiverId)
+        io.to(receiver?.socketId).emit("getNotification",{
+            senderId,
+            type
+        })
+     })
+
      socket.on("disconnect", ()=>{
         activeUsers = activeUsers.filter((user)=> user.socketId !== socket.id)
         console.log('user Disconnected', activeUsers);

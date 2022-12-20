@@ -111,7 +111,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                                 <div className="flex flex-col h-screen overflow-y-scroll  no-scrollbar">
                                     {messages.map((message) => {
                                         return (
-                                            <div ref={scroll} >
+                                            <div ref={scroll}>
                                                 {message.senderId != currentUser ?
                                                     <div className="col-start-1 col-end-8 p-3 rounded-lg ">
                                                         <div className="col-start-6 col-end-13 p-3 rounded-lg">

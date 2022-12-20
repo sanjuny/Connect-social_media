@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import image from '../../../Images/logowhite.png'
 import dummy from '../../../Images/dummy.jpg'
 import { BiHome, BiLogOutCircle } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
-import { addpost } from '../../../Api/UserApi/UserRequest'
+import { addpost, fetchNoCounts } from '../../../Api/UserApi/UserRequest'
 import { useSelector } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert';
+import { socket } from '../../../UserContext/SocketContext'
+
 
 
 function LeftBar() {
     const navigate = useNavigate()
     const [err, seterr] = useState('')
 
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         const token = localStorage.getItem('userToken')
-        if(!token){
+        if (!token) {
             navigate('/login')
         }
     })
@@ -33,7 +35,7 @@ function LeftBar() {
                         localStorage.removeItem('userToken')
                         navigate('/login')
                     }
-    
+
                 },
                 {
                     label: 'No'
@@ -42,16 +44,18 @@ function LeftBar() {
         });
     }
 
+    /* -------------------------------- add post -------------------------------- */
+
 
     const userData = useSelector(state => state.user)
-    console.log(userData,'lolololooololo');
-    
+    console.log(userData, 'lolololooololo');
+
 
     const [desc, setDesc] = useState('')
     const [post, setPost] = useState()
 
     const handlechange = (e) => {
-       
+
         console.log(e, 'kijhgf');
         setDesc(e.target.value)
 
@@ -64,21 +68,21 @@ function LeftBar() {
         console.log(e.target.files, 'hy');
     }
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         console.log('call tebhkbasbjs');
         try {
             console.log(post, 'llll');
             let data = new FormData()
-            data.append('file',post)
+            data.append('file', post)
             data.append('description', desc)
-            data.append('userId',userData._id)
-            console.log(data,'daaaaaaaaaaaaaaaaaaaatttttttttttttttttttaaaaaaaaaaaaaaaaaa');
+            data.append('userId', userData._id)
+            console.log(data, 'daaaaaaaa');
             await addpost(data)
             setOpen(false)
 
         } catch (error) {
-            console.log(error,'catch error eroor rororor');
+            console.log(error, 'catch error eroor rororor');
             seterr('Please upload a valid image file')
         }
     }
@@ -92,6 +96,40 @@ function LeftBar() {
     const openMODAL = () => {
         setOpen(true)
     }
+    /* -------------------------------- add post -------------------------------- */
+
+
+    /* ---------------------------- notication count ---------------------------- */
+
+    const [notification, setNotification] = useState('')
+
+    const fetchnotificationsCount = async () => {
+        try {
+            const { data } = await fetchNoCounts(userData._id)
+            console.log(data, 'fetchnotificationsCount');
+            setNotification(data)
+        } catch (error) {
+            console.log(error, 'catch error fetchnotificationsCount');
+        }
+    }
+
+
+    useEffect(() => {
+        if (userData) {
+            socket.emit("new-user-add", userData._id)
+        }
+        fetchnotificationsCount()
+    }, []);
+
+
+    useEffect(() => {
+        socket.on("getNotification", data => {
+            fetchnotificationsCount()
+        })
+    }, [socket, notification])
+
+
+    /* ---------------------------- notication count ---------------------------- */
 
     return (
         <>
@@ -104,10 +142,10 @@ function LeftBar() {
                                 <BiHome className='w-7 h-7' />
                                 <h2 className='pl-4'>Home</h2>
                             </Link>
-                            <a href="#" className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
+                            <Link to='/notification' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <IoIosNotifications className='w-7 h-7' />
                                 <h2 className='pl-4'>Notifications</h2>
-                            </a>
+                            </Link>
                             <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <AiOutlineMessage className='w-7 h-7' />
                                 <h2 className='pl-4'>Messages</h2>
@@ -197,7 +235,7 @@ function LeftBar() {
                                         </div>
                                     </div>
                                     <div>
-                                    <button onClick={(e)=> handleSubmit(e)} type="button" className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                                        <button onClick={(e) => handleSubmit(e)} type="button" className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                             font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
                                             Upload
                                         </button>

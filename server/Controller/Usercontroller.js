@@ -8,6 +8,7 @@ const nodemailer = require('nodemailer')
 const { Promise } = require('mongoose')
 const { post } = require('../routes/users')
 const users = require('../Models/SignupSchema')
+const Notification = require('../Models/NotificationSchema')
 
 
 
@@ -176,7 +177,7 @@ const postUpload = async (req, res) => {
   console.log('addPost reached');
   try {
     console.log(req.body, 'jhgfddfghj');
-    console.log(req?.file?.filename, 'mmmmmmmmgggggmmmm');
+    console.log(req?.file?.file, 'mmmmmmmmgggggmmmm');
     let { userId, description } = req.body;
     let image = req?.file?.filename
     await Post.create({ userId, description, image }).then((response) => {
@@ -189,6 +190,9 @@ const postUpload = async (req, res) => {
   }
 }
 
+
+
+/* --------------------------- update user profile -------------------------- */
 
 const profilePicUpload = async (req, res) => {
   console.log(req.params.id, 'profilePicUpload');
@@ -231,14 +235,27 @@ const getUsersPost = async (req, res) => {
 
 const postaddlikes = async (req, res) => {
   console.log(req.body, 'kkkkk');
-  console.log(req.params.id, 'kikkk');
   console.log('call like');
   const post = await Post.findById(req.params.id)
   console.log(post, 'gfdvc');
+  const details = {
+    desc: 'liked ur post',
+    time: Date.now(),
+    user: req.body.userId
+  }
   if (!post?.likes?.includes(req.body.userId)) {
+    console.log('if working');
     await post.updateOne({ $push: { likes: req.body.userId } })
+    if (post.userId != req.body.userId) {
+      await Notification.updateOne({ userId: post.userId }, {
+        $push: {
+          Notification: details
+        }
+      }, { upsert: true })
+    }
     res.status(200).json({ message: 'post liked' })
   } else {
+    console.log('else working');
     await post.updateOne({ $pull: { likes: req.body.userId } })
     res.status(200).json({ message: 'post disliked' })
   }
@@ -340,37 +357,54 @@ const getProfilePost = async (req, res) => {
 
 /* --------------------- GET USER DETAILS WITH USERNAME --------------------- */
 
-const getUserData = async (req,res)=>{
+const getUserData = async (req, res) => {
   console.log('backend getuserdata');
   const username = req.query.username
-  console.log(username,'backend username');
+  console.log(username, 'backend username');
   try {
-    const user = await Users.findOne({ username : username})
-    console.log(user,'backend user');
+    const user = await Users.findOne({ username: username })
+    console.log(user, 'backend user');
     const { phone, password, ...details } = user._doc
     res.status(200).json(details)
-    console.log(details,'backend details');
+    console.log(details, 'backend details');
   } catch (error) {
-    console.log(error,'error here');
+    console.log(error, 'error here');
     res.status(500).json(error)
   }
-} 
+}
+
+/* ---------------------------- GET USER DETAILS BY Id---------------------------- */
+
+// const getUserDetails = async (req, res) => {
+//   const { userId } = req.params
+
+//   console.log(userId, "vvvvvvvvv")
+//   try {
+//     const user = await Users.findById(userId)
+//     const { phone, password, ...details } = user._doc
+//     res.status(200).json(details)
+//     console.log(details, "llkkoopp")
+//   } catch (error) {
+//     res.status(500).json(error)
+//   }
+// }
+
 
 
 /* ---------------------------- GET MY FOLLOWERS ---------------------------- */
 
-const getMyFollowers = async (req,res) =>{
-  console.log(req.params.id,'my followers');
+const getMyFollowers = async (req, res) => {
+  console.log(req.params.id, 'my followers');
   try {
     const user = await Users.findById(req.params.id)
-    if(user){
+    if (user) {
       const followers = await Promise.all(
-        user?.followers?.map((id)=>{
-          return Users.findOne({_id: id}, { username:1, name:1, profilePic:1})
+        user?.followers?.map((id) => {
+          return Users.findOne({ _id: id }, { username: 1, name: 1, profilePic: 1 })
         })
       )
       res.status(200).json(followers)
-    }else{
+    } else {
       res.status(402).json('pleadse tru again')
     }
   } catch (error) {
@@ -381,18 +415,18 @@ const getMyFollowers = async (req,res) =>{
 
 /* ---------------------------- GET MY FOLLOWING ---------------------------- */
 
-const getMyFollowing = async (req,res) =>{
-  console.log(req.params.id,'my following');
+const getMyFollowing = async (req, res) => {
+  console.log(req.params.id, 'my following');
   try {
     const user = await Users.findById(req.params.id)
-    if(user){
+    if (user) {
       const following = await Promise.all(
-        user?.following?.map((id)=>{
-          return Users.findOne({_id: id}, { username:1, name:1, profilePic:1})
+        user?.following?.map((id) => {
+          return Users.findOne({ _id: id }, { username: 1, name: 1, profilePic: 1 })
         })
       )
       res.status(200).json(following)
-    }else{
+    } else {
       res.status(402).json('pleadse tru again')
     }
   } catch (error) {
@@ -403,9 +437,94 @@ const getMyFollowing = async (req,res) =>{
 
 
 
+/* ----------------------------- SEARCH FOR USER ---------------------------- */
+
+const searchUsers = async (req, res) => {
+  console.log(req.params.id, "uuiiid")
+  const data = req.params.id
+  try {
+    const users = await Users.find(
+      { username: { $regex: "^" + data, $options: "i" } },
+      { name: 1, username: 1 }
+    )
+    res.status(200).json(users)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json(error)
+  }
+}
+
+
+/* ------------------------------ getuser post ------------------------------ */
+
+const userPost = async (req, res) => {
+  try {
+    const user = await Users.findById(req.params.id);
+    const userPosts = await Post.find({ userId: user._id }).sort({ createdAt: -1 });
+    res.json(userPosts);
+  } catch (error) {
+    res.json(error);
+  }
+};
+
+/* ------------------------------ getuser post ------------------------------ */
+
+const getUserPost = async (req, res) => {
+  const userId = req.query.userId;
+  const username = req.query.username;
+  try {
+    const user = userId
+      ? await Users.findById(userId)
+      : await Users.findOne({ username: username });
+    const { password, updatedAt, ...other } = user._doc;
+    res.status(200).json(other);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+
+/* ----------------------------- get report post ---------------------------- */
+
+const report = async () => {
+  console.log('kkkkkkkkkk');
+}
+
+
+/* -------------------------- get all notifications ------------------------- */
+
+const getAllNotification = async (req, res) => {
+  console.log('getallnotification back');
+  try {
+    const notifications = await Notification.findOne({user: req.params.id},{_id:0, Notification:1}).sort({_id:-1}).populate("Notification.user","username profilePic")
+    const notify = notifications.Notification.reverse()
+    console.log(notify,'notifyyyyy');
+    res.status(200).json(notify)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+
+/* ---------------------- fetch all notification count ---------------------- */
+
+const NotificationCount = async (req, res) => {
+  console.log(req.params.id, 'getNotificationCount');
+  try {
+    const result = await Notification.findOne({user: req.params.id})
+    console.log(result,'resulttttt');
+    const unread = result.Notification.filter((data) => {
+      if (data?.unRead === 'true') {
+        return data
+      }
+    })
+    console.log(unread.length, 'count111');
+  } catch (error) {
+    console.log(error,'erorrrrrrrrrrrrr');
+    res.status(500).json(error) 
+  }
+}
 
 
 
-
-
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser, getUserData, getMyFollowers, getMyFollowing }
+module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, userPost, getUserPost, report, getAllNotification, NotificationCount }

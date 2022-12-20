@@ -18,6 +18,7 @@ function Feed() {
     const [post, setpost] = useState([])
     const [comments, setcomments] = useState([])
     
+    
 
     console.log(comments, 'kkkkkkkkkkkkkkkk');
     console.log(post, 'datafeed');

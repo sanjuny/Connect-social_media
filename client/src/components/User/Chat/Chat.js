@@ -89,7 +89,7 @@ function Chat() {
 
     return (
         <>
-            <div className="flex h-screen  antialiased text-gray-800">
+            <div className="flex h-screen antialiased text-gray-800">
                 <div className="  h-full w-4/12 overflow-x-hidden no-scrollbar">
                     <div className="w-9/4  border border-y-0 border-gray-800 h-full">
                         <div className="flex justify-start">

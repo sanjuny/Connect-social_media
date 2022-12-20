@@ -8,9 +8,12 @@ import ChatPage from './Pages/User/ChatPage'
 import HomePages from './Pages/User/HomePages'
 import LandingPages from './Pages/User/LandingPages'
 import LoginPage from './Pages/User/LoginPage'
+import NotificationPage from './Pages/User/NotificationPage'
+import ProfiePage from './Pages/User/ProfiePage'
 import SignupPage from './Pages/User/SignupPage'
 import UserProfilePages from './Pages/User/UserProfilePages'
 import store from './Redux/Store'
+import Updation from './UserContext/userContext'
 
 
 function App() {
@@ -23,15 +26,21 @@ function App() {
           <Route path='/signup' element={<SignupPage />} />
         </Routes>
 
+
         <Provider store={store}>
-          <Routes> {/* userside */}
+          <Updation>
 
-            <Route path='/login' element={<LoginPage />} />
-            <Route path='/home' element={<HomePages />} />
-            <Route path='/profile' element={<UserProfilePages />} />
-            <Route path='/chat' element={<ChatPage />} />
+            <Routes> {/* userside */}
 
-          </Routes>
+              <Route path='/login' element={<LoginPage />} />
+              <Route path='/home' element={<HomePages />} />
+              <Route path='/profile' element={<UserProfilePages />} />
+              <Route path='/chat' element={<ChatPage />} />
+              <Route path='/profile/:username' element={<ProfiePage />} />
+              <Route path='/notification' element={<NotificationPage/>} />
+
+            </Routes>
+          </Updation>
         </Provider>
 
 
