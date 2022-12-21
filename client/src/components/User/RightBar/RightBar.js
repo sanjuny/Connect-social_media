@@ -14,6 +14,7 @@ function RightBar() {
   /* ---------------------------- current userdata ---------------------------- */
 
   const { profileUpdate, setProfileUpdate } = useContext(UserUpdation)
+  const { feedsUpdate, setfeedsUpdate } = useContext(UserUpdation)
 
 
   /* ----------------------------- user Suggestion ---------------------------- */
@@ -64,6 +65,7 @@ function RightBar() {
       const { data } = await addfollow(userData._id, id)
       console.log(data, 'follow log');
       setState(!State)
+      setfeedsUpdate(!feedsUpdate)
     } catch (error) {
       console.log(error, 'catch error');
     }
@@ -111,10 +113,10 @@ function RightBar() {
               {Sugge.map((obj) => {
                 return (
                   userData._id !== obj._id &&
-                  <Link to={`/profile/${obj.username}`}>
+                  <div>
                     {!obj.followers.includes(userData._id) ?
                       <div className="flex flex-shrink-0">
-                        <div className="flex-1 ">
+                        <Link to={`/profile/${obj.username}`} className="flex-1 ">
                           <div className="flex items-center w-48">
                             <div>
                               <img className="inline-block h-10 w-auto rounded-full ml-4 mt-2"
@@ -131,7 +133,7 @@ function RightBar() {
                               </p>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                         <div className="flex-1 px-4 py-2 m-2">
                           {obj.followers.includes(userData._id) ?
                             <button
@@ -152,7 +154,7 @@ function RightBar() {
 
                       : ''
                     }
-                  </Link>
+                  </div>
                 )
               })}
             </div>

@@ -18,7 +18,12 @@ const PostSchema = new mongoose.Schema({
         default:[]
     },
     reports:{
-        type:String
+        type:Array,
+        default:[]
+    },
+    status:{
+        type:String,
+        default:'active'
     }
 
 },{timestamps:true})

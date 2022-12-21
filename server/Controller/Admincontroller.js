@@ -82,13 +82,15 @@ const postAdminLogin = async (req, res)=>{
             }
         }else{
             res.json({message:'Email is not valid no details found'})
-            // console.log(res,'resjsnp');
         }
         
     } catch (error) {
         
     }
 }
+
+
+
 
 
 

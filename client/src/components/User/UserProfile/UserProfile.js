@@ -5,9 +5,11 @@ import { FcLike } from 'react-icons/fc'
 import dummy from '../../../Images/dummy.jpg'
 import connect from '../../../Images/dummy.jpg'
 import { useSelector } from 'react-redux'
-import { addfollow, editProfile, getProfilePost, getUserByUsername, getUserFollowers, getUserFollowing } from '../../../Api/UserApi/UserRequest'
+import { editphoto, editPostDetails, getProfilePost, getUserByUsername, getUserFollowers, getUserFollowing, updateDetails } from '../../../Api/UserApi/UserRequest'
 import { format, render, cancel, register } from 'timeago.js';
 import { useParams } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { update } from '../../../Redux/StoreSlice'
 
 
 function UserProfile() {
@@ -115,46 +117,6 @@ function UserProfile() {
 
     /* ------------------------------- editprofile ------------------------------ */
 
-    // const handleEdit  = async(e) =>{
-    //     e.preventDefault()
-    //     const newEdit ={
-    //         ...edit
-    //     }
-
-    //     if(file){
-    //         const datas = new FormData();
-    //         const filename = file.name
-    //         datas.append("file",file)
-    //         datas.append("name",filename)
-    //         edit.profilePic = filename
-    //         try {
-    //             const  { data } = editphoto(datas)
-    //             console.log(data,'datas profile pic');
-    //         } catch (error) {
-    //             console.log(error,'catch error handle error');
-    //         }
-    //     }
-    // }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const [open, setOpen] = useState(false)
 
     const closeMODAl = () => {
@@ -164,59 +126,56 @@ function UserProfile() {
     const openMODAL = () => {
         setOpen(true)
     }
-
+    const dispatch = useDispatch()
+    const [file, setFile] = useState("")
     const [edit, setedit] = useState({
         username: userData.username,
         name: userData.name,
         phone: userData.phone,
         bio: userData.bio,
-        profilePic: ''
     })
-    console.log(edit, 'editttttttttt');
+    var userId = userData._id
 
-    const handleProfile = (e) => {
-        const { name, value } = e.target;
-        setedit({
-            ...edit,
-            [name]: value,
-        });
-
-        console.log(edit);
-    };
-
-    const fileUpload = (e) => {
-        console.log("file upload ann");
-        setedit({
-            ...edit,
-            profilePic: e.target.files[0],
-        });
-        console.log(e.target.files[0], 'e,taret klxznk');
-    };
-    console.log(edit, "details of profile");
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        console.log('call tebhkbasbjs');
-        console.log(edit, 'helooooeoeoeoeoe');
-        let formData = new FormData()
-        // formData.append('file',edit.profilePic)
-        // formData.append('bio', edit.bio)
-        // formData.append('phone',edit.phone)
-        // formData.append('username',edit.username)
-        // formData.append('name',edit.name)
-        // formData.append('userId',userData._id)
-        for (let key in edit) {
-            formData.append(key, edit[key])
+    const handleEdit = async (e) => {
+        // e.preventDefault()
+        const newEdit = {
+            ...edit
         }
-        console.log(formData, 'lkjhgfdddddddddddddddddd');
+
+        if (file) {
+            const datas = new FormData();
+            const filename = file.name
+            datas.append("file", file)
+            datas.append("name", filename)
+            try {
+                const { data } = await editphoto(datas)
+                console.log(data, 'datas profile picccc');
+                edit.image = data.image
+            } catch (error) {
+                console.log(error, 'catch error handle error');
+            }
+            
+            dispatch(update({ ...userData, ...edit }))
+        }
+
         try {
-            await editProfile(formData, userData._id)
+            const { data } = updateDetails({ ...edit }, userId)
+            console.log(data, 'updatedetails');
+            console.log(edit, 'kkkkkkkkkkkkkjjjjjjj');
         } catch (error) {
-            console.log(error, 'catch error');
+            console.log(error);
         }
     }
 
-    /* ------------------------------- editprofile ------------------------------ */
+    // handlechange
 
+    const handlechange = (e) => {
+        setedit({ ...edit, [e.target.name]: e.target.value })
+
+    }
+
+    
+    /* ------------------------------- editprofile ------------------------------ */
     return (
         <>
             <div className="flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px' }}>
@@ -271,7 +230,7 @@ function UserProfile() {
                                                 className="md rounded-full relative avatar">
                                                 <img style={{ height: '144px', width: '144px' }}
                                                     className="md rounded-full relative border-4 border-gray-900"
-                                                    src={dummy}
+                                                    src={'/images/' + userData.image}
                                                     alt="" />
                                                 <div className="absolute"></div>
                                             </div>
@@ -339,16 +298,9 @@ function UserProfile() {
                         })
                     }
 
-
-
-
-
-
-
-
                     {/* tabs */}
 
-                    <div class="border-b border-gray-200 dark:border-gray-700">
+                    {/* <div class="border-b border-gray-200 dark:border-gray-700">
                         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
                             <li class="mr-2">
                                 <a href="#" class="inline-flex p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
@@ -360,7 +312,7 @@ function UserProfile() {
                                     <svg aria-hidden="true" class="mr-2 w-5 h-5 text-blue-600 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>Dashboard
                                 </a>
                             </li>
-                        </ul>
+                        </ul> */}
 
                         {/* tabs */}
 
@@ -418,8 +370,7 @@ function UserProfile() {
                         </ul>
                     </div>
                 </div>
-            </div>
-
+            {/* </div> */}
             { /* -------------------------------- openmodal ------------------------------- */}
             {
                 open ? (
@@ -452,44 +403,42 @@ function UserProfile() {
                                                 </div>
                                                 <input
                                                     type="file"
-                                                    name='profilePic'
-                                                    // value={edit.profilePic}
-                                                    onChange={fileUpload}
+                                                    name='file'
+                                                    onChange={(e) => { { setFile(e.target.files[0]) } }}
                                                     className="hidden" />
                                             </label>
                                         </div>
                                         <div className="flex  gap-2 w-full">
                                             <div>
                                                 <label htmlFor="Fullname " className="text-sm font-bold text-gray-500">Full Name
-                                                    <input type="text" onChange={handleProfile} name="name" className="bg-gray-8 rounded-lg  w-full text-black  p-1 pl-3" value={edit.name} />
+                                                    <input type="text" onChange={handlechange} name="name" className="bg-gray-8 rounded-lg  w-full text-black  p-1 pl-3" value={edit.name} />
                                                 </label>
                                                 <p className="text-red-500"></p>
                                             </div>
                                             <div>
                                                 <label htmlFor="UserName" className="text-sm font-bold text-gray-500">User Name
-                                                    <input type="text" onChange={handleProfile} name="username" className="bg-white rounded-lg   w-full text-black p-1 pl-3" value={edit.username} />
+                                                    <input type="text" onChange={handlechange} name="username" className="bg-white rounded-lg   w-full text-black p-1 pl-3" value={edit.username} />
                                                 </label>
                                                 <p className="text-red-500"></p>
                                             </div>
                                         </div>
                                         <div className="w-full ">
                                             <label htmlFor="phone" className="text-sm font-bold text-gray-500">Mobile
-                                                <input type="number" onChange={handleProfile} name="phone" className="bg-white rounded-lg  w-full  text-black p-1 pl-3" value={edit.phone} />
+                                                <input type="number" onChange={handlechange} name="phone" className="bg-white rounded-lg  w-full  text-black p-1 pl-3" value={edit.phone} />
                                                 <p className="text-red-500"></p>
                                             </label>
                                         </div>
                                         <div className="w-full " >
                                             <label htmlFor="about" className="text-sm font-bold text-gray-500" >About
-                                                <input type="text" name="bio" onChange={handleProfile} className="bg-white rounded-lg  w-full text-black  p-1 pl-3" value={edit.bio} />
+                                                <input type="text" name="bio" onChange={handlechange} className="bg-white rounded-lg  w-full text-black  p-1 pl-3" value={edit.bio} />
                                             </label>
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-center bg-gradient-to-r from-gray-900 bg-gray-600 p-1 border-t border-solid border-slate-200 rounded-b-lg">
-                                        <button onClick={(e) => handleSubmit(e)} type="button" className="my-5 w-72 flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
+                                        <button onClick={(e) => handleEdit(e)} type="button" className="my-5 w-72 flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
                                             font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
                                             Save Changes
                                         </button>
-
                                     </div>
                                 </form>
                             </div>

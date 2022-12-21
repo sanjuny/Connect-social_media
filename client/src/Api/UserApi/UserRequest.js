@@ -17,7 +17,7 @@ export const addfollow = (currentUserId, id) => instance.post(`/addfollow/${curr
 
 export const getProfilePost = (userId) => instance.get(`/getprofilepost/${userId}`)
 
-export const editProfile = (data, userId) => instance.post(`/geteditProfile/${userId}`, { data })
+// export const editProfile = (data, userId) => axios.post(`http://localhost:5000/geteditProfile/${userId}`, { data })
 
 export const userChats = (id) => instance.get(`/chat/${id}`)
 
@@ -39,9 +39,17 @@ export const userPost = (userId) => instance.get(`/profile/${userId}`)
 
 export const createChat = (users) => instance.post(`/chat`, users)
 
-export const reportPost = (userId, reportValue) => instance.post(`/report/Post/${userId}`, { reportValue })
+export const reportPost = (userId, reportValue, postId) => instance.post(`/report/Post/${postId}`, { userId, reportValue })
 
 export const getAllNotification = (userId) => instance.get(`/notification/${userId}`)
 
 export const fetchNoCounts = (userId) => instance.get(`/getcount/${userId}`)
+
+export const editphoto = (data) => axios.post(`http://localhost:5000/photo`,data)
+
+export const updateDetails = (data,userId) =>{instance.post(`/updatedetails/${userId}`,{data})}
+
+export const notificationManage = (userId) => instance.post(`/notificationRead/${userId}`)
+
+
 

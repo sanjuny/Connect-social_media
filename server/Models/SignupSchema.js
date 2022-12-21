@@ -34,7 +34,7 @@ const SignupSchema = mongoose.Schema({
         type: Array,
         default: []
     },
-    profilePic:{
+    image:{
         type: String,
         default:null
     },

@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { addcomment, addlike, getcomments, getpost } from '../../../Api/UserApi/UserRequest'
 import { useSelector } from 'react-redux'
 import Post from '../Post/post'
+import { useContext } from 'react'
+import { UserUpdation } from '../../../UserContext/userContext'
 
 
 
@@ -12,13 +14,15 @@ function Feed() {
     console.log(userData, 'lolololooonhjgyugv');
     /* ---------------------------- current userdata ---------------------------- */
 
+    const { likesUpdate, setLikesUpdate } = useContext(UserUpdation)
+    const { postsUpdate, setpostsUpdate } = useContext(UserUpdation)
+    const { feedsUpdate, setfeedsUpdate } = useContext(UserUpdation)
 
     /* --------------------------- handling user post --------------------------- */
-    // const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const [post, setpost] = useState([])
     const [comments, setcomments] = useState([])
-    
-    
+
+
 
     console.log(comments, 'kkkkkkkkkkkkkkkk');
     console.log(post, 'datafeed');
@@ -36,12 +40,10 @@ function Feed() {
             }
         }
         getUserPost()
-    }, [])
+    }, [likesUpdate, postsUpdate, feedsUpdate])
 
 
     /* --------------------------- handling user post --------------------------- */
-
-
 
     return (
         < >

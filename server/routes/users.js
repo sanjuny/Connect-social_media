@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, profilePicUpload, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, userPost, report, getAllNotification, NotificationCount } = require('../Controller/Usercontroller');
+const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, report, getAllNotification, NotificationCount, userPostProfile, getupdatedetails, manageNotification } = require('../Controller/Usercontroller');
 
 
 
@@ -29,7 +29,17 @@ router.post('/addfollow/:id', check, postfollow)
 
 router.get('/getprofilepost/:id', check, getProfilePost)
 
-router.post('/geteditProfile/:id', upload.single('profilePic'), profilePicUpload)
+router.post('/photo', upload.single('file'),(req, res)=>{
+    console.log(req.file);
+    console.log('profile upload');
+    let data = {
+        image: req.file.filename
+    }
+    console.log(data, 'ssss');
+    res.status(200).json(data)
+})
+
+router.post('/updatedetails/:id', check, getupdatedetails)
 
 router.get('/getUser/:userId', check, getUser)
 
@@ -41,13 +51,15 @@ router.get('/myFollowing/:id', check, getMyFollowing)
 
 router.get('/search/:id', check, searchUsers)
 
-router.get('/profile/:id', check, userPost)
+router.get('/profile/:id', check, userPostProfile)
 
 router.post('/report/Post/:id', check, report)
 
 router.get('/notification/:id', check, getAllNotification)
 
 router.get('/getcount/:id', check, NotificationCount)
+
+router.post('/notificationRead/:id',check, manageNotification)
 
 /* ------------------------ Datas protected with jwt ------------------------ */
 

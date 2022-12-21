@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import dummy from '../../../Images/dummy.jpg'
 import { FaRegComment, FaRegHeart } from 'react-icons/fa'
@@ -8,6 +8,8 @@ import { FcLike } from 'react-icons/fc'
 import { addcomment, addlike, getcomments, getpost, reportPost } from '../../../Api/UserApi/UserRequest'
 import { format, render, cancel, register } from 'timeago.js';
 import { socket } from '../../../UserContext/SocketContext';
+import { UserUpdation } from '../../../UserContext/userContext';
+import { useParams } from 'react-router';
 
 
 
@@ -17,6 +19,10 @@ function Post({ post }) {
     const userData = useSelector(state => state.user)
     console.log(userData, 'lolololooonhjgyugv');
     /* ---------------------------- current userdata ---------------------------- */
+
+    const { likesUpdate, setLikesUpdate } = useContext(UserUpdation)
+
+    let username = useParams().username
 
 
 
@@ -33,26 +39,7 @@ function Post({ post }) {
     const [posted, setposted] = useState([])
 
     const [comments, setcomments] = useState([])
-    
 
-
-
-
-
-    useEffect(() => {
-        const getUserPost = async () => {
-            try {
-                const { data } = await getpost(userData._id)
-                console.log(data, 'koko');
-                setposted(data.sort((p1, p2) => {
-                    return new Date(p2.createdAt) - new Date(p1.createdAt)
-                }))
-            } catch (error) {
-                console.log(error, 'catch error');
-            }
-        }
-        getUserPost()
-    }, [LikeState])
 
 
 
@@ -62,13 +49,13 @@ function Post({ post }) {
         try {
             const { data } = await addlike(userData._id, postId)
             console.log(data, 'likesss');
-            socket.emit('send-notification',{
-                senderId:userData._id,
-                receiverId:post.userId._id,
-                type:'liked your post'
-             })
+            socket.emit('send-notification', {
+                senderId: userData._id,
+                receiverId: post.userId._id,
+                type: 'liked your post'
+            })
             setLike(LikeState ? Like - 1 : Like + 1)
-            setLikeState(!LikeState)
+            setLikesUpdate(!likesUpdate)
         } catch (error) {
             console.log(error, 'catch error');
         }
@@ -104,12 +91,19 @@ function Post({ post }) {
     const handleComment = async (postId) => {
         const datas = {
             userId: userData._id,
-            comment: comment
+            comment: comment,
+            postUser: post.userId._id
         }
-        console.log(datas, 'kjhgfdfgh');
+        console.log(datas, '1111111111111111kjhgfdiuhgfgh');
         try {
             const { data } = await addcomment(datas, postId)
+            socket.emit('send-notification', {
+                senderId: userData._id,
+                receiverId: post.userId._id,
+                type: 'commented your post'
+            })
             setcomment('')
+            setOpen(!open)
             console.log(data, 'kkkkiiii');
         } catch (error) {
             console.log(error, 'catch error comment');
@@ -142,9 +136,10 @@ function Post({ post }) {
         try {
             e.preventDefault()
             console.log(post._id, "report");
-            const { data } = await reportPost(userData._id, reportValue)
-            console.log(data,'jjjjjjjjjjjjjjjj');
+            const { data } = await reportPost(userData._id, reportValue, post._id)
+            console.log(data, 'jjjjjjjjjjjjjjjj');
             setReportValue(new Date())
+            setReportPop(!reportPop)
             setPop(!pop)
         } catch (error) {
             console.log(error, 'catch error handle report');
@@ -160,10 +155,17 @@ function Post({ post }) {
                 <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
                     <div className="flex-shrink-0 group block w-full">
                         <div className="flex items-center justify-between ">
+
                             <div className='flex'>
-                                <img className="inline-block h-10 w-10 rounded-full"
-                                    src={dummy}
-                                    alt="" />
+                                { userData?.image ?
+                                    <img className="inline-block h-10 w-10 rounded-full"
+                                        src={'/images/' + userData?.image}
+                                        alt="" />
+                                    : 
+                                    <img className="inline-block h-10 w-10 rounded-full"
+                                        src={dummy}
+                                        alt="" />
+                                }
                                 <div className="ml-3 flex justify-center items-center">
                                     <p className="text-base leading-6 font-medium text-white">
                                         {post.userId.name}
@@ -183,18 +185,24 @@ function Post({ post }) {
                             pop ? (
                                 <div class='absolute right-80 cursor-pointer z-30 bg-white shadow-sm rounded-lg border flex-col flex justify-end'>
                                     <ul>
-                                        <li>
-                                            <a onClick={(e) => setReportPop(!reportPop)} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Report</a>
-                                        </li>
-                                        <li>
-                                            <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Delete</a>
-                                        </li>
+                                        {post.userId._id === userData._id ?
+                                            <>
+                                                <li>
+                                                    <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Delete</a>
+                                                </li>
+                                            </> :
+                                            <>
+                                                <li>
+                                                    <a onClick={(e) => setReportPop(!reportPop)} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Report</a>
+                                                </li>
+                                            </>
+                                        }
+
                                     </ul>
                                 </div>
                             ) : null
                         }
                         {/* dropdown modal */}
-
                     </div>
                 </div>
 
@@ -236,9 +244,9 @@ function Post({ post }) {
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
-                                <div onClick={(e) => handleComment(post._id)} className="flex float-right  items-center text-xs text-blue-500 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
+                                <button onClick={(e) => handleComment(post._id)} className="flex float-right  items-center text-xs text-blue-500 hover:text-blue-400 transition duration-350 ease-in-out gap-3 disabled:text-blue-200" disabled={!comment}>
                                     <FiSend className='w-6 h-6' />
-                                </div>
+                                </button>
                                 <div className="flex-1 px-2 ml-2 text-sm  w-full font-medium leading-loose text-white">
                                     <textarea className=' w-[400px] focus:outline-none flex flex-wrap no-scrollbar bg-black' onChange={handleStateComment} type='text' placeholder='Comment Here' value={comment}></textarea>
                                 </div>
@@ -285,11 +293,6 @@ function Post({ post }) {
                 {/* reportmodal */}
                 {
                     reportPop ? (
-
-
-
-
-
                         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
                             <div className="relative w-auto my-6 mx-auto max-w-3xl">
                                 {/* {/content/} */}

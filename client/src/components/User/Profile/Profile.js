@@ -137,17 +137,17 @@ function Profile() {
 
     /* ------------------------------- create chat ------------------------------ */
 
-    const onHandleChange = async ()=>{
+    const onHandleChange = async () => {
         let users = {
             senderId: userData._id,
             receiverId: user._id
         }
         try {
             const { data } = await createChat(users)
-            console.log(data,'onHandleChange');
+            console.log(data, 'onHandleChange');
             Navigate('/chat')
         } catch (error) {
-            console.log(error,'catch error create chat');
+            console.log(error, 'catch error create chat');
         }
     }
 
@@ -182,49 +182,71 @@ function Profile() {
                     </div>
 
                     <div className="p-4">
+                        {username !== userData.username ?
 
-                        <div className="relative flex w-full space-x-4 space-x-reverse">
-                            <div className="flex flex-1">
-                                <div style={{ marginTop: '-96px' }}>
-                                    <div style={{ height: '144px', width: '144px' }}
-                                        className="md rounded-full relative avatar">
-                                        <img style={{ height: '144px', width: '144px' }}
-                                            className="md rounded-full relative border-4 border-gray-900"
-                                            src={dummy}
-                                            alt="" />
-                                        <div className="absolute"></div>
+
+
+
+                            <div className="relative flex w-full space-x-4 space-x-reverse">
+                                <div className="flex flex-1">
+                                    <div style={{ marginTop: '-96px' }}>
+                                        <div style={{ height: '144px', width: '144px' }}
+                                            className="md rounded-full relative avatar">
+                                            <img style={{ height: '144px', width: '144px' }}
+                                                className="md rounded-full relative border-4 border-gray-900"
+                                                src={dummy}
+                                                alt="" />
+                                            <div className="absolute"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="flex flex-col text-right ">
-                                <div onClick={onHandleChange}
-                                    className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                                    message
+                                <div className="flex flex-col text-right ">
+                                    <div onClick={onHandleChange}
+                                        className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                                        message
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col text-right">
+                                    {user?.followers?.includes(userData._id) ?
+                                        <button
+                                            className="bg-transparent hover:bg-gray-800 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full"
+                                            onClick={() => follow(user._id)}>
+                                            UnFollow
+                                        </button>
+
+                                        : <button
+                                            className="bg-transparent hover:bg-gray-800 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full"
+                                            onClick={() => follow(user._id)}
+                                        >
+                                            Follow
+                                        </button>
+                                    }
                                 </div>
                             </div>
-                            {/* <div className="flex items-center justify-center h-10 w-10 border-2  border-white text-white rounded-full"><FaRegComment /></div> */}
-                            {/* <div>className="bg-transparent hover:bg-gray-800 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full"</div> */}
-                            <div className="flex flex-col text-right">
-                                {user?.followers?.includes(userData._id) ?
+                            :
+                            <div className="relative flex w-full space-x-4 space-x-reverse">
+                                <div className="flex flex-1">
+                                    <div style={{ marginTop: '-96px' }}>
+                                        <div style={{ height: '144px', width: '144px' }}
+                                            className="md rounded-full relative avatar">
+                                            <img style={{ height: '144px', width: '144px' }}
+                                                className="md rounded-full relative border-4 border-gray-900"
+                                                src={'/images/' + userData.image}
+                                                alt="" />
+                                            <div className="absolute"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col text-right">
                                     <button
-                                        className="bg-transparent hover:bg-gray-800 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full"
-                                        onClick={() => follow(user._id)}>
-                                        UnFollow
-                                    </button>
 
-                                    : <button
-                                        className="bg-transparent hover:bg-gray-800 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full"
-                                        onClick={() => follow(user._id)}
-                                    >
-                                        Follow
+                                        className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
+                                        Edit Profile
                                     </button>
-                                }
+                                </div>
                             </div>
-                        </div>
-
-
-
-
+                        }
 
                         <div className="space-y-1 justify-center w-full mt-3 ml-3">
 
@@ -256,6 +278,33 @@ function Profile() {
                     </div>
                     <hr className="border-gray-800" />
                 </div>
+
+
+                {
+                    myFollowers.map((persons) => {
+                        return (
+                            <div class=" z-10 w-60 bg-white rounded shadow dark:bg-gray-700">
+                                <ul class="overflow-y-auto py-1 h-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
+                                    <li>
+                                        <a class="flex items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            <img class="mr-2 w-6 h-6 rounded-full" src={dummy} alt="Jese image" />
+                                            {persons.username}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        )
+                    })
+                }
+
+
+
+
+
+
+
+
                 <ul className="list-none">
                     <li>
                         {person.map((obj) => {

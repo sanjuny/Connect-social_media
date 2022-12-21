@@ -18,7 +18,8 @@ const NotificationSchema = new mongoose.Schema({
             type: Date
         },
         unRead: {
-            type: String
+            type: String,
+            default:true
         }
     }]
 

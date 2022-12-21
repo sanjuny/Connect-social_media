@@ -5,16 +5,23 @@ import { BiHome, BiLogOutCircle } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
-import { addpost, fetchNoCounts } from '../../../Api/UserApi/UserRequest'
+import { addpost, fetchNoCounts, notificationManage } from '../../../Api/UserApi/UserRequest'
 import { useSelector } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert';
 import { socket } from '../../../UserContext/SocketContext'
+import { UserUpdation } from '../../../UserContext/userContext'
+
+
+
+
 
 
 
 function LeftBar() {
     const navigate = useNavigate()
     const [err, seterr] = useState('')
+
+    const { postsUpdate, setpostsUpdate } = useContext(UserUpdation)
 
 
     useEffect(() => {
@@ -35,7 +42,6 @@ function LeftBar() {
                         localStorage.removeItem('userToken')
                         navigate('/login')
                     }
-
                 },
                 {
                     label: 'No'
@@ -80,7 +86,7 @@ function LeftBar() {
             console.log(data, 'daaaaaaaa');
             await addpost(data)
             setOpen(false)
-
+            setpostsUpdate(!postsUpdate)
         } catch (error) {
             console.log(error, 'catch error eroor rororor');
             seterr('Please upload a valid image file')
@@ -131,6 +137,30 @@ function LeftBar() {
 
     /* ---------------------------- notication count ---------------------------- */
 
+
+    /* ----------------------- manage notification count ----------------------- */
+    // const [notificationData, setNotificationData] = useState([])
+    // const [counts, SetCounts] = useState('')
+
+
+    const notificationHandler = async () => {
+        try {
+            const { data } = await notificationManage(userData._id)
+            console.log(data, 'notificationHandler');
+            setNotification("0")
+            navigate('/notification')
+        } catch (error) {
+            console.log(error,'sssssssss');
+
+        }
+    }
+
+
+
+
+    /* ----------------------- manage notification count ----------------------- */
+
+
     return (
         <>
             <div className="text-white py-4 h-auto">
@@ -142,10 +172,15 @@ function LeftBar() {
                                 <BiHome className='w-7 h-7' />
                                 <h2 className='pl-4'>Home</h2>
                             </Link>
-                            <Link to='/notification' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
-                                <IoIosNotifications className='w-7 h-7' />
-                                <h2 className='pl-4'>Notifications</h2>
-                            </Link>
+                            {notification != 0 ?
+                                <div onClick={notificationHandler} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
+                                    <IoIosNotifications className='w-7 h-7' />
+                                    <h2 className='pl-4 '>Notifications</h2>
+                                    <span class="inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600 text-white rounded ml-2">{notification}</span>
+                                </div>
+                                : null
+
+                            }
                             <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <AiOutlineMessage className='w-7 h-7' />
                                 <h2 className='pl-4'>Messages</h2>
