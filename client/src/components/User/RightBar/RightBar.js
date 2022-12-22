@@ -77,22 +77,22 @@ function RightBar() {
 
   return (
     <>
-      <div class="relative text-gray-600 flex justify-center ">
+      <div class="relative text-white flex justify-center ">
         <input type="search" name="search" onChange={handleSearch} placeholder="Search" class="bg-[#16181c] h-10 px-5 pr-10 w-full rounded-full text-sm focus:outline-none" required />
       </div>
       {serachUser.length !== 0 ?
         serachUser.map((user) => (
           <div>
             <Link to={`/profile/${user.username}`}>
-              <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+              <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-800 hover:text-blue-300 focus:outline-none">
                 <img class="object-cover w-10 h-10 rounded-full"
-                // src={user?.profilePic? PF+user.profilePic :profile} alt="username"
+                  src={'/images/' + user?.image} alt="username"
                 />
                 <div class="w-full pb-2">
                   <div class="flex justify-between">
-                    <span class="block ml-2 font-semibold text-gray-600">{user.username}</span>
+                    <span class="block ml-2 font-semibold text-white">{user.username}</span>
                   </div>
-                  {/* <span class="block ml-2 text-sm text-gray-400">{user.accountType}</span> */}
+
                 </div>
               </a></Link>
 
@@ -119,9 +119,16 @@ function RightBar() {
                         <Link to={`/profile/${obj.username}`} className="flex-1 ">
                           <div className="flex items-center w-48">
                             <div>
-                              <img className="inline-block h-10 w-auto rounded-full ml-4 mt-2"
-                                src={dummy}
-                                alt="" />
+                              { obj.image ?
+
+                                <img className="inline-block h-10 w-10 rounded-full ml-4 mt-2"
+                                  src={'/images/' + obj.image}
+                                  alt="" />
+                                : <img className="inline-block h-10 w-10 rounded-full ml-4 mt-2"
+                                  src={dummy}
+                                  alt="" />
+                              }
+
                             </div>
                             <div className="ml-3 mt-3">
                               <p className="text-base leading-6 font-medium text-white">

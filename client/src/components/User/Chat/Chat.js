@@ -3,8 +3,10 @@ import { useSelector } from 'react-redux';
 import { getUser, userChats } from '../../../Api/UserApi/UserRequest';
 import ChatRight from '../ChatRight/ChatRight';
 import Conversation from '../Conversation/Conversation';
-import { io } from 'socket.io-client'
-import { useRef } from 'react';
+// import { io } from 'socket.io-client'
+// import { useRef } from 'react';
+import dummy from '../../../Images/dummy.jpg'
+import { socket } from '../../../UserContext/SocketContext';
 
 
 function Chat() {
@@ -19,13 +21,13 @@ function Chat() {
     const [onlineUsers, setOnlineUsers] = useState([])
     const [sendMessage, setSendMessage] = useState(null)
     const [recieveMessage, setRecieveMessage] = useState(null)
-    const socket = useRef()
+    // const socket = useRef()
 
 
     // send messgae to the socket server
     useEffect(() => {
         if (sendMessage !== null) {
-            socket.current.emit('send-message', sendMessage)
+            socket.emit('send-message', sendMessage)
         }
     }, [sendMessage])
 
@@ -33,9 +35,9 @@ function Chat() {
 
 
     useEffect(() => {
-        socket.current = io('http://localhost:8800');
-        socket.current.emit('new-user-add', userData._id)
-        socket.current.on('get-users', (users) => {
+        // socket = io('http://localhost:8800');
+        socket.emit('new-user-add', userData._id)
+        socket.on('get-users', (users) => {
             setOnlineUsers(users)
             console.log(onlineUsers, 'onlineUsers');
         })
@@ -43,7 +45,7 @@ function Chat() {
 
     // receive message from socket server
     useEffect(() => {
-        socket.current.on('receive-message', (data) => {
+        socket.on('receive-message', (data) => {
             setRecieveMessage(data)
         })
     }, [])
@@ -81,10 +83,10 @@ function Chat() {
         }
     };
 
-    const checkOnlineStatus = (chat) =>{
-        const chatMember = chat.members.find((member)=> member !== userData._id)
-        const online = onlineUsers.find((user)=> user.userId === chatMember)
-        return online? true : false
+    const checkOnlineStatus = (chat) => {
+        const chatMember = chat.members.find((member) => member !== userData._id)
+        const online = onlineUsers.find((user) => user.userId === chatMember)
+        return online ? true : false
     }
 
     return (
@@ -110,10 +112,9 @@ function Chat() {
                                     return (
                                         <div className="flex flex-col space-y-1 mt-4 max-h-screen overflow-y-auto  no-scrollbar" key={index}>
                                             <button onClick={() => setCurrentChat(chat)}
-                                                className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2" >
-                                                <div className="flex items-center justify-center h-8 w-8 bg-gray-200 rounded-full"> M</div>
-                                                <div className="ml-2 text-sm font-semibold text-white"> <Conversation data={chat} currentUserId={userData._id} online={checkOnlineStatus(chat)}/></div>
-                                                {/* <div className="flex items-center justify-center ml-auto text-xs text-white bg-red-500 h-4 w-4 rounded leading-none">2</div> */}
+                                                className="flex flex-row items-center hover:bg-gray-100 rounded-md p-2 border-b-2 " >
+                                                {/* <img className="flex items-center justify-center h-8 w-8 bg-gray-200 rounded-full" src={'/images/' + chat.image} /> */}
+                                                <div className="ml-2 text-sm font-semibold text-white"> <Conversation data={chat} currentUserId={userData._id} online={checkOnlineStatus(chat)} /></div>
                                             </button>
                                         </div>
                                     )

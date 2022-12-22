@@ -24,15 +24,16 @@ const Conversation = ({ data, currentUserId, online }) => {
 
     return (
         <div>
-            <a class='flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none'>
-                {/* <img class='object-cover w-10 h-10 rounded-full' src={'/images/' + userData?.profilePic} alt='username' /> */}
-                <div class='w-full pb-2'>
+            <a class='flex items-center px-3 py-2 text-sm transition duration-150  cursor-pointer hover:bg-gray-100 focus:outline-none'>
+                <img class='object-cover w-10 h-10 rounded-full' src={'/images/' + userData?.image} alt='username' />
+                <div>
                     <div class='flex justify-between'>
                         <span class='block ml-2 font-bold text-gray-600'>{userData?.username}</span>
                     </div>
-                    {online && <span class='block ml-2 text-sm text-green-400 float-right'>online</span>}
+                    {online && <span class='block text-sm text-green-400'>online</span>}
                 </div>
             </a>
+            {/* <hr className="border-white w-full" /> */}
         </div>
     )
 }

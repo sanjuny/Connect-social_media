@@ -304,8 +304,6 @@ const postaddcomment = async (req, res) => {
   }
   try {
   const ha=  await Comment.create({ userId, comment, postId })
-    // if (postId.userId != userId) {
-      // console.log(postId.userId,'ooooooooooooooooo');
       console.log(ha,'kjhgvbnmb');
     const fr =  await Notification.updateOne({ userId: postUser }, {
         $push: {
@@ -313,7 +311,6 @@ const postaddcomment = async (req, res) => {
         }
       }, { upsert: true })
       console.log(fr,'mmmmmmmmmmmmmmm');
-    // }
     res.status(200).json({ message: 'comment added successfully' })
   } catch (error) {
     console.log(error);
@@ -339,7 +336,7 @@ const getcomments = async (req, res) => {
 const getsuggestions = async (req, res) => {
   console.log('getsuggestions');
   try {
-    let suggestions = await Users.find().limit(4)
+    let suggestions = await Users.find().limit(5)
     res.status(200).json(suggestions)
   } catch (error) {
     res.status(500).json({ message: 'failed' })
@@ -473,7 +470,7 @@ const searchUsers = async (req, res) => {
   try {
     const users = await Users.find(
       { username: { $regex: "^" + data, $options: "i" } },
-      { name: 1, username: 1 }
+      { name: 1, username: 1 , image: 1}
     )
     res.status(200).json(users)
   } catch (error) {
@@ -523,7 +520,7 @@ const report = async (req, res) => {
 const getAllNotification = async (req, res) => {
   console.log('getallnotification back');
   try {
-    const notifications = await Notification.findOne({ user: req.params.id }, { _id: 0, Notification: 1 }).sort({ _id: -1 }).populate("Notification.user", "username profilePic")
+    const notifications = await Notification.findOne({ user: req.params.id }, { _id: 0, Notification: 1 }).sort({ _id: -1 }).populate("Notification.user", "username image")
     const notify = notifications.Notification.reverse()
     console.log(notify, 'notifyyyyy');
     res.status(200).json(notify)

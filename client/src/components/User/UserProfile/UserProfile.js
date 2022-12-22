@@ -47,6 +47,7 @@ function UserProfile() {
 
     /* ------------------------------ show followers ----------------------------- */
 
+    const [followMod, setFollowMod] = useState(false)
     const [myFollowers, setMyFollowers] = useState([])
     const showFollowers = async () => {
         let id;
@@ -59,6 +60,7 @@ function UserProfile() {
             const { data } = await getUserFollowers(id)
             console.log(data, 'userFollowers');
             setMyFollowers(data)
+            setFollowMod(!followMod)
         } catch (error) {
             console.log(error, 'catch error');
 
@@ -69,7 +71,6 @@ function UserProfile() {
 
     /* ----------------------------- show following ----------------------------- */
 
-    const [followMod, setFollowMod] = useState(false)
 
     const showFollowing = async () => {
         let id;
@@ -154,7 +155,7 @@ function UserProfile() {
             } catch (error) {
                 console.log(error, 'catch error handle error');
             }
-            
+
             dispatch(update({ ...userData, ...edit }))
         }
 
@@ -174,7 +175,7 @@ function UserProfile() {
 
     }
 
-    
+
     /* ------------------------------- editprofile ------------------------------ */
     return (
         <>
@@ -283,17 +284,16 @@ function UserProfile() {
                     {
                         myFollowers.map((persons) => {
                             return (
-                                <div class=" z-10 w-60 bg-white rounded shadow dark:bg-gray-700">
-                                    <ul class="overflow-y-auto py-1 h-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
+                                <div class=" z-10 w-60 bg-white">
+                                    <ul class="overflow-y-auto py-1 h-auto hover:bg-gray-800 hover:text-blue-300" aria-labelledby="dropdownUsersButton">
                                         <li>
-                                            <a class="flex items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            <a class="flex items-center py-2 px-4 hover:bg-gray-800 hover:text-blue-300">
                                                 <img class="mr-2 w-6 h-6 rounded-full" src={dummy} alt="Jese image" />
                                                 {persons.username}
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
-
                             )
                         })
                     }
@@ -314,62 +314,62 @@ function UserProfile() {
                             </li>
                         </ul> */}
 
-                        {/* tabs */}
+                    {/* tabs */}
 
 
-                        <ul className="list-none">
-                            <li>
-                                {post.map((obj) => {
-                                    return (
-                                        <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
-                                            <div className="flex flex-shrink-0 p-4 pb-0">
-                                                <div className="flex-shrink-0 group block">
-                                                    <div className="flex items-center">
-                                                        <div>
-                                                            <img className="inline-block h-10 w-10 rounded-full"
-                                                                src={dummy}
-                                                                alt="" />
-                                                        </div>
-                                                        <div className="ml-3">
-                                                            <p className="text-base leading-6 font-medium text-white">
-                                                                {obj.userId.name}
-                                                                <span
-                                                                    className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                                                    @{obj.userId.username} {format(obj.createdAt)}
-                                                                </span>
-                                                            </p>
-                                                        </div>
+                    <ul className="list-none">
+                        <li>
+                            {post.map((obj) => {
+                                return (
+                                    <div className="">
+                                        <div className="flex flex-shrink-0 p-4 pb-0">
+                                            <div className="flex-shrink-0 group block">
+                                                <div className="flex items-center">
+                                                    <div>
+                                                        <img className="inline-block h-10 w-10 rounded-full"
+                                                            src={'/images/' + obj.userId.image}
+                                                            alt="" />
+                                                    </div>
+                                                    <div className="ml-3">
+                                                        <p className="text-base leading-6 font-medium text-white">
+                                                            {obj.userId.name}
+                                                            <span
+                                                                className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                                                @{obj.userId.username} {format(obj.createdAt)}
+                                                            </span>
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="pl-16">
-                                                <p className="text-base width-auto font-medium text-white flex-shrink">
-                                                    {obj.description}
-                                                    <a className="text-blue-400"> #CopaAmerica #Argentina</a>
-                                                </p>
-                                                <div className="md:flex-shrink pr-6 pt-3">
-                                                    <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
-                                                        style={{ height: 'auto' }}>
-                                                        <img src={'/images/' + obj.image} style={{ height: '480px', width: '500px' }}></img>
-                                                    </div>
-                                                </div>
-                                                <div className="flex gap-5 items-center py-4">
-                                                    <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                                                        <FaRegComment className='w-6 h-6' />12.5k
-                                                    </div>
-                                                    <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
-                                                        <FcLike className='w-6 h-6' />10.5k
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr className="border-gray-800" />
                                         </div>
-                                    )
-                                })}
-                            </li>
-                        </ul>
-                    </div>
+                                        <div className="pl-16">
+                                            <p className="text-base width-auto font-medium text-white flex-shrink">
+                                                {obj.description}
+                                                <a className="text-blue-400"> #CopaAmerica #Argentina</a>
+                                            </p>
+                                            <div className="md:flex-shrink pr-6 pt-3">
+                                                <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
+                                                    style={{ height: 'auto' }}>
+                                                    <img src={'/images/' + obj.image} style={{ height: '550px', width: '480px' }}></img>
+                                                </div>
+                                            </div>
+                                            {/* <div className="flex gap-5 items-center py-4">
+                                                <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
+                                                    <FaRegComment className='w-6 h-6' />12.5k
+                                                </div>
+                                                <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
+                                                    <FcLike className='w-6 h-6' />10.5k
+                                                </div>
+                                            </div> */}
+                                        </div>
+                                        <hr className="border-gray-800" />
+                                    </div>
+                                )
+                            })}
+                        </li>
+                    </ul>
                 </div>
+            </div>
             {/* </div> */}
             { /* -------------------------------- openmodal ------------------------------- */}
             {
@@ -408,19 +408,19 @@ function UserProfile() {
                                                     className="hidden" />
                                             </label>
                                         </div>
-                                        <div className="flex  gap-2 w-full">
+                                        <div className=" w-full">
                                             <div>
                                                 <label htmlFor="Fullname " className="text-sm font-bold text-gray-500">Full Name
                                                     <input type="text" onChange={handlechange} name="name" className="bg-gray-8 rounded-lg  w-full text-black  p-1 pl-3" value={edit.name} />
                                                 </label>
                                                 <p className="text-red-500"></p>
                                             </div>
-                                            <div>
+                                            {/* <div>
                                                 <label htmlFor="UserName" className="text-sm font-bold text-gray-500">User Name
                                                     <input type="text" onChange={handlechange} name="username" className="bg-white rounded-lg   w-full text-black p-1 pl-3" value={edit.username} />
                                                 </label>
                                                 <p className="text-red-500"></p>
-                                            </div>
+                                            </div> */}
                                         </div>
                                         <div className="w-full ">
                                             <label htmlFor="phone" className="text-sm font-bold text-gray-500">Mobile
@@ -428,11 +428,11 @@ function UserProfile() {
                                                 <p className="text-red-500"></p>
                                             </label>
                                         </div>
-                                        <div className="w-full " >
+                                        {/* <div className="w-full " >
                                             <label htmlFor="about" className="text-sm font-bold text-gray-500" >About
                                                 <input type="text" name="bio" onChange={handlechange} className="bg-white rounded-lg  w-full text-black  p-1 pl-3" value={edit.bio} />
                                             </label>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="flex items-center justify-center bg-gradient-to-r from-gray-900 bg-gray-600 p-1 border-t border-solid border-slate-200 rounded-b-lg">
                                         <button onClick={(e) => handleEdit(e)} type="button" className="my-5 w-72 flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide

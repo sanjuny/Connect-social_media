@@ -150,7 +150,7 @@ function LeftBar() {
             setNotification("0")
             navigate('/notification')
         } catch (error) {
-            console.log(error,'sssssssss');
+            console.log(error, 'sssssssss');
 
         }
     }
@@ -172,15 +172,15 @@ function LeftBar() {
                                 <BiHome className='w-7 h-7' />
                                 <h2 className='pl-4'>Home</h2>
                             </Link>
-                            {notification != 0 ?
                                 <div onClick={notificationHandler} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                     <IoIosNotifications className='w-7 h-7' />
                                     <h2 className='pl-4 '>Notifications</h2>
+                            {notification != 0 ?
                                     <span class="inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600 text-white rounded ml-2">{notification}</span>
+                                    : null
+                                    
+                                }
                                 </div>
-                                : null
-
-                            }
                             <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <AiOutlineMessage className='w-7 h-7' />
                                 <h2 className='pl-4'>Messages</h2>
@@ -199,7 +199,7 @@ function LeftBar() {
                                     <Link to='/profile' v className="flex items-center">
                                         <div>
                                             <img className="inline-block h-10 w-10 rounded-full"
-                                                src={dummy}
+                                                src={'/images/' + userData.image}
                                                 alt="" />
                                         </div>
                                         <div className="ml-3">

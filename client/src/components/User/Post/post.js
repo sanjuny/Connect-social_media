@@ -157,9 +157,9 @@ function Post({ post }) {
                         <div className="flex items-center justify-between ">
 
                             <div className='flex'>
-                                { userData?.image ?
+                                { post.userId?.image ?
                                     <img className="inline-block h-10 w-10 rounded-full"
-                                        src={'/images/' + userData?.image}
+                                        src={'/images/' + post.userId?.image}
                                         alt="" />
                                     : 
                                     <img className="inline-block h-10 w-10 rounded-full"
@@ -183,17 +183,17 @@ function Post({ post }) {
                         {/* dropdown modal */}
                         {
                             pop ? (
-                                <div class='absolute right-80 cursor-pointer z-30 bg-white shadow-sm rounded-lg border flex-col flex justify-end'>
+                                <div class='absolute right-80 cursor-pointer z-30 bg-gray-300 shadow-sm rounded-full border flex-col flex justify-end'>
                                     <ul>
                                         {post.userId._id === userData._id ?
                                             <>
                                                 <li>
-                                                    <a class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Delete</a>
+                                                    <a class="text-sm rounded-full hover:bg-gray-800 hover:text-blue-300 block px-4 py-2">Delete</a>
                                                 </li>
                                             </> :
                                             <>
                                                 <li>
-                                                    <a onClick={(e) => setReportPop(!reportPop)} class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Report</a>
+                                                    <a onClick={(e) => setReportPop(!reportPop)} class="text-sm rounded-full hover:bg-gray-800 hover:text-blue-300 block px-4 py-2">Report</a>
                                                 </li>
                                             </>
                                         }
@@ -214,7 +214,7 @@ function Post({ post }) {
                     <div className="md:flex-shrink pr-6 pt-3">
                         <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64 object-contain"
                             style={{ height: 'auto' }}>
-                            <img src={'/images/' + post.image} style={{ height: '480px', width: '500px' }} alt={post.image} ></img>
+                            <img src={'/images/' + post.image} style={{ height: '550px', width: '500px' }} alt={post.image} ></img>
                         </div>
                     </div>
                     <div className="flex gap-5 items-center py-4">
@@ -296,7 +296,7 @@ function Post({ post }) {
                         <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none ">
                             <div className="relative w-auto my-6 mx-auto max-w-3xl">
                                 {/* {/content/} */}
-                                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-gray-400 outline-none focus:outline-none">
                                     {/* {/header/} */}
                                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                         <h3 className="text-xl font-semibold">Why are you Reporting this?</h3>

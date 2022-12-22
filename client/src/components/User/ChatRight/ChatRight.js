@@ -3,6 +3,7 @@ import { addMessage, getMessages, getUser } from '../../../Api/UserApi/UserReque
 import { format, render, cancel, register } from 'timeago.js';
 import InputEmoji from "react-input-emoji";
 import { useRef } from 'react';
+import dummy from '../../../Images/dummy.jpg'
 
 function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
 
@@ -95,8 +96,8 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                         <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-black h-full p-4" >
                             {/* heder */}
                             <div className="flex justify-center mb-10">
-                                <a className="inline-flex items-start mr-3" href="#0">
-                                    <img className="rounded-full" src="https://res.cloudinary.com/dc6deairt/image/upload/v1638102932/user-48-01_nugblk.jpg" width="48" height="48" alt="Lauren Marsano" />
+                                <a className="inline-flex items-start mr-3">
+                                    <img className="rounded-full w-10 h-10" src={'/images/' + userData?.image} alt="Lauren Marsano" />
                                 </a>
                                 <div className="pr-1">
                                     <a className="inline-flex text-white hover:text-indigo-500" href="#0">

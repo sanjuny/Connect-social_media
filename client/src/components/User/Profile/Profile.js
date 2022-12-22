@@ -184,9 +184,6 @@ function Profile() {
                     <div className="p-4">
                         {username !== userData.username ?
 
-
-
-
                             <div className="relative flex w-full space-x-4 space-x-reverse">
                                 <div className="flex flex-1">
                                     <div style={{ marginTop: '-96px' }}>
@@ -194,7 +191,7 @@ function Profile() {
                                             className="md rounded-full relative avatar">
                                             <img style={{ height: '144px', width: '144px' }}
                                                 className="md rounded-full relative border-4 border-gray-900"
-                                                src={dummy}
+                                                src={'/images/' + user.image}
                                                 alt="" />
                                             <div className="absolute"></div>
                                         </div>
@@ -298,24 +295,17 @@ function Profile() {
                     })
                 }
 
-
-
-
-
-
-
-
                 <ul className="list-none">
                     <li>
                         {person.map((obj) => {
                             return (
-                                <div className="hover:bg-gray-800 transition duration-350 ease-in-out ">
+                                <div className="">
                                     <div className="flex flex-shrink-0 p-4 pb-0">
                                         <div className="flex-shrink-0 group block">
                                             <div className="flex items-center">
                                                 <div>
                                                     <img className="inline-block h-10 w-10 rounded-full"
-                                                        src={dummy}
+                                                        src={'/images/' + user.image}
                                                         alt="" />
                                                 </div>
                                                 <div className="ml-3">
@@ -338,7 +328,7 @@ function Profile() {
                                         <div className="md:flex-shrink pr-6 pt-3">
                                             <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
                                                 style={{ height: 'auto' }}>
-                                                <img src={'/images/' + obj.image} style={{ height: '480px', width: '500px' }}></img>
+                                                <img src={'/images/' + obj.image} style={{ height: '540px', width: '480px' }}></img>
                                             </div>
                                         </div>
                                         <div className="flex gap-5 items-center py-4">
