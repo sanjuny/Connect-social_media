@@ -264,9 +264,25 @@ function UserProfile() {
                                     </>
                                 }
 
-                                <div className="mt-3">
+
+                                {!username ?
+                                    <>
+                                        <div className="mt-3">
+                                            <p className="text-white leading-tight mb-2">{userData?.bio}</p>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <div className="mt-3">
+                                            <p className="text-white leading-tight mb-2">{user?.bio}</p>
+                                        </div>
+                                    </>
+                                }
+
+
+                                {/* <div className="mt-3">
                                     <p className="text-white leading-tight mb-2">Vibe high the magic will unfold you.....</p>
-                                </div>
+                                </div> */}
                                 <div
                                     className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
                                     <div className="text-center pr-3"><span className="font-bold text-white">{user?.following?.length}</span><span
@@ -424,15 +440,16 @@ function UserProfile() {
                                         </div>
                                         <div className="w-full ">
                                             <label htmlFor="phone" className="text-sm font-bold text-gray-500">Mobile
-                                                <input type="number" onChange={handlechange} name="phone" className="bg-white rounded-lg  w-full  text-black p-1 pl-3" value={edit.phone} />
+                                                <input type="number" onChange={handlechange} name="phone" className="bg-white rounded-lg  w-full  text-black p-1 pl-3" value={edit.phone} checked />
                                                 <p className="text-red-500"></p>
                                             </label>
                                         </div>
-                                        {/* <div className="w-full " >
-                                            <label htmlFor="about" className="text-sm font-bold text-gray-500" >About
-                                                <input type="text" name="bio" onChange={handlechange} className="bg-white rounded-lg  w-full text-black  p-1 pl-3" value={edit.bio} />
+                                        <div className="w-full " >
+                                            <label htmlFor="bio" className="text-sm font-bold text-gray-500" >About
+                                                <input type="text" onChange={handlechange} name="bio" className="bg-white rounded-lg  w-full text-black  p-1 pl-3" value={edit.bio} />
+                                                <p className="text-red-500"></p>
                                             </label>
-                                        </div> */}
+                                        </div>
                                     </div>
                                     <div className="flex items-center justify-center bg-gradient-to-r from-gray-900 bg-gray-600 p-1 border-t border-solid border-slate-200 rounded-b-lg">
                                         <button onClick={(e) => handleEdit(e)} type="button" className="my-5 w-72 flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide

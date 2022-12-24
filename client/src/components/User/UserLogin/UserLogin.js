@@ -28,12 +28,9 @@ function Userlogin() {
         navigate('/home')
       } else {
         seterr(data.message)    
-        console.log("getting");
-        console.log(data.message);
       }
     } catch (error) {
       seterr('User does not Exist')
-      console.log(error, 'error');
     }
   }
 

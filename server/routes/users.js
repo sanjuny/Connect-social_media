@@ -15,6 +15,13 @@ router.post('/Verifyotp', postverifyOtp)
 
 router.post('/addNewPost', upload.single('file'), postUpload)
 
+router.post('/photo', upload.single('file'), (req, res) => {
+    let data = {
+        image: req.file.filename
+    }
+    res.status(200).json(data)
+})
+
 router.get('/getpost/:id', check, getUsersPost)
 
 router.post('/addlike/:id', check, postaddlikes)
@@ -29,15 +36,6 @@ router.post('/addfollow/:id', check, postfollow)
 
 router.get('/getprofilepost/:id', check, getProfilePost)
 
-router.post('/photo', upload.single('file'),(req, res)=>{
-    console.log(req.file);
-    console.log('profile upload');
-    let data = {
-        image: req.file.filename
-    }
-    console.log(data, 'ssss');
-    res.status(200).json(data)
-})
 
 router.post('/updatedetails/:id', check, getupdatedetails)
 
@@ -59,7 +57,7 @@ router.get('/notification/:id', check, getAllNotification)
 
 router.get('/getcount/:id', check, NotificationCount)
 
-router.post('/notificationRead/:id',check, manageNotification)
+router.post('/notificationRead/:id', check, manageNotification)
 
 /* ------------------------ Datas protected with jwt ------------------------ */
 

@@ -10,6 +10,7 @@ import { format, render, cancel, register } from 'timeago.js';
 import { socket } from '../../../UserContext/SocketContext';
 import { UserUpdation } from '../../../UserContext/userContext';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 
@@ -155,27 +156,28 @@ function Post({ post }) {
                 <div className="flex flex-shrink-0 p-4 pb-0 justify-between">
                     <div className="flex-shrink-0 group block w-full">
                         <div className="flex items-center justify-between ">
-
-                            <div className='flex'>
-                                { post.userId?.image ?
-                                    <img className="inline-block h-10 w-10 rounded-full"
-                                        src={'/images/' + post.userId?.image}
-                                        alt="" />
-                                    : 
-                                    <img className="inline-block h-10 w-10 rounded-full"
-                                        src={dummy}
-                                        alt="" />
-                                }
-                                <div className="ml-3 flex justify-center items-center">
-                                    <p className="text-base leading-6 font-medium text-white">
-                                        {post.userId.name}
-                                        <span
-                                            className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                            @{post.userId.username} {format(post.createdAt)}
-                                        </span>
-                                    </p>
+                            <Link to={`/profile/${post.userId?.username}`}>
+                                <div className='flex'>
+                                    {post.userId?.image ?
+                                        <img className="inline-block h-10 w-10 rounded-full"
+                                            src={'/images/' + post.userId?.image}
+                                            alt="" />
+                                        :
+                                        <img className="inline-block h-10 w-10 rounded-full"
+                                            src={dummy}
+                                            alt="" />
+                                    }
+                                    <div className="ml-3 flex justify-center items-center">
+                                        <p className="text-base leading-6 font-medium text-white">
+                                            {post.userId.name}
+                                            <span
+                                                className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                                                @{post.userId.username} {format(post.createdAt)}
+                                            </span>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                             <div>
                                 <BsThreeDotsVertical className=' text-white float-right w-6 h-6' onClick={(e) => setPop(!pop)} />
                             </div>
@@ -212,9 +214,9 @@ function Post({ post }) {
                         <a className="text-blue-400"> #hashtags #hasgtagsplus</a>
                     </p>
                     <div className="md:flex-shrink pr-6 pt-3">
-                        <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64 object-contain"
+                        <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
                             style={{ height: 'auto' }}>
-                            <img src={'/images/' + post.image} style={{ height: '550px', width: '500px' }} alt={post.image} ></img>
+                            <img src={'/images/' + post.image} style={{ height: '540px', width: '500px', objectFit: 'fill' }} alt={post.image} ></img>
                         </div>
                     </div>
                     <div className="flex gap-5 items-center py-4">
@@ -354,11 +356,6 @@ function Post({ post }) {
                     ) : null
                 }
                 {/* <div className="opacity-50 fixed inset-0 z-40 bg-black"></div> */}
-
-
-
-
-
             </div>
 
         </>

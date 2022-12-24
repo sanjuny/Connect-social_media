@@ -117,7 +117,8 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                                                     <div className="col-start-1 col-end-8 p-3 rounded-lg ">
                                                         <div className="col-start-6 col-end-13 p-3 rounded-lg">
                                                             <div className="flex items-center justify-start">
-                                                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0" >a </div>
+                                                                <div className="flex items-center justify-center h-5 w-5 rounded-full bg-red-500 flex-shrink-0" >a</div>
+                                                                {/* <img className="rounded-full w-10 h-10" src={'/images/' + userData?.image} alt="Lauren Marsano" /> */}
                                                                 <div className="relative ml-3 text-base bg-white py-2 px-4 shadow rounded-xl">
                                                                     <div>{message.text}</div>
                                                                     <span className='text-gray-400'>{format(message.createdAt)}</span>
@@ -128,7 +129,8 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                                                     <div className="col-start-1 col-end-8 p-3 rounded-lg ">
                                                         <div className="col-start-6 col-end-13 p-3 rounded-lg">
                                                             <div className="flex items-center justify-start flex-row-reverse">
-                                                                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0" >a </div>
+                                                                <div className="flex items-center justify-center h-5 w-5 rounded-full bg-indigo-500 flex-shrink-0" >c</div>
+                                                                {/* <img className="rounded-full w-10 h-10" src={'/images/' + message.senderId?.image} alt="Lauren Marsano" /> */}
                                                                 <div className="relative ml-3 text-base bg-white py-2 px-4 shadow rounded-xl">
                                                                     <div>{message.text}</div>
                                                                     <span className='text-gray-400'>{format(message.createdAt)}</span>

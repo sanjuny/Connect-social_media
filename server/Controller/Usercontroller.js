@@ -13,6 +13,7 @@ const reported = require('../Models/ReportSchema')
 const { json } = require('express')
 
 
+/* ----------------------------------- otp ---------------------------------- */
 
 let transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -88,6 +89,7 @@ const sendOtp = async (OtpResult, res) => {
   }
 }
 
+/* --------------------------------- signup --------------------------------- */
 
 const postSignup = async (req, res) => {
   try {
@@ -116,9 +118,12 @@ const postSignup = async (req, res) => {
       console.log(req.body);
     }
   } catch (error) {
-    res.json('something went wrong')
+    res.status(500).json(error)
   }
 }
+
+
+/* ---------------------------------- login --------------------------------- */
 
 const postLogin = async (req, res) => {
   try {
@@ -147,12 +152,11 @@ const postLogin = async (req, res) => {
     }
 
   } catch (error) {
-    console.log('ggggg');
-    console.log(error);
     res.status(500).json(error)
   }
 }
 
+/* ------------------------------- verify otp ------------------------------- */
 
 const postverifyOtp = async (req, res) => {
   console.log("reached");
@@ -170,10 +174,10 @@ const postverifyOtp = async (req, res) => {
     res.status(200).json({ verified: true });
   } else {
     res.status(200).json({ verified: false, msg: "Incorrect OTP" });
-    console.log('jjujuju');
   }
 };
 
+/* ----------------------------- uploading post ----------------------------- */
 
 const postUpload = async (req, res) => {
   console.log('addPost reached');
@@ -185,60 +189,45 @@ const postUpload = async (req, res) => {
     await Post.create({ userId, description, image }).then((response) => {
       res.status(200).json({ message: 'post added sucessfully' })
     }).catch((err) => {
-      console.log(err,'erorrrrrrrr');
+      console.log(err, 'erorrrrrrrr');
       res.status(500).json({ message: 'Unabel to add the post' })
     })
   } catch (error) {
-    console.log(error,'erorrrrrrrr');
     res.status(500).json({ message: 'Unabel to add the post file' })
   }
 }
 
 
+/* --------------------------- update userdetails --------------------------- */
 
-/* --------------------------- update user profile -------------------------- */
-
-// const profilePicUpload = async (req, res) => {
-//   console.log(req.params.id, 'profilePicUpload');
-//   console.log(req.body, 'req,bodu');
-//   try {
-//     // let { userId, bio, name, username, phone, profilePic} = req.body
-
-//   } catch (error) {
-
-//   }
-// }
-
-const getupdatedetails = async(req,res)=>{
-  console.log(req.body,'req.body');
-  console.log(req.body.data.username,'jjjjjjjjjj');
-  console.log(req.body.data,'jjjjjjjjjjhhhhhh');
-  console.log(req.params.id,'pppppppppppp');
+const getupdatedetails = async (req, res) => {
+  console.log(req.body, 'req.body');
+  console.log(req.body.data.username, 'jjjjjjjjjj');
+  console.log(req.body.data, 'jjjjjjjjjjhhhhhh');
+  console.log(req.params.id, 'pppppppppppp');
   try {
-    let find = await Users.findOne({username: req.body.data.username})
-    if(find){
-      if(find._id == req.params.id){
-        await Users.updateOne({ _id: req.params.id},{
-          $set:req.body.data
+    let find = await Users.findOne({ username: req.body.data.username })
+    if (find) {
+      if (find._id == req.params.id) {
+        await Users.updateOne({ _id: req.params.id }, {
+          $set: req.body.data
         })
         res.status(200).json("updated")
-      }else{
-        res.status(401).json({ message : 'already exists'})
+      } else {
+        res.status(401).json({ message: 'already exists' })
       }
-    }else{
-      await Users.updateOne({ _id: req.params.id},{
-        $set:req.body.data
+    } else {
+      await Users.updateOne({ _id: req.params.id }, {
+        $set: req.body.data
       })
       res.status(200).json("updated")
     }
   } catch (error) {
-    console.log(error,'banajajaj');
     res.status(500).json(error)
   }
 }
 
-
-
+/* ------------------------------ get user post ----------------------------- */
 
 const getUsersPost = async (req, res) => {
   console.log(req.params.id, 'wretyu');
@@ -250,7 +239,7 @@ const getUsersPost = async (req, res) => {
     console.log("posts");
     console.log(posts);
     let friendpost = await Promise.all(currentuser.following?.map((postId) => {
-      return Post.find({ userId: postId , reports:{$ne:req.params.id}}).populate('userId').sort({ createdAt: -1 })
+      return Post.find({ userId: postId, reports: { $ne: req.params.id } }).populate('userId').sort({ createdAt: -1 })
     }))
     console.log("kkkkkkk");
     let data = posts.concat(...friendpost)
@@ -263,9 +252,7 @@ const getUsersPost = async (req, res) => {
 }
 
 
-
-
-
+/* ----------------------------- likes handling ----------------------------- */
 
 const postaddlikes = async (req, res) => {
   console.log('call like');
@@ -291,9 +278,10 @@ const postaddlikes = async (req, res) => {
   }
 }
 
+/* ---------------------------- comments handling --------------------------- */
 
 const postaddcomment = async (req, res) => {
-  const { comment, userId ,postUser} = req.body.data
+  const { comment, userId, postUser } = req.body.data
   console.log(req.body.data, 'commentvgh');
   const postId = req.params.id
   console.log(req.params.id, 'rehcbdskhcscbs');
@@ -303,21 +291,21 @@ const postaddcomment = async (req, res) => {
     user: userId
   }
   try {
-  const ha=  await Comment.create({ userId, comment, postId })
-      console.log(ha,'kjhgvbnmb');
-    const fr =  await Notification.updateOne({ userId: postUser }, {
-        $push: {
-          Notification: details
-        }
-      }, { upsert: true })
-      console.log(fr,'mmmmmmmmmmmmmmm');
+    const ha = await Comment.create({ userId, comment, postId })
+    console.log(ha, 'kjhgvbnmb');
+    const fr = await Notification.updateOne({ userId: postUser }, {
+      $push: {
+        Notification: details
+      }
+    }, { upsert: true })
+    console.log(fr, 'mmmmmmmmmmmmmmm');
     res.status(200).json({ message: 'comment added successfully' })
   } catch (error) {
-    console.log(error);
     res.status(500).json(error)
   }
 }
 
+/* ---------------------------- fetching comments --------------------------- */
 
 const getcomments = async (req, res) => {
   console.log('hegeeg');
@@ -332,6 +320,7 @@ const getcomments = async (req, res) => {
   }
 }
 
+/* -------------------------- suggestions for users ------------------------- */
 
 const getsuggestions = async (req, res) => {
   console.log('getsuggestions');
@@ -340,10 +329,10 @@ const getsuggestions = async (req, res) => {
     res.status(200).json(suggestions)
   } catch (error) {
     res.status(500).json({ message: 'failed' })
-
   }
 }
 
+/* ----------------------------- follow handling ---------------------------- */
 
 const postfollow = async (req, res) => {
   console.log('follow reached');
@@ -364,9 +353,11 @@ const postfollow = async (req, res) => {
       res.status(200).json("You unfollowed this user")
     }
   } catch (error) {
-    console.log(error, 'catch error');
+    res.status(500).json(error)
   }
 }
+
+/* ------------------------------ getiing user ------------------------------ */
 
 const getUser = async (req, res) => {
   const { userId } = req.params
@@ -379,10 +370,10 @@ const getUser = async (req, res) => {
     console.log(details, 'llllllllllllllllll');
   } catch (error) {
     res.status(500).json(error);
-
   }
 }
 
+/* -------------------------- fetching profile post ------------------------- */
 
 const getProfilePost = async (req, res) => {
   try {
@@ -390,9 +381,7 @@ const getProfilePost = async (req, res) => {
     let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
     res.status(200).json(posts)
   } catch (error) {
-    console.log(error, "lknjn");
     res.status(500).json(error)
-
   }
 
 }
@@ -410,7 +399,6 @@ const getUserData = async (req, res) => {
     res.status(200).json(details)
     console.log(details, 'backend details');
   } catch (error) {
-    console.log(error, 'error here');
     res.status(500).json(error)
   }
 }
@@ -433,7 +421,6 @@ const getMyFollowers = async (req, res) => {
       res.status(402).json('pleadse tru again')
     }
   } catch (error) {
-    console.log(error)
     res.status(500).json(error)
   }
 }
@@ -455,7 +442,6 @@ const getMyFollowing = async (req, res) => {
       res.status(402).json('pleadse tru again')
     }
   } catch (error) {
-    console.log(error)
     res.status(500).json(error)
   }
 }
@@ -470,11 +456,10 @@ const searchUsers = async (req, res) => {
   try {
     const users = await Users.find(
       { username: { $regex: "^" + data, $options: "i" } },
-      { name: 1, username: 1 , image: 1}
+      { name: 1, username: 1, image: 1 }
     )
     res.status(200).json(users)
   } catch (error) {
-    console.log(error)
     res.status(500).json(error)
   }
 }
@@ -488,10 +473,9 @@ const userPostProfile = async (req, res) => {
     const userPosts = await Post.find({ userId: user._id }).sort({ createdAt: -1 });
     res.json(userPosts);
   } catch (error) {
-    console.log(error);
     res.status(500).json('Something went wrong!')
   }
-};
+}
 
 
 /* ----------------------------- get report post ---------------------------- */
@@ -536,7 +520,6 @@ const NotificationCount = async (req, res) => {
   console.log(req.params.id, 'getNotificationCount');
   try {
     const result = await Notification.findOne({ userId: req.params.id })
-    // console.log(result, 'resulttttt');
     const unread = result.Notification.filter((data) => {
       if (data?.unRead === 'true') {
         return data
@@ -545,25 +528,47 @@ const NotificationCount = async (req, res) => {
     console.log(unread.length, 'count111');
     res.status(200).json(unread.length)
   } catch (error) {
-    console.log(error, 'erorrrrrrrrrrrrr');
     res.status(500).json(error)
   }
 }
 
 /* ------------------------ manage notification count ----------------------- */
 
-const manageNotification = async(req,res) =>{
+const manageNotification = async (req, res) => {
   try {
-    await Notification.updateOne({userId:req.params.id},{
-      $set:{'Notification.$[].unRead':'false'}
+    await Notification.updateOne({ userId: req.params.id }, {
+      $set: { 'Notification.$[].unRead': 'false' }
     })
     res.status(200).json('managed')
   } catch (error) {
-    console.log(error);
-    res.status(500),json(error)
+    res.status(500), json(error)
   }
 }
 
 
 
-module.exports = { postSignup, postLogin, sendOtp, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, userPostProfile, report, getAllNotification, NotificationCount, getupdatedetails, manageNotification }
+module.exports = {
+  postSignup,
+  postLogin,
+  sendOtp,
+  postverifyOtp,
+  postUpload,
+  getUsersPost,
+  postaddlikes,
+  postaddcomment,
+  getcomments,
+  getsuggestions,
+  postfollow,
+  getProfilePost,
+  getUser,
+  getUserData,
+  getMyFollowers,
+  getMyFollowing,
+  searchUsers,
+  userPostProfile,
+  report,
+  getAllNotification,
+  NotificationCount,
+  getupdatedetails,
+  manageNotification
+}

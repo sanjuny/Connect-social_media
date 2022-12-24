@@ -43,7 +43,8 @@ const SignupSchema = mongoose.Schema({
         default:null
     },
     bio:{
-        type:String
+        type:String,
+        default:null
     }
 })
 
