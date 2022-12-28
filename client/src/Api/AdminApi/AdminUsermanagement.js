@@ -11,3 +11,5 @@ export const fetchReportedPost = () => instance.get('/reportedpost')
 export const getReportDetails = (postId) => instance.get(`/reportdetails/${postId}`)
 
 export const blockUserpost = (postId) => instance.post(`/blockpost/${postId}`)
+
+export const UnblockUserpost =(postId) => instance.post(`/unblockpost/${postId}`)

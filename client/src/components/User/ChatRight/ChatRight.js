@@ -16,6 +16,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
     useEffect(() => {
         if (recieveMessage !== null && recieveMessage.chatId === chat._id) {
             setMessages([...messages, recieveMessage])
+            console.log(messages,'messagessss');
         }
     }, [recieveMessage])
 
@@ -29,7 +30,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
             try {
                 const { data } = await getUser(userId);
                 setUserData(data)
-                console.log(userData, 'kkkkkkkkkkkkkkkfffffff');
+                console.log(data, 'kkkkkkkkkkkkkkkfffffff');
             } catch (error) {
                 console.log(error);
             }
@@ -108,8 +109,8 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                             </div>
                             {/* heder */}
                             <hr className="border-gray-800" />
-                            <div className=" flex flex-col h-screen overflow-x-auto mb-4">
-                                <div className="flex flex-col h-screen overflow-y-scroll  no-scrollbar">
+                            <div className=" flex flex-col overflow-x-auto mb-4">
+                                <div className="flex flex-col h-[80vh] sm:h-[80vh] md:h-screen overflow-y-scroll  no-scrollbar">
                                     {messages.map((message) => {
                                         return (
                                             <div ref={scroll}>

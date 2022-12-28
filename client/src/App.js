@@ -14,6 +14,8 @@ import SignupPage from './Pages/User/SignupPage'
 import UserProfilePages from './Pages/User/UserProfilePages'
 import store from './Redux/Store'
 import Updation from './UserContext/userContext'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -37,7 +39,7 @@ function App() {
               <Route path='/profile' element={<UserProfilePages />} />
               <Route path='/chat' element={<ChatPage />} />
               <Route path='/profile/:username' element={<ProfiePage />} />
-              <Route path='/notification' element={<NotificationPage/>} />
+              <Route path='/notification' element={<NotificationPage />} />
 
             </Routes>
           </Updation>
@@ -52,6 +54,7 @@ function App() {
         </Routes>
 
       </Router>
+      <ToastContainer />
 
     </div>
   )

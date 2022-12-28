@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const { getUserMangement, BlockUser, UnBlockUser, postAdminLogin, getreportPosts, getreportDetails, BlockreportPost } = require('../Controller/Admincontroller');
+const { getUserMangement, BlockUser, UnBlockUser, postAdminLogin, getreportPosts, getreportDetails, BlockreportPost, UnBlockreportPost } = require('../Controller/Admincontroller');
 
 const check = require('../Middleware/AuthMiddleware');
 
@@ -20,6 +20,8 @@ router.get('/reportedpost', check, getreportPosts)
 router.get('/reportdetails/:id', check, getreportDetails)
 
 router.post('/blockpost/:id', check, BlockreportPost)
+
+router.post('/unblockpost/:id',check, UnBlockreportPost)
 
 /* ------------------------ Datas protected with jwt ------------------------ */
 

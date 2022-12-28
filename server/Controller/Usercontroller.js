@@ -239,7 +239,7 @@ const getUsersPost = async (req, res) => {
     console.log("posts");
     console.log(posts);
     let friendpost = await Promise.all(currentuser.following?.map((postId) => {
-      return Post.find({ userId: postId, reports: { $ne: req.params.id } }).populate('userId').sort({ createdAt: -1 })
+      return Post.find({ userId: postId, reports: { $ne: req.params.id }, status: 'active' }).populate('userId').sort({ createdAt: -1 })
     }))
     console.log("kkkkkkk");
     let data = posts.concat(...friendpost)

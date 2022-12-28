@@ -122,14 +122,10 @@ const getreportDetails = async (req, res) => {
 /* ---------------------------- block report post --------------------------- */
 
 const BlockreportPost = async (req, res) => {
-    console.log(req.params.id,'loloololo');
+    console.log(req.params.id, 'loloololo');
     try {
-        const post = await Post.findByIdAndUpdate(req.param.id,
-            {
-                $set: { status: 'inactive' }
-
-            })
-        console.log(post,'lsllslslsl');
+        const post = await Post.findByIdAndUpdate(req.params.id, { $set: { status: 'inactive' } })
+        console.log(post, 'lsllslslsl');
         const details = {
             user: post.userId,
             desc: 'Post has been blocked',
@@ -137,11 +133,27 @@ const BlockreportPost = async (req, res) => {
         }
         res.status(200).json({ message: 'post Blocked!' })
     } catch (error) {
+        console.log(error, 'llllllllllll');
         res.status(500).json(error)
     }
 }
 
 
+
+const UnBlockreportPost = (req, res) => {
+    console.log(req.params.id, 'loloololo');
+    try {
+        Post.findByIdAndUpdate(req.params.id, {
+            $set: { status: "active" }
+        }).then(response => {
+            res.status(200).json({ update: true, message: "post has been Ublocked" })
+        }).catch(err => {
+            res.status(401).json({ message: "Something went wrong" })
+        })
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
 
 
 
@@ -153,6 +165,7 @@ module.exports = {
     postAdminLogin,
     getreportPosts,
     getreportDetails,
-    BlockreportPost
+    BlockreportPost,
+    UnBlockreportPost
 }
 

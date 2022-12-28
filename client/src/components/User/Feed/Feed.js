@@ -48,8 +48,8 @@ function Feed() {
     return (
         < >
             <div role="main">
-                <div className="flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px' }}>
-                    <div className="w-3/5 border border-y-0 border-gray-800" style={{ maxWidth: '600px' }}>
+                <div className="overflow-y-auto  h-screen no-scrollbar" >
+                    <div className="w-full border border-y-0 border-gray-800">
                         <div>
                             <div className="flex justify-start">
                                 <div className="px-4 py-2 mx-2">

@@ -92,10 +92,8 @@ function RightBar() {
                   <div class="flex justify-between">
                     <span class="block ml-2 font-semibold text-white">{user.username}</span>
                   </div>
-
                 </div>
               </a></Link>
-
           </div>
         ))
         : null}
@@ -119,7 +117,7 @@ function RightBar() {
                         <Link to={`/profile/${obj.username}`} className="flex-1 ">
                           <div className="flex items-center w-48">
                             <div>
-                              { obj.image ?
+                              {obj.image ?
 
                                 <img className="inline-block h-10 w-10 rounded-full ml-4 mt-2"
                                   src={'/images/' + obj.image}

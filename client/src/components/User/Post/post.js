@@ -178,33 +178,34 @@ function Post({ post }) {
                                     </div>
                                 </div>
                             </Link>
-                            <div>
+                            <div className='relative'>
                                 <BsThreeDotsVertical className=' text-white float-right w-6 h-6' onClick={(e) => setPop(!pop)} />
+                                {/* dropdown modal */}
+                                {
+                                    pop ? (
+                                        <div class='absolute top-10 right-2 cursor-pointer z-30 bg-gray-300 shadow-sm rounded-full border flex-col flex justify-end'>
+                                            <ul>
+                                                {post.userId._id === userData._id ?
+                                                    <>
+                                                        <li>
+                                                            <a class="text-sm rounded-full hover:bg-gray-800 hover:text-blue-300 block px-4 py-2">Delete</a>
+                                                        </li>
+                                                    </> :
+                                                    <>
+                                                        <li>
+                                                            <a onClick={(e) => setReportPop(!reportPop)} class="text-sm rounded-full hover:bg-gray-800 hover:text-blue-300 block px-4 py-2">Report</a>
+                                                        </li>
+                                                    </>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    ) : null
+                                }
+                                {/* dropdown modal */}
                             </div>
                         </div>
-                        {/* dropdown modal */}
-                        {
-                            pop ? (
-                                <div class='absolute right-80 cursor-pointer z-30 bg-gray-300 shadow-sm rounded-full border flex-col flex justify-end'>
-                                    <ul>
-                                        {post.userId._id === userData._id ?
-                                            <>
-                                                <li>
-                                                    <a class="text-sm rounded-full hover:bg-gray-800 hover:text-blue-300 block px-4 py-2">Delete</a>
-                                                </li>
-                                            </> :
-                                            <>
-                                                <li>
-                                                    <a onClick={(e) => setReportPop(!reportPop)} class="text-sm rounded-full hover:bg-gray-800 hover:text-blue-300 block px-4 py-2">Report</a>
-                                                </li>
-                                            </>
-                                        }
 
-                                    </ul>
-                                </div>
-                            ) : null
-                        }
-                        {/* dropdown modal */}
                     </div>
                 </div>
 
@@ -238,7 +239,7 @@ function Post({ post }) {
                 {/* modal */}
                 {
                     open ? (
-                        <div className=" px-0 mx-auto  w-[700px] max-h-[200px] overflow-y-scroll no-scrollbar">
+                        <div className=" px-0 mx-auto  w-[540px] max-h-[200px] overflow-y-scroll no-scrollbar">
                             <div className="flex-col  w-[590px]   bg-black border-b-2 border-r-2 border-black sm:px-4 sm:py-4 md:px-4 sm:rounded-lg sm:shadow-sm">
                                 <button onClick={closeMODAl} type="button" className="float-left rounded-md p-2 inline-flex items-center justify-center text-white hover:text-black hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black">
                                     <span className="sr-only">Close menu</span>

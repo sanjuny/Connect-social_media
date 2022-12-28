@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { FaRegComment, FaRegHeart } from 'react-icons/fa'
 import { FcLike } from 'react-icons/fc'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router';
 import { addcomment, addfollow, addlike, createChat, getcomments, getProfilePost, getUserByUsername, getUserFollowers, getUserFollowing, userPost } from '../../../Api/UserApi/UserRequest';
 import dummy from '../../../Images/dummy.jpg'
@@ -10,6 +10,7 @@ import connect from '../../../Images/dummy.jpg'
 import { format, render, cancel, register } from 'timeago.js';
 import { UserUpdation } from '../../../UserContext/userContext'
 import { Link } from 'react-router-dom'
+import { addMessage } from '../../../Redux/StoreAnother'
 
 
 
@@ -23,6 +24,7 @@ function Profile() {
     /* ---------------------------- current userdata ---------------------------- */
 
     const { profileUpdate, setProfileUpdate } = useContext(UserUpdation)
+    const dispatch = useDispatch()
 
 
 
@@ -145,7 +147,8 @@ function Profile() {
         try {
             const { data } = await createChat(users)
             console.log(data, 'onHandleChange');
-            Navigate('/chat')
+            dispatch(addMessage(user._id))
+            Navigate(`/chat`)
         } catch (error) {
             console.log(error, 'catch error create chat');
         }

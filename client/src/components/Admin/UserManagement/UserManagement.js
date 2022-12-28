@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getusers, userBlock, userUnBlock } from '../../../Api/AdminApi/AdminUsermanagement'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { toast } from 'react-toastify';
 
 function UserManagement() {
 
@@ -9,11 +10,10 @@ function UserManagement() {
   const [form, setForm] = useState([])
 
 
-
   useEffect(() => {
     const getUse = async () => {
       try {
-        const { data } = await getusers() 
+        const { data } = await getusers()
         console.log(data, 'userdata');
         setForm(data)
       } catch (error) {
@@ -35,6 +35,16 @@ function UserManagement() {
             const { data } = await userBlock(userId)
             console.log(data, 'responseeeeeeeeeeeee');
             setStatus(!status)
+            toast.error('The user is blocked!', {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           }
         },
         {
@@ -45,18 +55,25 @@ function UserManagement() {
 
   }
 
+
   const unblockuser = async (userId) => {
     const { data } = await userUnBlock(userId)
     console.log(data, 'unblock console');
     setStatus(!status)
+    toast.success('The user is Unblocked!', {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
 
 
-
-
-
   return (
-
     <>
       <div className="w-full my-2 py-2  px-5 overflow-x-auto sm:-mx-6 sm:px-6 lg:- pr-10 lg:px-8 flex justify-center">
         <div className="w-full align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3 rounded-bl-lg rounded-br-lg">
@@ -93,9 +110,9 @@ function UserManagement() {
                           <span className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
                             <span aria-hidden className=" absolute inset-0 bg-yellow-300 opacity-50 rounded-full"></span>
                             <span className="relative text-xs">{data.verified}</span>
-                          </span> 
-                         : <span className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
-                            <span aria-hidden className=" absolute inset-0 bg-red-300 opacity-50 rounded-full"></span> 
+                          </span>
+                          : <span className="relative inline-block px-3 py-1 font-semibold text-yellow-900 leading-tight">
+                            <span aria-hidden className=" absolute inset-0 bg-red-300 opacity-50 rounded-full"></span>
                             <span className="relative text-xs">{data.verified}</span>
                           </span>
                       }

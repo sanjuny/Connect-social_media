@@ -6,10 +6,11 @@ import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
 import { addpost, fetchNoCounts, notificationManage } from '../../../Api/UserApi/UserRequest'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert';
 import { socket } from '../../../UserContext/SocketContext'
 import { UserUpdation } from '../../../UserContext/userContext'
+import { addMessage } from '../../../Redux/StoreAnother'
 
 
 
@@ -141,6 +142,7 @@ function LeftBar() {
     /* ----------------------- manage notification count ----------------------- */
     // const [notificationData, setNotificationData] = useState([])
     // const [counts, SetCounts] = useState('')
+    const dispatch = useDispatch()
 
 
     const notificationHandler = async () => {
@@ -152,6 +154,14 @@ function LeftBar() {
         } catch (error) {
             console.log(error, 'sssssssss');
 
+        }
+    }
+
+    const handlemessage = async()=>{
+        try {
+            dispatch(addMessage(null))
+        } catch (error) {
+            
         }
     }
 
@@ -172,19 +182,20 @@ function LeftBar() {
                                 <BiHome className='w-7 h-7' />
                                 <h2 className='pl-4'>Home</h2>
                             </Link>
-                                <div onClick={notificationHandler} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
-                                    <IoIosNotifications className='w-7 h-7' />
-                                    <h2 className='pl-4 '>Notifications</h2>
-                            {notification != 0 ?
+                            <div onClick={notificationHandler} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
+                                <IoIosNotifications className='w-7 h-7' />
+                                <h2 className='pl-4 '>Notifications</h2>
+                                {notification != 0 ?
                                     <span class="inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600 text-white rounded ml-2">{notification}</span>
                                     : null
-                                    
                                 }
-                                </div>
+                            </div>
+                            <div onClick={handlemessage}>
                             <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <AiOutlineMessage className='w-7 h-7' />
                                 <h2 className='pl-4'>Messages</h2>
                             </Link>
+                            </div>
                             <a onClick={Logout} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <BiLogOutCircle className='w-7 h-7' />
                                 <h2 className='pl-4'>logout</h2>
