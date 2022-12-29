@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import image from '../../../Images/logowhite.png'
-import dummy from '../../../Images/dummy.jpg'
 import { BiHome, BiLogOutCircle } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
@@ -11,11 +10,6 @@ import { confirmAlert } from 'react-confirm-alert';
 import { socket } from '../../../UserContext/SocketContext'
 import { UserUpdation } from '../../../UserContext/userContext'
 import { addMessage } from '../../../Redux/StoreAnother'
-
-
-
-
-
 
 
 function LeftBar() {
@@ -140,8 +134,6 @@ function LeftBar() {
 
 
     /* ----------------------- manage notification count ----------------------- */
-    // const [notificationData, setNotificationData] = useState([])
-    // const [counts, SetCounts] = useState('')
     const dispatch = useDispatch()
 
 
@@ -157,16 +149,13 @@ function LeftBar() {
         }
     }
 
-    const handlemessage = async()=>{
+    const handlemessage = async () => {
         try {
             dispatch(addMessage(null))
         } catch (error) {
-            
+            console.log(error, 'errrorrr');
         }
     }
-
-
-
 
     /* ----------------------- manage notification count ----------------------- */
 
@@ -191,10 +180,10 @@ function LeftBar() {
                                 }
                             </div>
                             <div onClick={handlemessage}>
-                            <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
-                                <AiOutlineMessage className='w-7 h-7' />
-                                <h2 className='pl-4'>Messages</h2>
-                            </Link>
+                                <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
+                                    <AiOutlineMessage className='w-7 h-7' />
+                                    <h2 className='pl-4'>Messages</h2>
+                                </Link>
                             </div>
                             <a onClick={Logout} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                 <BiLogOutCircle className='w-7 h-7' />
@@ -207,7 +196,7 @@ function LeftBar() {
                         <div className="absolute" style={{ bottom: '2rem' }}>
                             <div className="flex-shrink-0 flex hover:bg-gray-800 rounded-full px-4 py-3 mt-12 mr-2">
                                 <div className="flex-shrink-0 group block">
-                                    <Link to='/profile' v className="flex items-center">
+                                    <Link to='/profile'  className="flex items-center">
                                         <div>
                                             <img className="inline-block h-10 w-10 rounded-full"
                                                 src={'/images/' + userData.image}

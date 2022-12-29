@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, report, getAllNotification, NotificationCount, userPostProfile, getupdatedetails, manageNotification } = require('../Controller/Usercontroller');
+const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, report, getAllNotification, NotificationCount, userPostProfile, getupdatedetails, manageNotification, deletepost } = require('../Controller/Usercontroller');
 
 
 
@@ -36,7 +36,6 @@ router.post('/addfollow/:id', check, postfollow)
 
 router.get('/getprofilepost/:id', check, getProfilePost)
 
-
 router.post('/updatedetails/:id', check, getupdatedetails)
 
 router.get('/getUser/:userId', check, getUser)
@@ -58,6 +57,8 @@ router.get('/notification/:id', check, getAllNotification)
 router.get('/getcount/:id', check, NotificationCount)
 
 router.post('/notificationRead/:id', check, manageNotification)
+
+router.post('/deletepost/:id', check, deletepost)
 
 /* ------------------------ Datas protected with jwt ------------------------ */
 

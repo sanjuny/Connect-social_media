@@ -24,7 +24,6 @@ function Chat() {
     const [sendMessage, setSendMessage] = useState(null)
     const [recieveMessage, setRecieveMessage] = useState(null)
 
-
     // send messgae to the socket server
     useEffect(() => {
         if (sendMessage !== null) {
@@ -32,34 +31,23 @@ function Chat() {
         }
     }, [sendMessage])
 
+
     useEffect(() => {
         if (AnotherUserId) {
             const users = {
                 senderId: userData._id,
                 receiverId: AnotherUserId
             }
-            console.log(users,'userssssssssssssss');
-            createChat(users).then((res)=>{
-                if(res.data){
+            console.log(users, 'userssssssssssssss');
+            createChat(users).then((res) => {
+                if (res.data) {
                     setCurrentChat(res.data)
                     setResponsive(true)
-                    // fetchMessages(res.data._id);
                 }
-                console.log(res.data,'ksksksksksksk');
+                console.log(res.data, 'ksksksksksksk');
             })
-            // const fetchMessages = async (chatId) => {
-            //     try {
-            //         const { data } = await getMessages(chatId)
-            //         console.log(data, 'fetchmesaagettttttttttttttttttttttttt');
-            //         // setMessage(data)
-            //     } catch (error) {
-            //         console.log(error);
-            //     }
-            // };
         }
     }, [])
-
-
 
 
     useEffect(() => {
@@ -116,7 +104,7 @@ function Chat() {
 
     return (
         <>
-            <div className="flex h-screen antialiased text-gray-800">
+            <div className="flex h-screen antialiased text-gray-800 ml-20 md:ml-0">
                 <div className={`${responsive ? 'hidden' : ''} md:block h-full  w-full md:w-4/12 overflow-x-hidden no-scrollbar`}>
                     <div className="w-9/4  border border-y-0 border-gray-800 h-full">
                         <div className="flex justify-start">

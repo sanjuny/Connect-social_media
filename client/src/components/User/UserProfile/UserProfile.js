@@ -179,7 +179,7 @@ function UserProfile() {
     /* ------------------------------- editprofile ------------------------------ */
     return (
         <>
-            <div className="flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px' }}>
+            <div className=" ml-14 md:ml-0 flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px', backgroundColor:'black' }}>
                 <div className="w-3/5 border border-y-0 border-gray-800" style={{ maxWidth: '600px' }}>
                     <div>
                         <div className="flex justify-start">

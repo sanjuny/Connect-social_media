@@ -17,8 +17,6 @@ export const addfollow = (currentUserId, id) => instance.post(`/addfollow/${curr
 
 export const getProfilePost = (userId) => instance.get(`/getprofilepost/${userId}`)
 
-// export const editProfile = (data, userId) => axios.post(`http://localhost:5000/geteditProfile/${userId}`, { data })
-
 export const userChats = (id) => instance.get(`/chat/${id}`)
 
 export const getUser = (userId) => instance.get(`/getUser/${userId}`)
@@ -51,5 +49,6 @@ export const updateDetails = (data,userId) =>{instance.post(`/updatedetails/${us
 
 export const notificationManage = (userId) => instance.post(`/notificationRead/${userId}`)
 
+export const deletepost = (postId) => instance.post(`/deletepost/${postId}`)
 
 

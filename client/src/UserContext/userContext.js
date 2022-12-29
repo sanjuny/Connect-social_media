@@ -8,8 +8,9 @@ function Updation({ children }) {
     const [likesUpdate, setLikesUpdate] = useState(true)
     const [postsUpdate, setpostsUpdate] = useState(true)
     const [feedsUpdate, setfeedsUpdate] = useState(true)
+    const [serachModal, setSearchModal] = useState(false)
     return (
-        <UserUpdation.Provider value={{ setProfileUpdate, profileUpdate, setLikesUpdate, likesUpdate, setpostsUpdate, postsUpdate, setfeedsUpdate, feedsUpdate }}>
+        <UserUpdation.Provider value={{ setProfileUpdate, profileUpdate, setLikesUpdate, likesUpdate, setpostsUpdate, postsUpdate, setfeedsUpdate, feedsUpdate, setSearchModal, serachModal }}>
             {children}
         </UserUpdation.Provider>
     )

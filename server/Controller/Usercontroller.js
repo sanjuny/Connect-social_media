@@ -312,7 +312,7 @@ const getcomments = async (req, res) => {
   const postId = req.params.id
   console.log(req.params.id, 'id hefre');
   try {
-    let comments = await Comment.find({ postId: req.params.id }).populate('userId', 'name username')
+    let comments = await Comment.find({ postId: req.params.id }).populate('userId', 'name username image')
     console.log(comments, 'gettting');
     res.status(200).json(comments)
   } catch (error) {
@@ -545,7 +545,21 @@ const manageNotification = async (req, res) => {
   }
 }
 
+/* ---------------------------- delete user post ---------------------------- */
 
+const deletepost = async (req, res) => {
+  console.log(req.params.id, 'req.params.id');
+  try {
+    let result1 = await Post.findByIdAndDelete(req.params.id)
+    let result2 = await Comment.deleteMany({ postId: req.params.id })
+    res.status(200).json({ message: 'post deleted successfully' })
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error)
+
+  }
+
+}
 
 module.exports = {
   postSignup,
@@ -570,5 +584,6 @@ module.exports = {
   getAllNotification,
   NotificationCount,
   getupdatedetails,
-  manageNotification
+  manageNotification,
+  deletepost
 }

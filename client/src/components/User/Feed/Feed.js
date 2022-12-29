@@ -23,7 +23,6 @@ function Feed() {
     const [comments, setcomments] = useState([])
 
 
-
     console.log(comments, 'kkkkkkkkkkkkkkkk');
     console.log(post, 'datafeed');
 
@@ -48,7 +47,7 @@ function Feed() {
     return (
         < >
             <div role="main">
-                <div className="overflow-y-auto  h-screen no-scrollbar" >
+                <div className=" ml-20 md:ml-0 overflow-y-auto  h-screen no-scrollbar" >
                     <div className="w-full border border-y-0 border-gray-800">
                         <div>
                             <div className="flex justify-start">
@@ -64,13 +63,13 @@ function Feed() {
                         {/* Feed/ */}
 
                         <ul className="list-none">
-                            <li>
                                 {post.map((obj) => {
                                     return (
-                                        <Post key={obj.id} post={obj} />
+                                        <li>
+                                            <Post key={obj.id} post={obj} />
+                                        </li>
                                     )
                                 })}
-                            </li>
                         </ul>
                     </div>
                 </div>
