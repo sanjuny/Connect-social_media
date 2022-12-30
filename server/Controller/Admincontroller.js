@@ -156,6 +156,21 @@ const UnBlockreportPost = (req, res) => {
 }
 
 
+/* ----------------------------- something good ----------------------------- */
+// const checkBlock = async (req,res)=>{
+//     console.log('hello');
+//     try {
+//         const userBlock = await users.findById(req.body.userId)
+//         console.log(userBlock,'userblockckckck');
+//         return userBlock.status
+//         // res.status(200).json({ message: 'user logut suceesfully' })
+//     } catch (error) {
+//         console.log(error,'error');
+
+//     }
+// }
+
+
 
 
 module.exports = {

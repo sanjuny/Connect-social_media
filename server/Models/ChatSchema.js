@@ -5,7 +5,7 @@ const ChatSchema = mongoose.Schema({
         type: Array,
     },
 
-},{ timestamps: true});
+}, { timestamps: true });
 
 const chat = mongoose.model('chat', ChatSchema)
 

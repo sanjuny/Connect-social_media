@@ -21,6 +21,7 @@ function Post({ post }) {
     /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
     console.log(userData, 'lolololooonhjgyugv');
+
     /* ---------------------------- current userdata ---------------------------- */
 
     const { likesUpdate, setLikesUpdate } = useContext(UserUpdation)

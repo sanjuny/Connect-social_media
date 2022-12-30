@@ -13,12 +13,13 @@ import { UserUpdation } from '../../../UserContext/userContext'
 import { socket } from '../../../UserContext/SocketContext';
 import { addMessage } from '../../../Redux/StoreAnother';
 
+
 function Menubar() {
     const [open, setOpen] = useState(false);
 
     const navigate = useNavigate()
     const [err, seterr] = useState('')
-    
+
     const { postsUpdate, setpostsUpdate } = useContext(UserUpdation)
 
     /* ---------------------------------- logut --------------------------------- */
@@ -184,6 +185,16 @@ function Menubar() {
     }
 
 
+    /* -------------------------- messgae notifications ------------------------- */
+    const [message, setMessgae] = useState(false)
+
+    useEffect(() => {
+        socket.on("receive-message", data => {
+            setMessgae(true)
+        })
+    }, [message])
+
+
     /* ---------------------- responsive sidebar functions ---------------------- */
 
     const menus = [
@@ -238,6 +249,13 @@ function Menubar() {
                         {notification != 0 ?
                             <span class="inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap top-20 align-baseline font-bold  bg-red-600 text-white rounded ml-8 absolute">{notification}</span>
                             : null
+                        }
+                        {message != 0 ?
+                            <span class="flex h-3 w-3pointer-events-none">
+                                <span class="top-56 mb-1 ml-8 absolute inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-400  rounded  opacity-75"></span>
+                                <span class="bottom-48 mt-2 h-2 w-2 ml-8 relative animate-ping inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600  rounded"></span>
+                            </span>
+                            : null  
                         }
                         <div>
                             <Link to='/profile' className="flex items-center">

@@ -1,15 +1,17 @@
 const jwt = require("jsonwebtoken");
+const { checkBlock } = require("../Controller/Admincontroller");
 
 const check = async (req, res, next) => {
 
   console.log("checked");
-  console.log(req.headers.accesstoken,"popopopo");
-  
+  console.log(req.headers.accesstoken, "popopopo");
+
   try {
     let token = req.headers.accesstoken;
     if (token) {
     }
     const user = jwt.verify(token, process.env.JWT_SECERT);
+
     if (user) {
       req.user = user;
       next();

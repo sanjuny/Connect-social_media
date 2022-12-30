@@ -10,6 +10,7 @@ import { confirmAlert } from 'react-confirm-alert';
 import { socket } from '../../../UserContext/SocketContext'
 import { UserUpdation } from '../../../UserContext/userContext'
 import { addMessage } from '../../../Redux/StoreAnother'
+import { toast } from 'react-toastify';
 
 
 function LeftBar() {
@@ -82,6 +83,16 @@ function LeftBar() {
             await addpost(data)
             setOpen(false)
             setpostsUpdate(!postsUpdate)
+            toast.success('Post is added succesfully!', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
         } catch (error) {
             console.log(error, 'catch error eroor rororor');
             seterr('Please upload a valid image file')
@@ -145,9 +156,13 @@ function LeftBar() {
             navigate('/notification')
         } catch (error) {
             console.log(error, 'sssssssss');
-
         }
     }
+
+
+    /* -------------------------- message notification -------------------------- */
+
+    const [message, setMessgae] = useState(false)
 
     const handlemessage = async () => {
         try {
@@ -156,6 +171,13 @@ function LeftBar() {
             console.log(error, 'errrorrr');
         }
     }
+
+    useEffect(() => {
+        socket.on("receive-message", data => {
+            setMessgae(true)
+        })
+    }, [message])
+
 
     /* ----------------------- manage notification count ----------------------- */
 
@@ -183,6 +205,13 @@ function LeftBar() {
                                 <Link to='/chat' className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
                                     <AiOutlineMessage className='w-7 h-7' />
                                     <h2 className='pl-4'>Messages</h2>
+                                    {message != 0 ?
+                                        <span class="flex h-3 w-3 pointer-events-none">
+                                            <span class="mt-1 absolute inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-400 text-white rounded ml-2 opacity-75"></span>
+                                            <span class="mt-1 h-2 w-2 relative animate-ping inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-700 text-white rounded ml-2"></span>
+                                        </span>
+                                        : null
+                                    }
                                 </Link>
                             </div>
                             <a onClick={Logout} className="mt-5 group flex items-center px-2 py-2 text-white leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-blue-300">
@@ -196,7 +225,7 @@ function LeftBar() {
                         <div className="absolute" style={{ bottom: '2rem' }}>
                             <div className="flex-shrink-0 flex hover:bg-gray-800 rounded-full px-4 py-3 mt-12 mr-2">
                                 <div className="flex-shrink-0 group block">
-                                    <Link to='/profile'  className="flex items-center">
+                                    <Link to='/profile' className="flex items-center">
                                         <div>
                                             <img className="inline-block h-10 w-10 rounded-full"
                                                 src={'/images/' + userData.image}

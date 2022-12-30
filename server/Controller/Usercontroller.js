@@ -532,7 +532,7 @@ const NotificationCount = async (req, res) => {
   }
 }
 
-/* ------------------------ manage notification count ----------------------- */
+/* ------------------------ manage notification if the user read the msg or not ----------------------- */
 
 const manageNotification = async (req, res) => {
   try {

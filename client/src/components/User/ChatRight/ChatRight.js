@@ -4,8 +4,13 @@ import { format, render, cancel, register } from 'timeago.js';
 import InputEmoji from "react-input-emoji";
 import { useRef } from 'react';
 import dummy from '../../../Images/dummy.jpg'
+import { socket } from '../../../UserContext/SocketContext';
+import { useSelector } from 'react-redux';
 
 function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
+
+    const { AnotherUserId } = useSelector(state => state.anotheruser)
+    console.log(AnotherUserId, 'anananananaan');
 
     const [userData, setUserData] = useState(null)
     const [messages, setMessages] = useState([])
@@ -16,7 +21,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
     useEffect(() => {
         if (recieveMessage !== null && recieveMessage.chatId === chat._id) {
             setMessages([...messages, recieveMessage])
-            console.log(messages,'messagessss');
+            console.log(messages, 'messagessss');
         }
     }, [recieveMessage])
 
@@ -72,6 +77,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
         // send message to database
         try {
             const { data } = await addMessage(message);
+            console.log(data, 'notifyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
             setMessages([...messages, data])
             setNewMessages('')
         } catch (error) {
