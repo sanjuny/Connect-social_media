@@ -92,7 +92,7 @@ function LeftBar() {
                 draggable: true,
                 progress: undefined,
                 theme: "dark",
-              });
+            });
         } catch (error) {
             console.log(error, 'catch error eroor rororor');
             seterr('Please upload a valid image file')

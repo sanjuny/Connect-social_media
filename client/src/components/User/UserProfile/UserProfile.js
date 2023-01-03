@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
 import { FaRegComment } from 'react-icons/fa'
 import { FcLike } from 'react-icons/fc'
@@ -10,6 +10,7 @@ import { format, render, cancel, register } from 'timeago.js';
 import { useParams } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { update } from '../../../Redux/StoreSlice'
+import { UserUpdation } from '../../../UserContext/userContext'
 
 
 function UserProfile() {
@@ -17,6 +18,8 @@ function UserProfile() {
     const userData = useSelector(state => state.user)
     console.log(userData, 'lolololooololo');
     /* ---------------------------- current userdata ---------------------------- */
+
+    const { profileUpdate, setProfileUpdate } = useContext(UserUpdation)
 
 
 
@@ -142,12 +145,15 @@ function UserProfile() {
         const newEdit = {
             ...edit
         }
+        setOpen(!open)
 
         if (file) {
             const datas = new FormData();
             const filename = file.name
             datas.append("file", file)
             datas.append("name", filename)
+            console.log("h");
+
             try {
                 const { data } = await editphoto(datas)
                 console.log(data, 'datas profile picccc');
@@ -276,11 +282,6 @@ function UserProfile() {
                                         </div>
                                     </>
                                 }
-
-
-                                {/* <div className="mt-3">
-                                    <p className="text-white leading-tight mb-2">Vibe high the magic will unfold you.....</p>
-                                </div> */}
                                 <div
                                     className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">
                                     <div className="text-center pr-3"><span className="font-bold text-white">{user?.following?.length}</span><span
@@ -351,14 +352,6 @@ function UserProfile() {
                                                     <img src={'/images/' + obj.image} style={{ height: '550px', width: '480px' }}></img>
                                                 </div>
                                             </div>
-                                            {/* <div className="flex gap-5 items-center py-4">
-                                                <div className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                                                    <FaRegComment className='w-6 h-6' />12.5k
-                                                </div>
-                                                <div className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
-                                                    <FcLike className='w-6 h-6' />10.5k
-                                                </div>
-                                            </div> */}
                                         </div>
                                         <hr className="border-gray-800" />
                                     </div>

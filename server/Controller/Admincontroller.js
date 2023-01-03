@@ -95,9 +95,20 @@ const postAdminLogin = async (req, res) => {
 /* ---------------------------- get report posts ---------------------------- */
 
 const getreportPosts = async (req, res) => {
+    // let postId = req.params.id
+    // let { userId, reason } = req.body
+    // let data = await new reported({ postId: postId, userId: userId, reason: reason })
+    // console.log(postId, 'ksksksksksk');
+    // console.log(userId, 'ksksks');
+    // console.log(reason, 'ks');
     try {
         const posts = await Post.find({ reports: { $ne: [] } })
         console.log(posts, 'postsssss');
+        // let posts = await Post.findById(postId)
+        // if (!posts?.reports?.includes(userId)) {
+        //     await Post.updateOne({ $push: { reports: userId } })
+        //     await data.save()
+        // }
         res.status(200).json(posts)
     } catch (error) {
         res.status(500).json(error)

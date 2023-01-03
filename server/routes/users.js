@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, report, getAllNotification, NotificationCount, userPostProfile, getupdatedetails, manageNotification, deletepost } = require('../Controller/Usercontroller');
+const { postSignup, postLogin, postverifyOtp, postUpload, getUsersPost, postaddlikes, postaddcomment, getcomments, getsuggestions, postfollow, getProfilePost, getUser, getUserData, getMyFollowers, getMyFollowing, searchUsers, report, getAllNotification, NotificationCount, userPostProfile, getupdatedetails, manageNotification, deletepost, resendOtp } = require('../Controller/Usercontroller');
 
 
 
@@ -10,6 +10,7 @@ const check = require('../Middleware/AuthMiddleware');
 router.post('/signup', postSignup)
 router.post('/login', postLogin)
 router.post('/Verifyotp', postverifyOtp)
+router.post('/resendotp', resendOtp)
 
 /* ------------------------ Datas protected with jwt ------------------------ */
 
@@ -22,43 +23,45 @@ router.post('/photo', upload.single('file'), (req, res) => {
     res.status(200).json(data)
 })
 
-router.get('/getpost/:id', check, getUsersPost)
+router.get('/getpost/:id([a-f0-9]{24})', check, getUsersPost)
 
-router.post('/addlike/:id', check, postaddlikes)
+router.post('/addlike/:id([a-f0-9]{24})', check, postaddlikes)
 
-router.post('/addcomment/:id', check, postaddcomment)
+router.post('/addcomment/:id([a-f0-9]{24})', check, postaddcomment)
 
-router.get('/getcomment/:id', check, getcomments)
+router.get('/getcomment/:id([a-f0-9]{24})', check, getcomments)
 
 router.get('/getsuggestion', check, getsuggestions)
 
-router.post('/addfollow/:id', check, postfollow)
+router.post('/addfollow/:id([a-f0-9]{24})', check, postfollow)
 
-router.get('/getprofilepost/:id', check, getProfilePost)
+router.get('/getprofilepost/:id([a-f0-9]{24})', check, getProfilePost)
 
-router.post('/updatedetails/:id', check, getupdatedetails)
+router.post('/updatedetails/:id([a-f0-9]{24})', check, getupdatedetails)
 
-router.get('/getUser/:userId', check, getUser)
+router.get('/getUser/:userId([a-f0-9]{24})', check, getUser)
 
 router.get('/:id', check, getUserData)
 
-router.get('/myFollowers/:id', check, getMyFollowers)
+router.get('/myFollowers/:id([a-f0-9]{24})', check, getMyFollowers)
 
-router.get('/myFollowing/:id', check, getMyFollowing)
+router.get('/myFollowing/:id([a-f0-9]{24})', check, getMyFollowing)
 
 router.get('/search/:id', check, searchUsers)
 
-router.get('/profile/:id', check, userPostProfile)
+router.get('/profile/:id([a-f0-9]{24})', check, userPostProfile)
 
-router.post('/report/Post/:id', check, report)
+router.post('/report/Post/:id([a-f0-9]{24})', check, report)
 
-router.get('/notification/:id', check, getAllNotification)
+router.get('/notification/:id([a-f0-9]{24})', check, getAllNotification)
 
-router.get('/getcount/:id', check, NotificationCount)
+router.get('/getcount/:id([a-f0-9]{24})', check, NotificationCount)
 
-router.post('/notificationRead/:id', check, manageNotification)
+router.post('/notificationRead/:id([a-f0-9]{24})', check, manageNotification)
 
-router.post('/deletepost/:id', check, deletepost)
+router.post('/deletepost/:id([a-f0-9]{24})', check, deletepost)
+
+
 
 /* ------------------------ Datas protected with jwt ------------------------ */
 

@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router';
 import image from '../../../Images/logowhite.png'
-import OTPInput, { ResendOTP } from "otp-input-react";
+import OTPInput from "otp-input-react";
 import { Link } from 'react-router-dom'
-import { Signup, VerifyOtp } from '../../../Api/UserApi/UserLogin';
+import { resendOTPP, Signup, VerifyOtp } from '../../../Api/UserApi/UserLogin';
 
 
 function UserSignup() {
@@ -18,11 +18,12 @@ function UserSignup() {
   const [OTP, setOTP] = useState('')
   const [OtpError, setOtpError] = useState('')
   const [UserDetails, setUserDetails] = useState('')
-
+  const [data, setData] = useState({})
   const onSubmit = async (UserRequest) => {
     try {
       const { data } = await Signup(UserRequest)
       console.log(data, 'dataaaa');
+      setData(data)
       if (data.auth) {
         setUserDetails(data)
         setOpen(true)
@@ -54,10 +55,54 @@ function UserSignup() {
     }
   }
 
-
   const closeMODAl = () => {
     setOpen(false)
   }
+
+  /* ------------------------------- resend otp ------------------------------- */
+  const [minutes, setMinutes] = useState(1);
+  const [seconds, setSeconds] = useState(30);
+
+
+  const sendOtp = async () => {
+    try {
+      const { data } = await resendOTPP(UserDetails)
+      console.log(data, 'kdkdkdkdkdk');
+      // setMinutes(1);
+      // setSeconds(30);
+    } catch (error) {
+      console.log(error, 'catch error signup');
+    }
+  }
+
+  const resendOTP = () => {
+    setMinutes(0);
+    setSeconds(30);
+    sendOtp()
+  };
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(59);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
+
 
   return (
     <>
@@ -190,9 +235,30 @@ function UserSignup() {
                             Verify Account
                           </button>
                         </div>
-                        <div className="flex flex-row items-center justify-center text-center text-sm font-medium space-x-1 text-white">
-                          <p>Didn't recieve code?</p> <a className="flex flex-row items-center text-blue-600" href="http://" target="_blank" rel="noopener noreferrer">Resend</a>
-                        </div>
+                        <div className="container text-center">
+                          <div className="card">
+                            <div className="countdown-text">
+                              {seconds > 0 || minutes > 0 ? (
+                                <p>
+                                  Time Remaining: {minutes < 10 ? `0${minutes}` : minutes}:
+                                  {seconds < 10 ? `0${seconds}` : seconds}
+                                </p>
+                              ) : (
+                                <p>Didn't recieve code?</p>
+                              )}
+
+                              <button
+                                disabled={seconds > 0 || minutes > 0}
+                                style={{
+                                  color: seconds > 0 || minutes > 0 ? "#DFE3E8" : "#FF5630",
+                                }}
+                                onClick={resendOTP}
+                              >
+                                Resend OTP
+                              </button>
+                            </div>
+                          </div>
+                        </div>;
                       </div>
                     </div>
                   </form>

@@ -16,6 +16,7 @@
     "otp-input-react": "^0.3.0",
     "react": "^18.2.0",
     "react-confirm-alert": "^3.0.6",
+    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.39.6",
     "react-hooks": "^1.0.1",

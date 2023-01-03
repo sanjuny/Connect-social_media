@@ -43,12 +43,13 @@ export const getAllNotification = (userId) => instance.get(`/notification/${user
 
 export const fetchNoCounts = (userId) => instance.get(`/getcount/${userId}`)
 
-export const editphoto = (data) => axios.post(`http://localhost:5000/photo`,data)
+export const editphoto = (data) => axios.post(`http://localhost:5000/photo`, data)
 
-export const updateDetails = (data,userId) =>{instance.post(`/updatedetails/${userId}`,{data})}
+export const updateDetails = (data, userId) => { instance.post(`/updatedetails/${userId}`, { data }) }
 
 export const notificationManage = (userId) => instance.post(`/notificationRead/${userId}`)
 
 export const deletepost = (postId) => instance.post(`/deletepost/${postId}`)
+
 
 

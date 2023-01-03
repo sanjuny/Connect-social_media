@@ -85,10 +85,10 @@ function RightBar() {
           <div>
             <Link to={`/profile/${user.username}`}>
               <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-800 hover:text-blue-300 focus:outline-none">
-                <img class="object-cover w-10 h-10 rounded-full"
+                <img class="object-cover z-50 w-10 h-10 rounded-full"
                   src={'/images/' + user?.image} alt="username"
                 />
-                <div class="w-full pb-2">
+                <div class="w-full pb-2 z-50">
                   <div class="flex justify-between">
                     <span class="block ml-2 font-semibold text-white">{user.username}</span>
                   </div>

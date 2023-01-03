@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import { HiMenuAlt2 } from 'react-icons/hi'
-import { AiOutlineUsergroupAdd} from 'react-icons/ai'
+import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 import { MdOutlineReportGmailerrorred, MdDashboard } from 'react-icons/md'
 
 function AdminSidebar() {
 
     const navigate = useNavigate()
 
-    useEffect(()=>{
+    useEffect(() => {
         const token = localStorage.getItem('AdminToken')
-        if(!token){
+        if (!token) {
             navigate('/adminlogin')
         }
     })
@@ -26,35 +26,35 @@ function AdminSidebar() {
                     onClick: () => {
                         localStorage.removeItem('AdminToken')
                         navigate('/adminlogin')
-    
+
                     }
-    
+
                 },
                 {
                     label: 'No'
                 }
-    
-    
+
+
             ]
         });
     }
 
 
-  const menus = [
-    { name: "Dashboard", link: '/admindashboard', icon:MdDashboard},
-    { name: "User Managemnt", link: '/usermanagement', icon:AiOutlineUsergroupAdd  },
-    { name: "Report Post", link: '/reportpost', icon: MdOutlineReportGmailerrorred },
-    // { name: "Logoutt", link:'/adminlogin' , icon: MdOutlineReportGmailerrorred },
-    
-];
+    const menus = [
+        // { name: "Dashboard", link: '/admindashboard', icon:MdDashboard},
+        { name: "User Managemnt", link: '/usermanagement', icon: AiOutlineUsergroupAdd },
+        { name: "Report Post", link: '/reportpost', icon: MdOutlineReportGmailerrorred },
+        { name: "Logout", action: Logout, icon: MdOutlineReportGmailerrorred },
 
-const [open, setOpen] = useState(true);
+    ];
 
-
+    const [open, setOpen] = useState(true);
 
 
-  return (
-    <section className={`flex gap-6 ${open ? 'w-72' : 'w-16'}`}>
+
+
+    return (
+        <section className={`flex gap-6 ${open ? 'w-72' : 'w-16'}`}>
             <div className={`bg-[#0e0e0e] min-h-screen fixed ${open ? 'w-72' : 'w-16'}
             duration-500 text-gray-100 px-4`}>
 
@@ -69,6 +69,7 @@ const [open, setOpen] = useState(true);
                         <Link
                             to={menu?.link}
                             key={i}
+                            onClick={menu?.action}
                             className={` ${menu?.margin && "mt-5"
                                 } group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 
                              rounded-md`}>
@@ -90,18 +91,12 @@ const [open, setOpen] = useState(true);
                                 group-hover:w-fit`}>
                                 {menu?.name}
                             </h2>
-                            {/* {menu.name == 'Logoutt'? <div className="md:text-3xl lg:text-2xl" >onclick={Logout}asdfghbngfdsdfghgfrdefg</div> :null
-                           } */}
-                            
                         </Link>
                     ))}
                 </div>
-                <button onClick={Logout} className="bg-red-500 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-full mt-5 mr-14">
-                    LogOut
-                </button>
             </div>
         </section>
-  )
+    )
 }
 
 export default AdminSidebar

@@ -12,6 +12,8 @@ const Notification = require('../Models/NotificationSchema')
 const reported = require('../Models/ReportSchema')
 const { json } = require('express')
 
+var regex = /^[a-z0 -9_.-]*$/;
+
 
 /* ----------------------------------- otp ---------------------------------- */
 
@@ -31,7 +33,7 @@ const sendOtp = async (OtpResult, res) => {
     let info = await transporter.sendMail({
       from: process.env.OTP_USER, // sender address
       to: OtpResult.email, // list of receivers
-      subject: "Meassage From Connect", // Subject line
+      subject: "Message From Connect", // Subject line
       html: `
           <div style="width: 100%; background-color: azure; padding: 5rem 0">
           <div style="max-width: 700px; background-color: lightcyan; margin: 0 auto">
@@ -40,7 +42,7 @@ const sendOtp = async (OtpResult, res) => {
             </div>
             <div style="width: 100%; gap: 10px; padding: 30px 0; display: grid">
               <p style="font-weight: 800; font-size: 1.2rem; padding: 0 30px">
-                Form Connect
+                From Connect
               </p>
               <div style="font-size: .8rem; margin: 0 30px">
               <p>OTP: <b>${OTP}</b> is your one time password(OTP) to log in to Connect. Please enter OTP to proceed.</p>
@@ -65,28 +67,22 @@ const sendOtp = async (OtpResult, res) => {
     } else {
       await OtpVerification.updateOne(
         { userId: OtpResult._id },
-        { OTP: hashOTP }
+        { Otp: hashOTP }
       );
     }
-
-    transporter.sendMail(info, function (error, info) {
-      console.log('passed');
-      if (error) {
-        console.log(error, 'hello');
-      } else {
-        // res.json({
-        //   status: "pending",
-        //   message: "OTPverification mail sent",
-        //   mail: OtpResult.email,
-        //   user: OtpResult
-        // })
-      }
-    })
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   } catch (error) {
     console.log(error, 'error');
   }
+}
+
+
+/* -------------------------------- resendotp ------------------------------- */
+
+const resendOtp = async (req, res) => {
+  console.log(req.body, 'dataaatata');
+  await sendOtp(req.body.data).then((response) => {
+    res.status(200).json({ auth: true })
+  })
 }
 
 /* --------------------------------- signup --------------------------------- */
@@ -201,26 +197,15 @@ const postUpload = async (req, res) => {
 /* --------------------------- update userdetails --------------------------- */
 
 const getupdatedetails = async (req, res) => {
-  console.log(req.body, 'req.body');
-  console.log(req.body.data.username, 'jjjjjjjjjj');
-  console.log(req.body.data, 'jjjjjjjjjjhhhhhh');
-  console.log(req.params.id, 'pppppppppppp');
   try {
     let find = await Users.findOne({ username: req.body.data.username })
-    if (find) {
-      if (find._id == req.params.id) {
-        await Users.updateOne({ _id: req.params.id }, {
-          $set: req.body.data
-        })
-        res.status(200).json("updated")
-      } else {
-        res.status(401).json({ message: 'already exists' })
-      }
-    } else {
+    if (find._id == req.params.id) {
       await Users.updateOne({ _id: req.params.id }, {
         $set: req.body.data
       })
       res.status(200).json("updated")
+    } else {
+      res.status(401).json({ message: 'already exists' })
     }
   } catch (error) {
     res.status(500).json(error)
@@ -390,17 +375,22 @@ const getProfilePost = async (req, res) => {
 
 const getUserData = async (req, res) => {
   console.log('backend getuserdata');
-  const username = req.query.username
-  console.log(username, 'backend username');
-  try {
-    const user = await Users.findOne({ username: username })
-    console.log(user, 'backend user');
-    const { phone, password, ...details } = user._doc
-    res.status(200).json(details)
-    console.log(details, 'backend details');
-  } catch (error) {
-    res.status(500).json(error)
+  if (regex.test) {
+    const username = req.query.username
+    console.log(username, 'backend username');
+    try {
+      const user = await Users.findOne({ username: username })
+      console.log(user, 'backend user');
+      const { phone, password, ...details } = user._doc
+      res.status(200).json(details)
+      console.log(details, 'backend details');
+    } catch (error) {
+      res.status(500).json(error)
+    }
+  } else {
+    res.status(400).json({ message: 'it is' })
   }
+
 }
 
 
@@ -585,5 +575,6 @@ module.exports = {
   NotificationCount,
   getupdatedetails,
   manageNotification,
-  deletepost
+  deletepost,
+  resendOtp
 }
