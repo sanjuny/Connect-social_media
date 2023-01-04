@@ -16,6 +16,7 @@ import { confirmAlert } from 'react-confirm-alert';
 
 
 function Post({ post }) {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const navigate = useNavigate()
 
     /* ---------------------------- current userdata ---------------------------- */
@@ -238,7 +239,7 @@ function Post({ post }) {
                     <div className="md:flex-shrink pr-6 pt-3">
                         <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
                             style={{ height: 'auto' }}>
-                            <img src={'/images/' + post.image} style={{ height: '540px', width: '500px', objectFit: 'fill' }} alt={post.image} ></img>
+                            <img src={PF + post.image} style={{ height: '540px', width: '500px', objectFit: 'fill' }} alt={post.image} ></img>
                         </div>
                     </div>
                     <div className="flex gap-5 items-center py-4">
