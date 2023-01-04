@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const USERAPI = axios.create({ baseURL: "http://localhost:5000/api" })
+const USERAPI = axios.create({ baseURL: "http://connectgram.website/api" })
 
 export const Login = (data) => USERAPI.post('/login', data)
 

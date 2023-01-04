@@ -1,7 +1,7 @@
 import axios from "axios"
 import instance from "../../Axios/AxiosUserAuth"
 
-export const addpost = (data) => axios.post('http://localhost:5000/api/addNewPost', data)
+export const addpost = (data) => axios.post('http://connectgram.website/api/addNewPost', data)
 
 export const getpost = (userId) => instance.get(`/getpost/${userId}`)
 
@@ -43,7 +43,7 @@ export const getAllNotification = (userId) => instance.get(`/notification/${user
 
 export const fetchNoCounts = (userId) => instance.get(`/getcount/${userId}`)
 
-export const editphoto = (data) => axios.post(`http://localhost:5000/api/photo`, data)
+export const editphoto = (data) => axios.post(`http://connectgram.website/api/photo`, data)
 
 export const updateDetails = (data, userId) => { instance.post(`/updatedetails/${userId}`, { data }) }
 
