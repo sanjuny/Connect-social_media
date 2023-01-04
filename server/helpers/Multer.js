@@ -2,7 +2,7 @@ const multer = require('multer')
 
 const storage = multer.diskStorage({
     destination(req, file, callback) {
-        callback(null, '../client/public/images');
+        callback(null, '/public/images');
     },
     filename(req, file, callback) {
         if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {

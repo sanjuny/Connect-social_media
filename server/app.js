@@ -27,7 +27,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.use("/api/images", express.static(path.join(__dirname, "public/images")));
 
 app.use('/api/admin', indexRouter);
 app.use('/api/', usersRouter);
