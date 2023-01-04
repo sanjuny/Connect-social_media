@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "http://localhost:5000/admin";
+const baseURL = "http://localhost:5000/api/admin";
 
 const defaultOptions = {
   baseURL: baseURL,

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const USERAPI = axios.create({ baseURL: "http://localhost:5000" })
+const USERAPI = axios.create({ baseURL: "http://localhost:5000/api" })
 
 export const Login = (data) => USERAPI.post('/login', data)
 

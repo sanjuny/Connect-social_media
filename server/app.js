@@ -29,10 +29,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-app.use('/admin', indexRouter);
-app.use('/', usersRouter);
-app.use('/chat',ChatRoute)
-app.use('/message',MessageRoute)
+app.use('/api/admin', indexRouter);
+app.use('/api/', usersRouter);
+app.use('/api/chat',ChatRoute)
+app.use('/api/message',MessageRoute)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
