@@ -1,10 +1,6 @@
-// import axios from 'axios'
-
-// const baseurl = 'http://localhost:5000'
-// const instance = axios.create({baseURL: baseurl})
-
 import axios from "axios";
-const baseURL = "https://connectgram.website/api";
+const baseURL = process.env.REACT_APP_API_USER_URL
+// const baseURL = "https://connectgram.website/api";
 // const baseURL = "http://localhost:5000/api";
 
 const defaultOptions = {

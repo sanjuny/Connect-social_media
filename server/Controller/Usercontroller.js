@@ -5,12 +5,13 @@ const Post = require('../Models/PostSchema')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const nodemailer = require('nodemailer')
-const { Promise } = require('mongoose')
+// const { Promise, sanitizeFilter } = require('mongoose')
 const { post } = require('../routes/users')
 const users = require('../Models/SignupSchema')
 const Notification = require('../Models/NotificationSchema')
 const reported = require('../Models/ReportSchema')
 const { json } = require('express')
+const sanitizeHtml = require('sanitize-html');
 
 var regex = /^[a-z0 -9_.-]*$/;
 
