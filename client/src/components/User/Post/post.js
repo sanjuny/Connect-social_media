@@ -17,6 +17,7 @@ import { confirmAlert } from 'react-confirm-alert';
 
 function Post({ post }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
+    console.log(PF, 'pfpfpfpfpfpfpfpf');
     const navigate = useNavigate()
 
     /* ---------------------------- current userdata ---------------------------- */

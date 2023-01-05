@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "http://connectgram.website/api/admin";
+const baseURL = "https://connectgram.website/api/admin";
 
 const defaultOptions = {
   baseURL: baseURL,

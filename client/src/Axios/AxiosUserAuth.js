@@ -4,7 +4,8 @@
 // const instance = axios.create({baseURL: baseurl})
 
 import axios from "axios";
-const baseURL = "http://connectgram.website/api";
+const baseURL = "https://connectgram.website/api";
+// const baseURL = "http://localhost:5000/api";
 
 const defaultOptions = {
   baseURL: baseURL,
@@ -21,7 +22,7 @@ Userinstance.interceptors.request.use(function (config) {
   const token = localStorage.getItem("userToken");
   console.log(token, "verifyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
   config.headers.accesstoken = token;
-  return config;    
+  return config;
 });
 
 export default Userinstance;
