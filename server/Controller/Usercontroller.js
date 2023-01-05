@@ -124,6 +124,8 @@ const postSignup = async (req, res) => {
 const postLogin = async (req, res) => {
   try {
     const users = await Users.findOne({ email: req.body.email })
+    console.log(users);
+    console.log(" ghavdhjbkbancs");
     if (users.status == 'inactive') {
       res.status(200).json({ message: 'Entered Email is blocked' })
     } else {
