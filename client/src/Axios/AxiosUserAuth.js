@@ -1,5 +1,4 @@
 import axios from "axios";
-// const baseURL = process.env.REACT_APP_API_USER_URL
 const baseURL = "https://connectgram.website/api";
 // const baseURL = "http://localhost:5000/api";
 

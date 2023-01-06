@@ -2,6 +2,7 @@ import axios from "axios"
 import instance from "../../Axios/AxiosUserAuth"
 
 export const addpost = (data) => axios.post('https://connectgram.website/api/addNewPost', data)
+// export const addpost = (data) => axios.post('http://localhost:5000/api/addNewPost', data)
 
 export const getpost = (userId) => instance.get(`/getpost/${userId}`)
 

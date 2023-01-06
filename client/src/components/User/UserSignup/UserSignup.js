@@ -189,11 +189,8 @@ function UserSignup() {
                   {errors.password?.type === "minLength" && "Password must be more than 8 characters"}
                   {errors.password?.type === "maxLength" && "Password cannot exceed more than 15 characters"}
                 </error>
-                <div className=" mt-3 text-gray-400 hover:underline hover:text-gray-100">
-                  Already have an account?
-                  <Link to='/login' className="text-blue-600 hover:underline">
-                    login here
-                  </Link>
+                <div className=" mt-3 text-gray-400">
+                  Already have an account?<Link to='/login'><span className='hover:text-blue-600 hover:underline'>Login Here</span></Link>
                 </div>
               </div>
               <div className="px-4 pb-2 pt-4 ">

@@ -8,8 +8,8 @@ const cors = require('cors')
 
 
 const { connectDB } = require('./Config/Connection')
-
 var app = express();
+
 
 app.use(cors())
 
@@ -26,8 +26,8 @@ connectDB();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use("/api/images", express.static(path.join(__dirname, "public/images")));
+// app.use(cookieParser());
+app.use('/api/images', express.static(path.join(__dirname, 'public/images')))
 
 app.use('/api/admin', indexRouter);
 app.use('/api/', usersRouter);

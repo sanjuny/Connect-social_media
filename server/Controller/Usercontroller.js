@@ -179,7 +179,7 @@ const postverifyOtp = async (req, res) => {
 /* ----------------------------- uploading post ----------------------------- */
 
 const postUpload = async (req, res) => {
-  console.log('addPost reached');
+  console.log('addPost reachedfdffffcgvhbjkl');
   try {
     console.log(req.body, 'jhgfddfghj');
     console.log(req?.file?.file, 'mmmmmmmmgggggmmmm');
@@ -192,6 +192,7 @@ const postUpload = async (req, res) => {
       res.status(500).json({ message: 'Unabel to add the post' })
     })
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Unabel to add the post file' })
   }
 }
