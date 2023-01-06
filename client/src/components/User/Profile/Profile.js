@@ -16,11 +16,11 @@ import { addMessage } from '../../../Redux/StoreAnother'
 
 
 function Profile() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     let Navigate = useNavigate()
 
     /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
-    console.log(userData, 'lolololooololo');
     /* ---------------------------- current userdata ---------------------------- */
 
     const { profileUpdate, setProfileUpdate } = useContext(UserUpdation)
@@ -34,10 +34,8 @@ function Profile() {
         const getuserpost = async () => {
             try {
                 const { data } = await userPost()
-                console.log(data, 'getuserposttttttt');
-
             } catch (error) {
-                console.log(error, 'catch error');
+                console.log(error);
             }
         }
         getuserpost()
@@ -58,15 +56,12 @@ function Profile() {
         const getUserData = async () => {
             try {
                 const { data } = await getUserByUsername(username)
-                console.log(data, 'getUserData');
                 setUser(data)
                 await userPost(data._id).then((response) => {
-                    console.log(response, 'responseeeeeeeeeeeee');
                     setPerson(response.data)
-                    console.log(response.data, 'response.data');
                 })
             } catch (error) {
-                console.log(error, 'catch error');
+                console.log(error);
             }
         }
         getUserData()
@@ -86,10 +81,9 @@ function Profile() {
         }
         try {
             const { data } = await getUserFollowers(id)
-            console.log(data, 'userFollowers');
             setMyFollowers(data)
         } catch (error) {
-            console.log(error, 'catch error');
+            console.log(error);
 
         }
     }
@@ -107,10 +101,9 @@ function Profile() {
         }
         try {
             const { data } = await getUserFollowing(id)
-            console.log(data, 'userFollowing');
             setMyFollowers(data)
         } catch (error) {
-            console.log(error, 'catch error');
+            console.log(error);
 
         }
     }
@@ -122,14 +115,12 @@ function Profile() {
 
 
     const follow = async (id) => {
-        console.log("reached");
         try {
             const { data } = await addfollow(userData._id, id)
-            console.log(data, 'follow log');
             setState(!State)
             setProfileUpdate(!profileUpdate)
         } catch (error) {
-            console.log(error, 'catch error');
+            console.log(error);
         }
     }
 
@@ -144,18 +135,12 @@ function Profile() {
         }
         try {
             const { data } = await createChat(users)
-            console.log(data, 'onHandleChange');
             dispatch(addMessage(user._id))
             Navigate(`/chat`)
         } catch (error) {
-            console.log(error, 'catch error create chat');
+            console.log(error);
         }
     }
-
-
-
-
-
 
     /* ------------------------------- create chat ------------------------------ */
 
@@ -192,7 +177,7 @@ function Profile() {
                                             className="md rounded-full relative avatar">
                                             <img style={{ height: '144px', width: '144px' }}
                                                 className="md rounded-full relative border-4 border-gray-900"
-                                                src={'/images/' + user.image}
+                                                src={PF + user.image}
                                                 alt="" />
                                             <div className="absolute"></div>
                                         </div>
@@ -230,7 +215,7 @@ function Profile() {
                                             className="md rounded-full relative avatar">
                                             <img style={{ height: '144px', width: '144px' }}
                                                 className="md rounded-full relative border-4 border-gray-900"
-                                                src={'/images/' + userData.image}
+                                                src={PF + userData.image}
                                                 alt="" />
                                             <div className="absolute"></div>
                                         </div>
@@ -285,7 +270,7 @@ function Profile() {
                                 <ul class="overflow-y-auto py-1 h-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
                                     <li>
                                         <a class="flex items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <img class="mr-2 w-6 h-6 rounded-full" src={dummy} alt="Jese image" />
+                                            <img class="mr-2 w-6 h-6 rounded-full" src={PF + persons.user.image} alt="Jese image" />
                                             {persons.username}
                                         </a>
                                     </li>
@@ -306,7 +291,7 @@ function Profile() {
                                             <div className="flex items-center">
                                                 <div>
                                                     <img className="inline-block h-10 w-10 rounded-full"
-                                                        src={'/images/' + user.image}
+                                                        src={PF + user.image}
                                                         alt="" />
                                                 </div>
                                                 <div className="ml-3">
@@ -324,26 +309,14 @@ function Profile() {
                                     <div className="pl-16">
                                         <p className="text-base width-auto font-medium text-white flex-shrink">
                                             {obj.description}
-                                            <a className="text-blue-400"> #CopaAmerica #Argentina</a>
                                         </p>
                                         <div className="md:flex-shrink pr-6 pt-3">
                                             <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
                                                 style={{ height: 'auto' }}>
-                                                <img src={'/images/' + obj.image} style={{ height: '540px', width: '480px' }}></img>
+                                                <img src={PF + obj.image} style={{ height: '540px', width: '480px' }}></img>
                                             </div>
                                         </div>
                                         <div className="flex gap-5 items-center py-4">
-                                            {/* <div onClick={(e) => getUserComment(person._id)} className="flex items-center text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out gap-3">
-                                                <FaRegComment className='w-6 h-6' />
-                                            </div> */}
-                                            {/* <div onClick={(e) => handlelike(person._id)} className="flex items-center text-xs text-gray-400 hover:text-red-800 transition duration-350 ease-in-out gap-3">
-                                                {
-                                                    person.likes.includes(userData._id) ?
-                                                        <FcLike className='w-6 h-6' />
-                                                        :
-                                                        <FaRegHeart className='w-6 h-6' />
-                                                }{person.likes.length}
-                                            </div> */}
                                         </div>
                                     </div>
                                     <hr className="border-gray-800" />

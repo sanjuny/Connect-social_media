@@ -1,7 +1,6 @@
 const ChatSchema = require('../Models/ChatSchema')
 
 const createChat = async (req, res) => {
-    console.log('reachedddd d dddd');
     const newChat = new ChatSchema({
         members: [req.body.senderId, req.body.receiverId]
     });
@@ -13,7 +12,6 @@ const createChat = async (req, res) => {
 
         if (!chat) {
             const result = await newChat.save();
-            console.log(result,'ksksksksksksksksksksksssssssssssss');
             res.status(200).json(result);
 
         } else {
@@ -27,7 +25,6 @@ const createChat = async (req, res) => {
 
 
 const userChats = async (req, res) => {
-    console.log(req.params.userId, "mknjnjnj");
     try {
         const chat = await ChatSchema.find({
             members: { $in: [req.params.userId] }

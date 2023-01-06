@@ -8,10 +8,8 @@ import { socket } from '../../../UserContext/SocketContext';
 import { useSelector } from 'react-redux';
 
 function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
-
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const { AnotherUserId } = useSelector(state => state.anotheruser)
-    console.log(AnotherUserId, 'anananananaan');
-
     const [userData, setUserData] = useState(null)
     const [messages, setMessages] = useState([])
     const [newMessages, setNewMessages] = useState('')
@@ -21,28 +19,24 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
     useEffect(() => {
         if (recieveMessage !== null && recieveMessage.chatId === chat._id) {
             setMessages([...messages, recieveMessage])
-            console.log(messages, 'messagessss');
         }
     }, [recieveMessage])
 
 
     //fetching data for headers in chat box
     useEffect(() => {
-        console.log('eeeeeeeeeeffffffffffffffffecccccccccccccceee');
         const userId = chat?.members?.find((id) => id !== currentUser);
-        console.log(userId, 'jhgfdefggggggggggg');
         const getUserData = async () => {
             try {
                 const { data } = await getUser(userId);
                 setUserData(data)
-                console.log(data, 'kkkkkkkkkkkkkkkfffffff');
             } catch (error) {
                 console.log(error);
             }
         };
         if (chat !== null) getUserData();
     }, [chat, currentUser])
-    console.log(userData, 'userData');
+
 
 
     //fetching data for messages
@@ -51,7 +45,6 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
         const fetchMessages = async () => {
             try {
                 const { data } = await getMessages(chat._id)
-                console.log(data, 'fetchmesaage');
                 setMessages(data)
             } catch (error) {
                 console.log(error);
@@ -62,7 +55,11 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
 
 
     const handleChange = (newMessages) => {
-        setNewMessages(newMessages)
+        if (/^\s/.test(newMessages)) {
+            setNewMessages(null)
+        } else {
+            setNewMessages(newMessages)
+        }
     }
 
 
@@ -77,7 +74,6 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
         // send message to database
         try {
             const { data } = await addMessage(message);
-            console.log(data, 'notifyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
             setMessages([...messages, data])
             setNewMessages('')
         } catch (error) {
@@ -104,7 +100,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                             {/* heder */}
                             <div className="flex justify-center mb-10">
                                 <a className="inline-flex items-start mr-3">
-                                    <img className="rounded-full w-10 h-10" src={'/images/' + userData?.image} alt="Lauren Marsano" />
+                                    <img className="rounded-full w-10 h-10" src={PF + userData?.image} alt="Lauren Marsano" />
                                 </a>
                                 <div className="pr-1">
                                     <a className="inline-flex text-white hover:text-indigo-500" href="#0">
@@ -125,7 +121,6 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                                                         <div className="col-start-6 col-end-13 p-3 rounded-lg">
                                                             <div className="flex items-center justify-start">
                                                                 <div className="flex items-center justify-center h-5 w-5 rounded-full bg-red-500 flex-shrink-0" >a</div>
-                                                                {/* <img className="rounded-full w-10 h-10" src={'/images/' + userData?.image} alt="Lauren Marsano" /> */}
                                                                 <div className="relative ml-3 text-base bg-white py-2 px-4 shadow rounded-xl">
                                                                     <div>{message.text}</div>
                                                                     <span className='text-gray-400'>{format(message.createdAt)}</span>
@@ -137,7 +132,6 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                                                         <div className="col-start-6 col-end-13 p-3 rounded-lg">
                                                             <div className="flex items-center justify-start flex-row-reverse">
                                                                 <div className="flex items-center justify-center h-5 w-5 rounded-full bg-indigo-500 flex-shrink-0" >c</div>
-                                                                {/* <img className="rounded-full w-10 h-10" src={'/images/' + message.senderId?.image} alt="Lauren Marsano" /> */}
                                                                 <div className="relative ml-3 text-base bg-white py-2 px-4 shadow rounded-xl">
                                                                     <div>{message.text}</div>
                                                                     <span className='text-gray-400'>{format(message.createdAt)}</span>
@@ -182,7 +176,7 @@ function ChatRight({ chat, currentUser, setSendMessage, recieveMessage }) {
                                     </div>
                                 </div>
                                 <div className="ml-4">
-                                    <button onClick={handleSend} className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0" >
+                                    <button disabled={!newMessages} onClick={handleSend} className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0" >
                                         <span>Send</span>
                                         <span className="ml-2">
                                             <svg

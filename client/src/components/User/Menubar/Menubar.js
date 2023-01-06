@@ -15,6 +15,7 @@ import { addMessage } from '../../../Redux/StoreAnother';
 
 
 function Menubar() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const [open, setOpen] = useState(false);
 
     const navigate = useNavigate()
@@ -54,41 +55,30 @@ function Menubar() {
     /* -------------------------------- add post -------------------------------- */
 
     const userData = useSelector(state => state.user)
-    console.log(userData, 'lolololooololo');
-
 
     const [desc, setDesc] = useState('')
     const [post, setPost] = useState()
 
     const handlechange = (e) => {
-
-        console.log(e, 'kijhgf');
         setDesc(e.target.value)
 
     }
 
     const handleimage = (e) => {
-        console.log(e, 'post');
         setPost(e.target.files[0])
-        console.log(e.target.value, 'hello');
-        console.log(e.target.files, 'hy');
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('call tebhkbasbjs');
         try {
-            console.log(post, 'llll');
             let data = new FormData()
             data.append('file', post)
             data.append('description', desc)
             data.append('userId', userData._id)
-            console.log(data, 'daaaaaaaa');
             await addpost(data)
             setPostOpen(false)
             setpostsUpdate(!postsUpdate)
         } catch (error) {
-            console.log(error, 'catch error eroor rororor');
             seterr('Please upload a valid image file')
         }
     }
@@ -111,10 +101,9 @@ function Menubar() {
     const fetchnotificationsCount = async () => {
         try {
             const { data } = await fetchNoCounts(userData._id)
-            console.log(data, 'fetchnotificationsCount');
             setNotification(data)
         } catch (error) {
-            console.log(error, 'catch error fetchnotificationsCount');
+            console.log(error);
         }
     }
 
@@ -141,17 +130,14 @@ function Menubar() {
     const notificationHandler = async () => {
         try {
             const { data } = await notificationManage(userData._id)
-            console.log(data, 'notificationHandler');
             setNotification("0")
             navigate('/notification')
         } catch (error) {
-            console.log(error, 'sssssssss');
-
+            console.log(error);
         }
     }
 
     const handlemessage = async () => {
-        console.log('ldjdhdhdgddgd');
         await dispatch(addMessage(null))
         navigate('/chat')
     }
@@ -169,7 +155,6 @@ function Menubar() {
         }
         try {
             const { data } = await findSearch(val)
-            console.log(data, 'jjjjjj');
             setSearchUser(data)
         } catch (error) {
             console.log(error);
@@ -255,12 +240,12 @@ function Menubar() {
                                 <span class="top-56 mb-1 ml-8 absolute inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-400  rounded  opacity-75"></span>
                                 <span class="bottom-48 mt-2 h-2 w-2 ml-8 relative animate-ping inline-block py-1 px-1.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600  rounded"></span>
                             </span>
-                            : null  
+                            : null
                         }
                         <div>
                             <Link to='/profile' className="flex items-center">
                                 <img className="mt-52 inline-block h-10 w-10 rounded-full"
-                                    src={'/images/' + userData.image}
+                                    src={PF + userData.image}
                                     alt="" />
                             </Link>
                         </div>
@@ -379,7 +364,7 @@ function Menubar() {
                                                         <div className='flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white'>
                                                             <img
                                                                 class='object-cover w-10 h-10 rounded-full'
-                                                                src={'/images/' + user?.image}
+                                                                src={PF + user?.image}
                                                                 alt=''
                                                             />
                                                             <span className='flex-1 ml-3 whitespace-nowrap'>{user?.username}</span>

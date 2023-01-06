@@ -10,10 +10,7 @@ function Chat() {
 
     /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
-    console.log(userData, 'userData');
-
     const { AnotherUserId } = useSelector(state => state.anotheruser)
-    console.log(AnotherUserId, 'anananananaan');
     /* ---------------------------- current userdata ---------------------------- */
 
     const [responsive, setResponsive] = useState(false)
@@ -38,23 +35,19 @@ function Chat() {
                 senderId: userData._id,
                 receiverId: AnotherUserId
             }
-            console.log(users, 'userssssssssssssss');
             createChat(users).then((res) => {
                 if (res.data) {
                     setCurrentChat(res.data)
                     setResponsive(true)
                 }
-                console.log(res.data, 'ksksksksksksk');
             })
         }
     }, [])
-
 
     useEffect(() => {
         socket.emit('new-user-add', userData._id)
         socket.on('get-users', (users) => {
             setOnlineUsers(users)
-            console.log(onlineUsers, 'onlineUsers');
         })
     }, [userData])
 
@@ -70,10 +63,9 @@ function Chat() {
         const getChats = async () => {
             try {
                 const { data } = await userChats(userData._id)
-                console.log(data, 'data');
                 setChats(data)
             } catch (error) {
-                console.log(error, 'catch error chat');
+                console.log(error);
             }
         }
         getChats()
@@ -84,12 +76,8 @@ function Chat() {
 
 
     const getUserData = async (userId) => {
-        console.log('currentChat');
-        console.log(currentChat);
         try {
-            const { data } = await getUser(currentChat);
-            console.log(" DATA ON RIGHT SIDE");
-            console.log(data);
+            const { data } = await getUser(currentChat)
             setCurrentChat(data)
         } catch (error) {
             console.log(error);
@@ -119,7 +107,6 @@ function Chat() {
                             <div className="flex flex-col">
                                 <div className="flex flex-row items-center justify-between text-xs">
                                     <span className="font-bold text-white">Active Conversations</span>
-                                    {/* <span className="flex items-center justify-center bg-gray-300 h-4 w-4 rounded-full">4</span> */}
                                 </div>
                                 {chats.map((chat, index) => {
                                     return (
@@ -129,7 +116,6 @@ function Chat() {
                                                 setResponsive(true)
                                             }}
                                                 className="flex flex-row items-center hover:bg-gray-100 rounded-md p-2 border-b-2 " >
-                                                {/* <img className="flex items-center justify-center h-8 w-8 bg-gray-200 rounded-full" src={'/images/' + chat.image} /> */}
                                                 <div className="ml-2 text-sm font-semibold text-white"> <Conversation data={chat} currentUserId={userData._id} online={checkOnlineStatus(chat)} /></div>
                                             </button>
                                         </div>

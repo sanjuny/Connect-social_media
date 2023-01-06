@@ -17,22 +17,15 @@ import { confirmAlert } from 'react-confirm-alert';
 
 function Post({ post }) {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
-    console.log(PF, 'pfpfpfpfpfpfpfpf');
+    let username = useParams().username
     const navigate = useNavigate()
 
     /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
-    console.log(userData, 'lolololooonhjgyugv');
-
     /* ---------------------------- current userdata ---------------------------- */
 
-    const { likesUpdate, setLikesUpdate } = useContext(UserUpdation)
-
-    let username = useParams().username
-
-
-
     /* ------------------------------- handle like ------------------------------- */
+    const { likesUpdate, setLikesUpdate } = useContext(UserUpdation)
 
     useEffect(() => {
         setLikeState(post.likes.includes(userData._id))
@@ -41,17 +34,13 @@ function Post({ post }) {
 
     const [Like, setLike] = useState(post?.likes?.length)
     const [LikeState, setLikeState] = useState(false)
-
     const [posted, setposted] = useState([])
-
     const [comments, setcomments] = useState([])
 
 
     const handlelike = async (postId) => {
-        console.log(handlelike);
         try {
             const { data } = await addlike(userData._id, postId)
-            console.log(data, 'likesss');
             socket.emit('send-notification', {
                 senderId: userData._id,
                 receiverId: post.userId._id,
@@ -60,7 +49,7 @@ function Post({ post }) {
             setLike(LikeState ? Like - 1 : Like + 1)
             setLikesUpdate(!likesUpdate)
         } catch (error) {
-            console.log(error, 'catch error');
+            console.log(error);
         }
     }
 
@@ -80,13 +69,11 @@ function Post({ post }) {
         setOpen(true)
     }
 
-
     const handleStateComment = (e) => {
-        console.log('call handlesetcomment');
         try {
             setcomment(e.target.value)
         } catch (error) {
-            console.log(error, 'catch error comment one');
+            console.log(error);
         }
     }
 
@@ -97,7 +84,6 @@ function Post({ post }) {
             comment: comment,
             postUser: post.userId._id
         }
-        console.log(datas, '1111111111111111kjhgfdiuhgfgh');
         try {
             const { data } = await addcomment(datas, postId)
             socket.emit('send-notification', {
@@ -107,22 +93,19 @@ function Post({ post }) {
             })
             setcomment('')
             setOpen(!open)
-            console.log(data, 'kkkkiiii');
         } catch (error) {
-            console.log(error, 'catch error comment');
+            console.log(error);
         }
     }
 
 
     const getUserComment = async (postId) => {
-        console.log('lkjhgfdjsjsj');
         try {
             const { data } = await getcomments(postId)
-            console.log(data, 'comment data');
             setcomments(data)
             setOpen(!open)
         } catch (error) {
-            console.log(error, 'catching hjbdjshfd');
+            console.log(error);
         }
     }
 
@@ -135,17 +118,14 @@ function Post({ post }) {
     const [reportPop, setReportPop] = useState(false)
 
     const handleReport = async (e) => {
-        console.log('hellllo');
         try {
             e.preventDefault()
-            console.log(post._id, "report");
             const { data } = await reportPost(userData._id, reportValue, post._id)
-            console.log(data, 'jjjjjjjjjjjjjjjj');
             setReportValue(new Date())
             setReportPop(!reportPop)
             setPop(!pop)
         } catch (error) {
-            console.log(error, 'catch error handle report');
+            console.log(error);
         }
     }
 
@@ -184,7 +164,7 @@ function Post({ post }) {
                                 <div className='flex'>
                                     {post.userId?.image ?
                                         <img className="inline-block h-10 w-10 rounded-full"
-                                            src={'/images/' + post.userId?.image}
+                                            src={PF + post.userId?.image}
                                             alt="" />
                                         :
                                         <img className="inline-block h-10 w-10 rounded-full"
@@ -235,7 +215,7 @@ function Post({ post }) {
                 <div className="pl-16">
                     <p className="text-base width-auto font-medium text-white flex-shrink">
                         {post.description}
-                        <a className="text-blue-400"> #hashtags #hasgtagsplus</a>
+                        {/* <a className="text-blue-400"> #hashtags #hasgtagsplus</a> */}
                     </p>
                     <div className="md:flex-shrink pr-6 pt-3">
                         <div className="bg-cover bg-no-repeat bg-center rounded-lg w-full h-64"
@@ -275,7 +255,7 @@ function Post({ post }) {
                                         <Link to={`/profile/${item.userId.username}`}>
                                             <div className="flex flex-row mt-6">
                                                 <img className="object-cover w-12 h-12 border-2 border-gray-300 rounded-full" alt="Noob master's avatar"
-                                                    src={'/images/' + item.userId.image} />
+                                                    src={PF + item.userId.image} />
                                                 <div className="flex-col mt-1">
                                                     <div className="flex items-center flex-1 px-4 font-bold leading-tight text-gray-400 ">{item.userId.name}
                                                         <span className="ml-2 text-xs font-normal text-gray-500">{format(item.createdAt)}</span>

@@ -2,10 +2,6 @@ const jwt = require("jsonwebtoken");
 const { checkBlock } = require("../Controller/Admincontroller");
 
 const check = async (req, res, next) => {
-
-  console.log("checked");
-  console.log(req.headers.accesstoken, "popopopo");
-
   try {
     let token = req.headers.accesstoken;
     if (token) {
@@ -19,7 +15,6 @@ const check = async (req, res, next) => {
       res.send({ status: "errors", data: "no user" });
     }
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({ status: "errors", data: error.message });
   }
 };

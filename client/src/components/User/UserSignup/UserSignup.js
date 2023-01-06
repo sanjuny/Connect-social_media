@@ -22,7 +22,6 @@ function UserSignup() {
   const onSubmit = async (UserRequest) => {
     try {
       const { data } = await Signup(UserRequest)
-      console.log(data, 'dataaaa');
       setData(data)
       if (data.auth) {
         setUserDetails(data)
@@ -67,11 +66,8 @@ function UserSignup() {
   const sendOtp = async () => {
     try {
       const { data } = await resendOTPP(UserDetails)
-      console.log(data, 'kdkdkdkdkdk');
-      // setMinutes(1);
-      // setSeconds(30);
     } catch (error) {
-      console.log(error, 'catch error signup');
+      console.log(error);
     }
   }
 

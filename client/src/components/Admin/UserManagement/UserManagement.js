@@ -14,10 +14,9 @@ function UserManagement() {
     const getUse = async () => {
       try {
         const { data } = await getusers()
-        console.log(data, 'userdata');
         setForm(data)
       } catch (error) {
-        console.log(error, 'error');
+        console.log(error);
       }
     }
     getUse()
@@ -33,7 +32,6 @@ function UserManagement() {
           label: 'Yes',
           onClick: async () => {
             const { data } = await userBlock(userId)
-            console.log(data, 'responseeeeeeeeeeeee');
             setStatus(!status)
             toast.error('The user is blocked!', {
               position: "top-right",
@@ -58,7 +56,6 @@ function UserManagement() {
 
   const unblockuser = async (userId) => {
     const { data } = await userUnBlock(userId)
-    console.log(data, 'unblock console');
     setStatus(!status)
     toast.success('The user is Unblocked!', {
       position: "top-right",
@@ -90,7 +87,6 @@ function UserManagement() {
             </thead>
             <tbody className="bg-white">
               {form.map((data, index) => {
-                console.log(data, 'aasdfghjk');
                 return (
                   <tr key={index}>
                     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-500">

@@ -30,7 +30,6 @@ let transporter = nodemailer.createTransport({
 const sendOtp = async (OtpResult, res) => {
   try {
     const OTP = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log(OTP, 'LLLL');
     let info = await transporter.sendMail({
       from: process.env.OTP_USER, // sender address
       to: OtpResult.email, // list of receivers
@@ -63,7 +62,6 @@ const sendOtp = async (OtpResult, res) => {
         Created: Date.now(),
         Expiry: Date.now() + 100000,
       })
-      console.log(OTPVerification, "hgf");
       await OTPVerification.save();
     } else {
       await OtpVerification.updateOne(
@@ -72,7 +70,7 @@ const sendOtp = async (OtpResult, res) => {
       );
     }
   } catch (error) {
-    console.log(error, 'error');
+    res.status(500).json(error)
   }
 }
 
@@ -80,7 +78,6 @@ const sendOtp = async (OtpResult, res) => {
 /* -------------------------------- resendotp ------------------------------- */
 
 const resendOtp = async (req, res) => {
-  console.log(req.body, 'dataaatata');
   await sendOtp(req.body.data).then((response) => {
     res.status(200).json({ auth: true })
   })
@@ -90,14 +87,11 @@ const resendOtp = async (req, res) => {
 
 const postSignup = async (req, res) => {
   try {
-    console.log(req.body, 'pp');
     let { username, name, email, phone, password } = req.body;
     const userExist = await Users.findOne({ email, verified: 'verified' })
     if (userExist) {
-      console.log('userwxis');
       res.status(200).json({ message: 'user already exisit with this mail id' })
     } else {
-      console.log('opopoopopop');
       password = await bcrypt.hash(password, 10)
       const newUser = await new Users({
         username,
@@ -106,13 +100,10 @@ const postSignup = async (req, res) => {
         phone: parseInt(phone),
         password,
       })
-      console.log(newUser, "hgf");
       newUser.save().then((OtpResult) => {
-        console.log(OtpResult, 'mmmm');
         sendOtp(OtpResult, res)
         res.status(200).json({ auth: true, data: OtpResult })
       })
-      console.log(req.body);
     }
   } catch (error) {
     res.status(500).json(error)
@@ -125,8 +116,6 @@ const postSignup = async (req, res) => {
 const postLogin = async (req, res) => {
   try {
     const users = await Users.findOne({ email: req.body.email })
-    console.log(users);
-    console.log(" ghavdhjbkbancs");
     if (users.status == 'inactive') {
       res.status(200).json({ message: 'Entered Email is blocked' })
     } else {
@@ -158,13 +147,8 @@ const postLogin = async (req, res) => {
 /* ------------------------------- verify otp ------------------------------- */
 
 const postverifyOtp = async (req, res) => {
-  console.log("reached");
-  console.log(req.body.OTP);
   let OtpVerify = await OtpVerification.findOne({ userId: req.body.user });
-  console.log(OtpVerify, "tttttt");
   let correctOtp = await bcrypt.compare(req.body.OTP, OtpVerify.Otp);
-  console.log("correctOtp");
-  console.log(correctOtp);
   if (correctOtp) {
     await Users.updateOne(
       { _id: req.body.user },
@@ -179,20 +163,15 @@ const postverifyOtp = async (req, res) => {
 /* ----------------------------- uploading post ----------------------------- */
 
 const postUpload = async (req, res) => {
-  console.log('addPost reachedfdffffcgvhbjkl');
   try {
-    console.log(req.body, 'jhgfddfghj');
-    console.log(req?.file?.file, 'mmmmmmmmgggggmmmm');
     let { userId, description } = req.body;
     let image = req?.file?.filename
     await Post.create({ userId, description, image }).then((response) => {
       res.status(200).json({ message: 'post added sucessfully' })
     }).catch((err) => {
-      console.log(err, 'erorrrrrrrr');
       res.status(500).json({ message: 'Unabel to add the post' })
     })
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: 'Unabel to add the post file' })
   }
 }
@@ -219,23 +198,15 @@ const getupdatedetails = async (req, res) => {
 /* ------------------------------ get user post ----------------------------- */
 
 const getUsersPost = async (req, res) => {
-  console.log(req.params.id, 'wretyu');
   try {
     let currentuser = await Users.findById(req.params.id)
-    console.log(currentuser, "nnj");
-
     let posts = await Post.find({ userId: currentuser._id }).populate('userId').sort({ createdAt: -1 })
-    console.log("posts");
-    console.log(posts);
     let friendpost = await Promise.all(currentuser.following?.map((postId) => {
       return Post.find({ userId: postId, reports: { $ne: req.params.id }, status: 'active' }).populate('userId').sort({ createdAt: -1 })
     }))
-    console.log("kkkkkkk");
     let data = posts.concat(...friendpost)
-    console.log(data, "hihii");
     res.status(200).json(data)
   } catch (error) {
-    console.log(error, "lknjn");
     res.status(500).json({ message: 'this file' })
   }
 }
@@ -244,7 +215,6 @@ const getUsersPost = async (req, res) => {
 /* ----------------------------- likes handling ----------------------------- */
 
 const postaddlikes = async (req, res) => {
-  console.log('call like');
   const post = await Post.findById(req.params.id)
   const details = {
     desc: 'liked your post',
@@ -271,9 +241,7 @@ const postaddlikes = async (req, res) => {
 
 const postaddcomment = async (req, res) => {
   const { comment, userId, postUser } = req.body.data
-  console.log(req.body.data, 'commentvgh');
   const postId = req.params.id
-  console.log(req.params.id, 'rehcbdskhcscbs');
   const details = {
     desc: 'Commented on your post',
     time: Date.now(),
@@ -281,13 +249,11 @@ const postaddcomment = async (req, res) => {
   }
   try {
     const ha = await Comment.create({ userId, comment, postId })
-    console.log(ha, 'kjhgvbnmb');
     const fr = await Notification.updateOne({ userId: postUser }, {
       $push: {
         Notification: details
       }
     }, { upsert: true })
-    console.log(fr, 'mmmmmmmmmmmmmmm');
     res.status(200).json({ message: 'comment added successfully' })
   } catch (error) {
     res.status(500).json(error)
@@ -297,12 +263,9 @@ const postaddcomment = async (req, res) => {
 /* ---------------------------- fetching comments --------------------------- */
 
 const getcomments = async (req, res) => {
-  console.log('hegeeg');
   const postId = req.params.id
-  console.log(req.params.id, 'id hefre');
   try {
     let comments = await Comment.find({ postId: req.params.id }).populate('userId', 'name username image')
-    console.log(comments, 'gettting');
     res.status(200).json(comments)
   } catch (error) {
     res.status(500).json({ message: 'failed' })
@@ -312,7 +275,6 @@ const getcomments = async (req, res) => {
 /* -------------------------- suggestions for users ------------------------- */
 
 const getsuggestions = async (req, res) => {
-  console.log('getsuggestions');
   try {
     let suggestions = await Users.find().limit(5)
     res.status(200).json(suggestions)
@@ -324,19 +286,14 @@ const getsuggestions = async (req, res) => {
 /* ----------------------------- follow handling ---------------------------- */
 
 const postfollow = async (req, res) => {
-  console.log('follow reached');
-  console.log(req.body, 'req.body');
-  console.log(req.params.id, 'req.params.id,');
   try {
     let follow = await Users.findById(req.params.id)
     let following = await Users.findById(req.body.id)
     if (!follow?.following?.includes(req.body.id)) {
-      console.log("followed");
       await follow.updateOne({ $push: { following: req.body.id } })
       await following.updateOne({ $push: { followers: req.params.id } })
       res.status(200).json("Followed")
     } else {
-      console.log("unfollowed");
       await follow.updateOne({ $pull: { following: req.body.id } })
       await following.updateOne({ $pull: { followers: req.params.id } })
       res.status(200).json("You unfollowed this user")
@@ -350,13 +307,10 @@ const postfollow = async (req, res) => {
 
 const getUser = async (req, res) => {
   const { userId } = req.params
-  console.log(userId, 'ooooooooooooooo');
   try {
     const user = await Users.findById(userId)
-    console.log(user, 'pppppppppp');
     const { phone, password, ...details } = user._doc
     res.status(200).json(details)
-    console.log(details, 'llllllllllllllllll');
   } catch (error) {
     res.status(500).json(error);
   }
@@ -378,16 +332,12 @@ const getProfilePost = async (req, res) => {
 /* --------------------- GET USER DETAILS WITH USERNAME --------------------- */
 
 const getUserData = async (req, res) => {
-  console.log('backend getuserdata');
   if (regex.test) {
     const username = req.query.username
-    console.log(username, 'backend username');
     try {
       const user = await Users.findOne({ username: username })
-      console.log(user, 'backend user');
       const { phone, password, ...details } = user._doc
       res.status(200).json(details)
-      console.log(details, 'backend details');
     } catch (error) {
       res.status(500).json(error)
     }
@@ -401,7 +351,6 @@ const getUserData = async (req, res) => {
 /* ---------------------------- GET MY FOLLOWERS ---------------------------- */
 
 const getMyFollowers = async (req, res) => {
-  console.log(req.params.id, 'my followers');
   try {
     const user = await Users.findById(req.params.id)
     if (user) {
@@ -422,7 +371,6 @@ const getMyFollowers = async (req, res) => {
 /* ---------------------------- GET MY FOLLOWING ---------------------------- */
 
 const getMyFollowing = async (req, res) => {
-  console.log(req.params.id, 'my following');
   try {
     const user = await Users.findById(req.params.id)
     if (user) {
@@ -445,7 +393,7 @@ const getMyFollowing = async (req, res) => {
 /* ----------------------------- SEARCH FOR USER ---------------------------- */
 
 const searchUsers = async (req, res) => {
-  console.log(req.params.id, "uuiiid")
+
   const data = req.params.id
   try {
     const users = await Users.find(
@@ -477,8 +425,6 @@ const userPostProfile = async (req, res) => {
 const report = async (req, res) => {
   try {
     let postId = req.params.id
-    console.log(postId, 'pppppppppppp');
-    console.log(req.body, 'oooooooooo');
     let { userId, reportValue } = req.body
     let response = await Post.updateOne({ _id: postId }, { $push: { reports: userId } })
     await reported.create({
@@ -496,11 +442,9 @@ const report = async (req, res) => {
 /* -------------------------- get all notifications ------------------------- */
 
 const getAllNotification = async (req, res) => {
-  console.log('getallnotification back');
   try {
     const notifications = await Notification.findOne({ user: req.params.id }, { _id: 0, Notification: 1 }).sort({ _id: -1 }).populate("Notification.user", "username image")
     const notify = notifications.Notification.reverse()
-    console.log(notify, 'notifyyyyy');
     res.status(200).json(notify)
   } catch (error) {
     res.status(500).json(error)
@@ -511,7 +455,6 @@ const getAllNotification = async (req, res) => {
 /* ---------------------- fetch all notification count ---------------------- */
 
 const NotificationCount = async (req, res) => {
-  console.log(req.params.id, 'getNotificationCount');
   try {
     const result = await Notification.findOne({ userId: req.params.id })
     const unread = result.Notification.filter((data) => {
@@ -519,7 +462,6 @@ const NotificationCount = async (req, res) => {
         return data
       }
     })
-    console.log(unread.length, 'count111');
     res.status(200).json(unread.length)
   } catch (error) {
     res.status(500).json(error)
@@ -542,13 +484,11 @@ const manageNotification = async (req, res) => {
 /* ---------------------------- delete user post ---------------------------- */
 
 const deletepost = async (req, res) => {
-  console.log(req.params.id, 'req.params.id');
   try {
     let result1 = await Post.findByIdAndDelete(req.params.id)
     let result2 = await Comment.deleteMany({ postId: req.params.id })
     res.status(200).json({ message: 'post deleted successfully' })
   } catch (error) {
-    console.log(error);
     res.status(500).json(error)
 
   }

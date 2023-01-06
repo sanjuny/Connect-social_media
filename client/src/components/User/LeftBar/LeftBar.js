@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 
 
 function LeftBar() {
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const navigate = useNavigate()
     const [err, seterr] = useState('')
 
@@ -50,36 +51,26 @@ function LeftBar() {
 
 
     const userData = useSelector(state => state.user)
-    console.log(userData, 'lolololooololo');
-
 
     const [desc, setDesc] = useState('')
     const [post, setPost] = useState()
 
     const handlechange = (e) => {
-
-        console.log(e, 'kijhgf');
         setDesc(e.target.value)
 
     }
 
     const handleimage = (e) => {
-        console.log(e, 'post');
         setPost(e.target.files[0])
-        console.log(e.target.value, 'hello');
-        console.log(e.target.files, 'hy');
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('call tebhkbasbjs');
         try {
-            console.log(post, 'llll');
             let data = new FormData()
             data.append('file', post)
             data.append('description', desc)
             data.append('userId', userData._id)
-            console.log(data, 'daaaaaaaa');
             await addpost(data)
             setOpen(false)
             setpostsUpdate(!postsUpdate)
@@ -94,7 +85,6 @@ function LeftBar() {
                 theme: "dark",
             });
         } catch (error) {
-            console.log(error, 'catch error eroor rororor');
             seterr('Please upload a valid image file')
         }
     }
@@ -118,10 +108,9 @@ function LeftBar() {
     const fetchnotificationsCount = async () => {
         try {
             const { data } = await fetchNoCounts(userData._id)
-            console.log(data, 'fetchnotificationsCount');
             setNotification(data)
         } catch (error) {
-            console.log(error, 'catch error fetchnotificationsCount');
+            console.log(error);
         }
     }
 
@@ -151,11 +140,10 @@ function LeftBar() {
     const notificationHandler = async () => {
         try {
             const { data } = await notificationManage(userData._id)
-            console.log(data, 'notificationHandler');
             setNotification("0")
             navigate('/notification')
         } catch (error) {
-            console.log(error, 'sssssssss');
+            console.log(error);
         }
     }
 
@@ -168,7 +156,7 @@ function LeftBar() {
         try {
             dispatch(addMessage(null))
         } catch (error) {
-            console.log(error, 'errrorrr');
+            console.log(error);
         }
     }
 
@@ -228,7 +216,7 @@ function LeftBar() {
                                     <Link to='/profile' className="flex items-center">
                                         <div>
                                             <img className="inline-block h-10 w-10 rounded-full"
-                                                src={'/images/' + userData.image}
+                                                src={PF + userData.image}
                                                 alt="" />
                                         </div>
                                         <div className="ml-3">

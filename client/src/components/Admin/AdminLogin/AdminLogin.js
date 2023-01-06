@@ -14,20 +14,16 @@ function AdminLogin() {
 
 
   const onSubmit = async (loginrequest) => {
-    console.log('koko');
     try {
       const { data } = await postAdminLogin (loginrequest)
-      console.log(data, 'hello');
       if (data.auth) {
         localStorage.setItem('AdminToken', data.token)
         navigate('/usermanagement')
       } else {
         seterrorMsg(data.message)
-        console.log('something went wrong');
       }
     } catch (error) {
-      // seterrorMsg(error.message)
-      console.log(error, 'errorADMIN');
+      console.log(error);
 
     }
   }

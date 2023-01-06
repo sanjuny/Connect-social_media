@@ -4,6 +4,7 @@ import moment from "moment"
 import { toast } from 'react-toastify';
 
 function ReportPost() {
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
   const [posts, setPosts] = useState([])
   const [open, setOpen] = useState(false)
@@ -14,17 +15,13 @@ function ReportPost() {
     setOpen(false)
   }
 
-
-
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const { data } = await fetchReportedPost()
-        console.log(data, 'fetchpost');
         setPosts(data)
-        console.log('jiiiid');
       } catch (error) {
-        console.log(error, 'eroorrr');
+        console.log(error);
       }
     }
     fetchPost()
@@ -33,25 +30,21 @@ function ReportPost() {
 
 
   // handle modal view
-
-
   const handleview = async (items) => {
     setModaldata(items)
     try {
       const { data } = await getReportDetails(items?._id)
-      console.log(data, 'jsjjsjsjsjsjsjssjs');
       setReportData(data)
       setOpen(true)
     } catch (error) {
-      console.log(error, 'errror');
+      console.log(error);
     }
   }
-  // handle block post
 
+  // handle block post
   const handleBlockPost = async (postId) => {
     try {
       const { data } = await blockUserpost(postId)
-      console.log(data, 'handleblockpost');
       setOpen(false)
       setUpdate(!update)
       toast.error('The post is blocked!', {
@@ -65,7 +58,7 @@ function ReportPost() {
         theme: "light",
       });
     } catch (error) {
-      console.log(error, 'erorrrrr');
+      console.log(error);
     }
   }
 
@@ -74,7 +67,6 @@ function ReportPost() {
   const handleUnblockPost = async (postId) => {
     try {
       const { data } = await UnblockUserpost(postId)
-      console.log(data, 'handleununblockpost');
       setOpen(false)
       setUpdate(!update)
       toast.success('The post is Unblocked!', {
@@ -87,13 +79,11 @@ function ReportPost() {
         progress: undefined,
         theme: "light",
       });
-      
+
     } catch (error) {
-      console.log(error, 'erorrrrr');
+      console.log(error);
     }
   }
-
-  console.log(update, 'updateeeeeeeeeee');
 
   return (
     <>
@@ -140,7 +130,7 @@ function ReportPost() {
           <div className='flex justify-center'>
             <div class=" p-4 items-center justify-center w-[680px] rounded-xl group sm:flex space-x-6 bg-gray-500 bg-opacity-50 shadow-xl hover:rounded-2xl">
               {modalData?.image ?
-                <img class="mx-auto  block w-4/12 h-40 rounded-lg max-w-lg transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0" alt="art cover" src={'/images/' + modalData.image} />
+                <img class="mx-auto  block w-4/12 h-40 rounded-lg max-w-lg transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0" alt="art cover" src={PF + modalData.image} />
                 : null}
               {reportData.map((data) => {
                 let reportedOn = moment(data?.createdAt).format("YYYY-MM-DD")

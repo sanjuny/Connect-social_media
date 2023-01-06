@@ -20,7 +20,6 @@ function Userlogin() {
   const onSubmit = async (UserRequest) => {
     try {
       const { data } = await Login(UserRequest)
-      console.log(data, 'kkk');
       if (data.auth) {
         localStorage.setItem('userToken', data.token)
         localStorage.setItem('user', JSON.stringify(data.users))

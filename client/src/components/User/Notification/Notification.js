@@ -8,15 +8,15 @@ import dummy from '../../../Images/dummy.jpg'
 
 function Notification() {
 
+    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+
     /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
     /* ---------------------------- current userdata ---------------------------- */
 
     /* ------------------------------ notification ------------------------------ */
 
-
     useEffect(() => {
-        console.log('effect called');
         socket.on("getNotification", data => {
             setNotCount((prev) => [...prev, data])
         })
@@ -28,7 +28,6 @@ function Notification() {
     useEffect(() => {
         const fetchNotifications = async () => {
             const { data } = await getAllNotification(userData._id)
-            console.log(data, 'fetchNotifications');
             setNotification(data)
         }
         fetchNotifications()
@@ -62,7 +61,7 @@ function Notification() {
                                             <div className="flex-shrink-0">
 
                                                 {noti.user?.image ?
-                                                    <img className="w-11 h-11 rounded-full" src={'/images/' + noti.user?.image} alt="Jese image" />
+                                                    <img className="w-11 h-11 rounded-full" src={PF + noti.user?.image} alt="Jese image" />
                                                     :
                                                     <img className="w-11 h-11 rounded-full" src={dummy} alt="Jese image" />
                                                 }

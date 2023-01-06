@@ -8,10 +8,10 @@ import { UserUpdation } from '../../../UserContext/userContext'
 
 
 function Feed() {
+    
 
     /* ---------------------------- current userdata ---------------------------- */
     const userData = useSelector(state => state.user)
-    console.log(userData, 'lolololooonhjgyugv');
     /* ---------------------------- current userdata ---------------------------- */
 
     const { likesUpdate, setLikesUpdate } = useContext(UserUpdation)
@@ -22,20 +22,15 @@ function Feed() {
     const [post, setpost] = useState([])
     const [comments, setcomments] = useState([])
 
-
-    console.log(comments, 'kkkkkkkkkkkkkkkk');
-    console.log(post, 'datafeed');
-
     useEffect(() => {
         const getUserPost = async () => {
             try {
                 const { data } = await getpost(userData._id)
-                console.log(data, 'koko');
                 setpost(data.sort((p1, p2) => {
                     return new Date(p2.createdAt) - new Date(p1.createdAt)
                 }))
             } catch (error) {
-                console.log(error, 'catch error');
+                console.log(error);
             }
         }
         getUserPost()

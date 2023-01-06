@@ -33,10 +33,6 @@ app.use('/api/admin', indexRouter);
 app.use('/api/', usersRouter);
 app.use('/api/chat', ChatRoute)
 app.use('/api/message', MessageRoute)
-// catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   next(createError(404));
-// });
 
 // error handler
 app.use(function (err, req, res, next) {

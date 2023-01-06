@@ -15,7 +15,6 @@ let Userinstance = axios.create(defaultOptions);
 // Set the AUTH token for any request
 Userinstance.interceptors.request.use(function (config) {
   const token = localStorage.getItem("userToken");
-  console.log(token, "verifyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
   config.headers.accesstoken = token;
   return config;
 });

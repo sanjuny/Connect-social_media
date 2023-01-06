@@ -19,7 +19,6 @@ io.on("connection", (socket) => {
                 socketId: socket.id
             })
         }
-        console.log('connected users', activeUsers);
         io.emit('get-users', activeUsers)
     })
 
@@ -28,8 +27,6 @@ io.on("connection", (socket) => {
     socket.on("send-message", (data) => {
         const { receiverId } = data;
         const user = activeUsers.find((user) => user.userId === receiverId)
-        console.log("sending from socket to : ", receiverId);
-        console.log('data', data);
         if (user) {
             io.to(user.socketId).emit("receive-message", data)
         }
@@ -38,7 +35,6 @@ io.on("connection", (socket) => {
 
     //send notification
     socket.on("send-notification", (data) => {
-        console.log(data, 'hellllllllooo');
         const { receiverId, senderId, type } = data;
         const receiver = activeUsers.find((user) => user.userId === receiverId)
         io.to(receiver?.socketId).emit("getNotification", {
@@ -51,7 +47,6 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         activeUsers = activeUsers.filter((user) => user.socketId !== socket.id)
-        console.log('user Disconnected', activeUsers);
         io.emit('get-users', activeUsers)
     })
 

@@ -7,10 +7,10 @@ import { UserUpdation } from '../../../UserContext/userContext'
 
 
 function RightBar() {
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER
 
   /* ---------------------------- current userdata ---------------------------- */
   const userData = useSelector(state => state.user)
-  console.log(userData, 'userdataaavgvhgavd');
   /* ---------------------------- current userdata ---------------------------- */
 
   const { profileUpdate, setProfileUpdate } = useContext(UserUpdation)
@@ -27,10 +27,9 @@ function RightBar() {
     const getuser = async (e) => {
       try {
         const { data } = await getSuggestionUser()
-        console.log(data, 'suggestion user');
         setSugge(data)
       } catch (error) {
-        console.log(error, 'catch error');
+        console.log(error);
       }
     }
     getuser()
@@ -49,7 +48,6 @@ function RightBar() {
     }
     try {
       const { data } = await findSearch(val)
-      console.log(data, 'jjjjjj');
       setSearchUser(data)
     } catch (error) {
       console.log(error);
@@ -60,14 +58,12 @@ function RightBar() {
 
 
   const follow = async (id) => {
-    console.log("reached");
     try {
       const { data } = await addfollow(userData._id, id)
-      console.log(data, 'follow log');
       setState(!State)
       setfeedsUpdate(!feedsUpdate)
     } catch (error) {
-      console.log(error, 'catch error');
+      console.log(error);
     }
   }
 
@@ -86,7 +82,7 @@ function RightBar() {
             <Link to={`/profile/${user.username}`}>
               <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-800 hover:text-blue-300 focus:outline-none">
                 <img class="object-cover z-50 w-10 h-10 rounded-full"
-                  src={'/images/' + user?.image} alt="username"
+                  src={PF + user?.image} alt="username"
                 />
                 <div class="w-full pb-2 z-50">
                   <div class="flex justify-between">
@@ -120,7 +116,7 @@ function RightBar() {
                               {obj.image ?
 
                                 <img className="inline-block h-10 w-10 rounded-full ml-4 mt-2"
-                                  src={'/images/' + obj.image}
+                                  src={PF + obj.image}
                                   alt="" />
                                 : <img className="inline-block h-10 w-10 rounded-full ml-4 mt-2"
                                   src={dummy}
