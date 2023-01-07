@@ -216,20 +216,11 @@ function LeftBar() {
                             <div className="flex-shrink-0 flex hover:bg-gray-800 rounded-full px-4 py-3 mt-12 mr-2">
                                 <div className="flex-shrink-0 group block">
                                     <Link to='/profile' className="flex items-center">
-                                        {username !== userData.username ?
-                                            <div>
-                                                <img className="inline-block h-10 w-10 rounded-full"
-                                                    src={connect}
-                                                    alt="" />
-                                            </div>
-                                            :
-                                            <div>
-                                                <img className="inline-block h-10 w-10 rounded-full"
-                                                    src={PF + userData.image}
-                                                    alt="" />
-                                            </div>
-                                        }
-
+                                        <div>
+                                            <img className="inline-block h-10 w-10 rounded-full"
+                                                src={PF + userData.image}
+                                                alt="" />
+                                        </div>
                                         <div className="ml-3">
                                             <p className="text-base leading-6 font-medium text-white">
                                                 {userData.name}

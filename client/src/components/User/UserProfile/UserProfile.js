@@ -198,9 +198,7 @@ function UserProfile() {
                             />
                         </div>
 
-
                         <div className="p-4">
-                            {username !== userData.username ?
                                 <div className="relative flex w-full space-x-4 space-x-reverse">
                                     <div className="flex flex-1">
                                         <div style={{ marginTop: '-96px' }}>
@@ -222,30 +220,7 @@ function UserProfile() {
                                         </button>
                                     </div>
                                 </div>
-                                :
-                                <div className="relative flex w-full space-x-4 space-x-reverse">
-                                    <div className="flex flex-1">
-                                        <div style={{ marginTop: '-96px' }}>
-                                            <div style={{ height: '144px', width: '144px' }}
-                                                className="md rounded-full relative avatar">
-                                                <img style={{ height: '144px', width: '144px' }}
-                                                    className="md rounded-full relative border-4 border-gray-900"
-                                                    src={connect}
-                                                    alt="" />
-                                                <div className="absolute"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col text-right">
-                                        <button
-                                            onClick={openMODAL}
-                                            className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                                            Edit Profile
-                                        </button>
-                                    </div>
-                                </div>
-                            }
-
+                            
 
                             <div className="space-y-1 justify-center w-full mt-3 ml-3">
 

@@ -34,17 +34,17 @@ const SignupSchema = mongoose.Schema({
         type: Array,
         default: []
     },
-    image:{
+    image: {
         type: String,
-        default:null
+        default: "download.png"
     },
-    coverPic:{
-        type:String,
-        default:null
+    coverPic: {
+        type: String,
+        default: null
     },
-    bio:{
-        type:String,
-        default:null
+    bio: {
+        type: String,
+        default: null
     }
 })
 
