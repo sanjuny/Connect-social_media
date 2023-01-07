@@ -116,6 +116,7 @@ const postSignup = async (req, res) => {
 const postLogin = async (req, res) => {
   try {
     const users = await Users.findOne({ email: req.body.email })
+
     if (users.status == 'inactive') {
       res.status(200).json({ message: 'Entered Email is blocked' })
     } else {
@@ -356,12 +357,12 @@ const getMyFollowers = async (req, res) => {
     if (user) {
       const followers = await Promise.all(
         user?.followers?.map((id) => {
-          return Users.findOne({ _id: id }, { username: 1, name: 1, profilePic: 1 })
+          return Users.findOne({ _id: id }, { username: 1, name: 1, image: 1 })
         })
       )
       res.status(200).json(followers)
     } else {
-      res.status(402).json('pleadse tru again')
+      res.status(402).json('pleadse try again')
     }
   } catch (error) {
     res.status(500).json(error)
@@ -371,15 +372,17 @@ const getMyFollowers = async (req, res) => {
 /* ---------------------------- GET MY FOLLOWING ---------------------------- */
 
 const getMyFollowing = async (req, res) => {
+  console.log('hellooleoo');
   try {
     const user = await Users.findById(req.params.id)
     if (user) {
       const following = await Promise.all(
         user?.following?.map((id) => {
-          return Users.findOne({ _id: id }, { username: 1, name: 1, profilePic: 1 })
+          return Users.findOne({ _id: id }, { username: 1, name: 1, image: 1 })
         })
       )
       res.status(200).json(following)
+      console.log(res, 'oeoeoeoeo');
     } else {
       res.status(402).json('pleadse tru again')
     }

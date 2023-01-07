@@ -65,9 +65,6 @@ function AdminLogin() {
           </div>
           <button className="mt-5 w-full border p-2 bg-gradient-to-r from-gray-800 bg-gray-500 text-white rounded-[4px] hover:bg-slate-400 scale-105 duration-300">Sign in</button>
         </form>
-        <div className="mt-5 flex justify-between text-sm text-gray-600">
-          <a href="#">Forgot password?</a>
-        </div>
       </div>
     </div>
   )

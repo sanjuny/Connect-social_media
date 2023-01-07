@@ -16,22 +16,22 @@ import store from './Redux/Store'
 import Updation from './UserContext/userContext'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ErrorPage from './Pages/User/ErrorPage'
 
 function App() {
   return (
     <div className='App'>
 
       <Router>
-        <Routes> {/* userside */}
-          <Route path='/' element={<LandingPages />} />
-          <Route path='/signup' element={<SignupPage />} />
-        </Routes>
-
-
         <Provider store={store}>
           <Updation>
-
             <Routes> {/* userside */}
+
+              <Route path='/' element={<LandingPages />} />
+              <Route path='/signup' element={<SignupPage />} />
+
+
+
 
               <Route path='/login' element={<LoginPage />} />
               <Route path='/home' element={<HomePages />} />
@@ -40,19 +40,20 @@ function App() {
               <Route path='/profile/:username' element={<ProfiePage />} />
               <Route path='/notification' element={<NotificationPage />} />
 
-            </Routes>
 
+
+
+              <Route path='/adminlogin' element={<AdminLoginPage />} />
+              <Route path='/admindashboard' element={<AdminDashboardPage />} />
+              <Route path='/usermanagement' element={<UserManagementPage />} />
+              <Route path='/reportpost' element={<ReportPostPage />} />
+
+              <Route path='*' element={<ErrorPage />} />
+
+
+            </Routes>
           </Updation>
         </Provider>
-
-
-        <Routes> {/* adminside */}
-          <Route path='/adminlogin' element={<AdminLoginPage />} />
-          <Route path='/admindashboard' element={<AdminDashboardPage />} />
-          <Route path='/usermanagement' element={<UserManagementPage />} />
-          <Route path='/reportpost' element={<ReportPostPage />} />
-        </Routes>
-
       </Router>
       <ToastContainer />
 

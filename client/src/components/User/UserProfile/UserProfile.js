@@ -74,11 +74,11 @@ function UserProfile() {
         }
         try {
             const { data } = await getUserFollowing(id)
+            console.log(data, 'data');
             setMyFollowers(data)
             setFollowMod(!followMod)
         } catch (error) {
             console.log(error);
-
         }
     }
 
@@ -320,12 +320,13 @@ function UserProfile() {
 
                     {
                         myFollowers.map((persons) => {
+                            console.log(persons, 'persons');
                             return (
                                 <div class=" z-10 w-60 bg-white">
-                                    <ul class="overflow-y-auto py-1 h-auto hover:bg-gray-800 hover:text-blue-300" aria-labelledby="dropdownUsersButton">
+                                    <ul class="overflow-y-auto py-1 h-auto hover:bg-gray-800 hover:text-blue-300">
                                         <li>
                                             <a class="flex items-center py-2 px-4 hover:bg-gray-800 hover:text-blue-300">
-                                                <img class="mr-2 w-6 h-6 rounded-full" src={PF + persons.user.image} alt="Jese image" />
+                                                <img class="mr-2 w-6 h-6 rounded-full" src={PF + persons.image} alt="Jese image" />
                                                 {persons.username}
                                             </a>
                                         </li>

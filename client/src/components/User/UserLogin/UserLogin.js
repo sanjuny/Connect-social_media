@@ -51,13 +51,13 @@ function Userlogin() {
               <img src={image} style={{ height: '50px' }}></img>
             </div>
 
-            <div className="py-6 space-x-2">
+            {/* <div className="py-6 space-x-2">
               <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">f</span>
               <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</span>
               <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">in</span>
-            </div>
+            </div> */}
             <p className="text-gray-100">
-              or sign in with email
+              Sign in with email
             </p>
             <form className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto" onSubmit={handleSubmit(onSubmit)}>
               <div className="pb-2 pt-4">

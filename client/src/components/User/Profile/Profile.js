@@ -270,13 +270,12 @@ function Profile() {
                                 <ul class="overflow-y-auto py-1 h-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
                                     <li>
                                         <a class="flex items-center py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <img class="mr-2 w-6 h-6 rounded-full" src={PF + persons.user.image} alt="Jese image" />
+                                            <img class="mr-2 w-6 h-6 rounded-full" src={PF + persons.image} alt="Jese image" />
                                             {persons.username}
                                         </a>
                                     </li>
                                 </ul>
                             </div>
-
                         )
                     })
                 }
