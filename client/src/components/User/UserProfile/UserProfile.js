@@ -208,7 +208,7 @@ function UserProfile() {
                                                 className="md rounded-full relative avatar">
                                                 <img style={{ height: '144px', width: '144px' }}
                                                     className="md rounded-full relative border-4 border-gray-900"
-                                                    src={connect}
+                                                    src={PF + userData.image}
                                                     alt="" />
                                                 <div className="absolute"></div>
                                             </div>
@@ -230,7 +230,7 @@ function UserProfile() {
                                                 className="md rounded-full relative avatar">
                                                 <img style={{ height: '144px', width: '144px' }}
                                                     className="md rounded-full relative border-4 border-gray-900"
-                                                    src={PF + userData.image}
+                                                    src={connect}
                                                     alt="" />
                                                 <div className="absolute"></div>
                                             </div>

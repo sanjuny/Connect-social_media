@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import image from '../../../Images/logowhite.png'
+import connect from '../../../Images/dummy.jpg'
 import { BiHome, BiLogOutCircle } from 'react-icons/bi'
 import { IoIosNotifications } from 'react-icons/io'
 import { AiOutlineMessage } from 'react-icons/ai'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { addpost, fetchNoCounts, notificationManage } from '../../../Api/UserApi/UserRequest'
 import { useDispatch, useSelector } from 'react-redux'
 import { confirmAlert } from 'react-confirm-alert';
@@ -17,6 +18,7 @@ function LeftBar() {
     const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const navigate = useNavigate()
     const [err, seterr] = useState('')
+    let username = useParams().username
 
     const { postsUpdate, setpostsUpdate } = useContext(UserUpdation)
 
@@ -214,11 +216,20 @@ function LeftBar() {
                             <div className="flex-shrink-0 flex hover:bg-gray-800 rounded-full px-4 py-3 mt-12 mr-2">
                                 <div className="flex-shrink-0 group block">
                                     <Link to='/profile' className="flex items-center">
-                                        <div>
-                                            <img className="inline-block h-10 w-10 rounded-full"
-                                                src={PF + userData.image}
-                                                alt="" />
-                                        </div>
+                                        {username !== userData.username ?
+                                            <div>
+                                                <img className="inline-block h-10 w-10 rounded-full"
+                                                    src={connect}
+                                                    alt="" />
+                                            </div>
+                                            :
+                                            <div>
+                                                <img className="inline-block h-10 w-10 rounded-full"
+                                                    src={PF + userData.image}
+                                                    alt="" />
+                                            </div>
+                                        }
+
                                         <div className="ml-3">
                                             <p className="text-base leading-6 font-medium text-white">
                                                 {userData.name}
