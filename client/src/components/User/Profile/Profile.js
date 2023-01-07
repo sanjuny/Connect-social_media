@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { BiArrowBack } from 'react-icons/bi'
-import { FaRegComment, FaRegHeart } from 'react-icons/fa'
-import { FcLike } from 'react-icons/fc'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router';
 import { addcomment, addfollow, addlike, createChat, getcomments, getProfilePost, getUserByUsername, getUserFollowers, getUserFollowing, userPost } from '../../../Api/UserApi/UserRequest';
-import dummy from '../../../Images/dummy.jpg'
-import connect from '../../../Images/dummy.jpg'
+// import dummy from '../../../Images/dummy.jpg'
+// import connect from '../../../Images/dummy.jpg'
+import cover from '../../../Images/cover-1.jpg'
 import { format, render, cancel, register } from 'timeago.js';
 import { UserUpdation } from '../../../UserContext/userContext'
-import { Link } from 'react-router-dom'
 import { addMessage } from '../../../Redux/StoreAnother'
 
 
@@ -162,9 +160,9 @@ function Profile() {
                 </div>
                 <div>
                     <div className="w-full bg-cover bg-no-repeat bg-center"
-                        style={{ height: '200px', backgroundImage: `url(${connect})` }}>
+                        style={{ height: '200px', backgroundImage: `url(${cover})` }}>
                         <img className="opacity-0 w-full h-full"
-                            src={connect} alt="" />
+                            src={cover} alt="" />
                     </div>
 
                     <div className="p-4">

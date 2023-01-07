@@ -327,7 +327,6 @@ const getProfilePost = async (req, res) => {
   } catch (error) {
     res.status(500).json(error)
   }
-
 }
 
 /* --------------------- GET USER DETAILS WITH USERNAME --------------------- */
@@ -372,7 +371,6 @@ const getMyFollowers = async (req, res) => {
 /* ---------------------------- GET MY FOLLOWING ---------------------------- */
 
 const getMyFollowing = async (req, res) => {
-  console.log('hellooleoo');
   try {
     const user = await Users.findById(req.params.id)
     if (user) {
@@ -382,7 +380,6 @@ const getMyFollowing = async (req, res) => {
         })
       )
       res.status(200).json(following)
-      console.log(res, 'oeoeoeoeo');
     } else {
       res.status(402).json('pleadse tru again')
     }
@@ -446,7 +443,7 @@ const report = async (req, res) => {
 
 const getAllNotification = async (req, res) => {
   try {
-    const notifications = await Notification.findOne({ user: req.params.id }, { _id: 0, Notification: 1 }).sort({ _id: -1 }).populate("Notification.user", "username image")
+    const notifications = await Notification.findOne({ userId: req.params.id }, { _id: 0, Notification: 1 }).sort({ _id: -1 }).populate("Notification.user", "username image")
     const notify = notifications.Notification.reverse()
     res.status(200).json(notify)
   } catch (error) {

@@ -50,12 +50,6 @@ function Userlogin() {
             <div className='flex justify-center'>
               <img src={image} style={{ height: '50px' }}></img>
             </div>
-
-            {/* <div className="py-6 space-x-2">
-              <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">f</span>
-              <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">G+</span>
-              <span className="w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white">in</span>
-            </div> */}
             <p className="text-gray-100">
               Sign in with email
             </p>

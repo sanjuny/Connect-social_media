@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { BiArrowBack, BiEdit } from 'react-icons/bi'
-import dummy from '../../../Images/dummy.jpg'
+import cover from '../../../Images/cover-1.jpg'
 import connect from '../../../Images/dummy.jpg'
 import { useSelector } from 'react-redux'
 import { editphoto, editPostDetails, getProfilePost, getUserByUsername, getUserFollowers, getUserFollowing, updateDetails } from '../../../Api/UserApi/UserRequest'
@@ -8,6 +8,7 @@ import { format, render, cancel, register } from 'timeago.js';
 import { useParams } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { update } from '../../../Redux/StoreSlice'
+
 
 
 
@@ -74,7 +75,6 @@ function UserProfile() {
         }
         try {
             const { data } = await getUserFollowing(id)
-            console.log(data, 'data');
             setMyFollowers(data)
             setFollowMod(!followMod)
         } catch (error) {
@@ -83,8 +83,6 @@ function UserProfile() {
     }
 
     /* ----------------------------- show following ----------------------------- */
-
-
 
     /* ------------------------------ getaddedpost ------------------------------ */
 
@@ -108,6 +106,7 @@ function UserProfile() {
     /* ------------------------------ getaddedpost ------------------------------ */
 
     /* ------------------------------- editprofile ------------------------------ */
+    const [err, seterr] = useState('')
 
     const [open, setOpen] = useState(false)
 
@@ -132,28 +131,33 @@ function UserProfile() {
         const newEdit = {
             ...edit
         }
-        setOpen(!open)
+        if (newEdit.name !== '') {
+            setOpen(!open)
+            seterr(!err, 'Unable to Submit the request')
 
-        if (file) {
-            const datas = new FormData();
-            const filename = file.name
-            datas.append("file", file)
-            datas.append("name", filename)
+            if (file) {
+                const datas = new FormData();
+                const filename = file.name
+                datas.append("file", file)
+                datas.append("name", filename)
+                try {
+                    const { data } = await editphoto(datas)
+                    edit.image = data.image
+                } catch (error) {
+                    console.log(error);
+                }
+
+                dispatch(update({ ...userData, ...edit }))
+            }
+
             try {
-                const { data } = await editphoto(datas)
-                edit.image = data.image
+                dispatch(update({ ...userData, ...edit }))
+                const { data } = updateDetails({ ...edit }, userId)
             } catch (error) {
                 console.log(error);
             }
-
-            dispatch(update({ ...userData, ...edit }))
         }
 
-        try {
-            const { data } = updateDetails({ ...edit }, userId)
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     // handlechange
@@ -162,43 +166,10 @@ function UserProfile() {
         setedit({ ...edit, [e.target.name]: e.target.value })
     }
 
+
+
     /* ------------------------------- editprofile ------------------------------ */
 
-    /* ---------------------------- edit cover photo ---------------------------- */
-    // const [coverPic, setCoverPic] = useState("")
-    // const [coverPicEdit, setCoverPicEdit] = useState(false)
-    // const [showImage, setShowImage] = useState("")
-
-
-    // const handleCoverImage = (e) => {
-    //     setShowImage(URL.createObjectURL(e.target.files[0]))
-    //     setCoverPic(e.target.files[0])
-    // }
-
-    // const handleCoverClose = () => {
-    //     setCoverPic('')
-    //     setShowImage('')
-    //     setCoverPicEdit(false)
-
-    // }
-
-    // const handleCoverPic = async (e) => {
-    //     let coverData
-    //     if (coverPic) {
-    //         coverData = new FormData()
-    //         coverData.append("file", coverPic)
-    //         coverData.append("userId", userData._id)
-    //         try {
-    //             const { data } = await updateCoverPic(coverData)
-    //         } catch (error) {
-
-    //         }
-    //     }
-
-    // }
-
-
-    /* ---------------------------- edit cover photo ---------------------------- */
     return (
         <>
             <div className=" ml-14 md:ml-0 flex overflow-y-auto fixed  h-screen no-scrollbar" style={{ width: '990px', backgroundColor: 'black' }}>
@@ -217,14 +188,16 @@ function UserProfile() {
                     </div>
                     <div>
                         <div className="w-full bg-cover bg-no-repeat bg-center"
-                            style={{ height: '200px', backgroundImage: `url(${connect})` }}>
-                            <button
+                            style={{ height: '200px', backgroundImage: `url(${cover})` }}>
+                            {/* <button
                                 className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
                                 <BiEdit />
-                            </button>
+                            </button> */}
                             <img className="opacity-0 w-full h-full"
-                                src={connect} alt="" />
+                                src={cover} alt=""
+                            />
                         </div>
+
 
                         <div className="p-4">
                             {username !== userData.username ?
@@ -278,14 +251,14 @@ function UserProfile() {
 
                                 {!username ? <>
                                     <div>
-                                        <h2 className="text-xl leading-6 font-bold text-white">{userData?.name}</h2>
-                                        <p className="text-sm leading-5 font-medium text-gray-600">@{userData?.username}</p>
+                                        <h2 className="text-xl leading-6 font-bold text-white">{user?.name}</h2>
+                                        <p className="text-sm leading-5 font-medium text-gray-600">@{user?.username}</p>
                                     </div>
                                 </>
                                     : <>
                                         <div>
-                                            <h2 className="text-xl leading-6 font-bold text-white">{user?.name}</h2>
-                                            <p className="text-sm leading-5 font-medium text-gray-600">@{user?.username}</p>
+                                            <h2 className="text-xl leading-6 font-bold text-white">{userData?.name}</h2>
+                                            <p className="text-sm leading-5 font-medium text-gray-600">@{userData?.username}</p>
                                         </div>
                                     </>
                                 }
@@ -320,7 +293,6 @@ function UserProfile() {
 
                     {
                         myFollowers.map((persons) => {
-                            console.log(persons, 'persons');
                             return (
                                 <div class=" z-10 w-60 bg-white">
                                     <ul class="overflow-y-auto py-1 h-auto hover:bg-gray-800 hover:text-blue-300">
@@ -393,6 +365,7 @@ function UserProfile() {
                         <div className="relative  my-6 mx-auto ">
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none bg-gradient-to-r from-gray-900 bg-gray-600" >
                                 <form>
+                                    {err && <div className=" w-98 px p-2 mb-2 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {err}</div>}
                                     <div className="flex  p-3 border-b border-solid border-slate-200 rounded-t-lg">
                                         <div className="flex justify-center w-full">
                                             <h3 className="  mt-5 text-3xl font-bold text-white">
@@ -456,54 +429,6 @@ function UserProfile() {
 
                 ) : null
             }
-
-            {/* <div className="justify-center  items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none" >
-                <div className="relative  my-6 mx-auto ">
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none bg-gradient-to-r from-gray-900 bg-gray-600" >
-                        <form>
-                            <div className="flex  p-3 border-b border-solid border-slate-200 rounded-t-lg">
-                                <div className="flex justify-center w-full">
-                                    <h3 className="  mt-5 text-3xl font-bold text-white">
-                                        Edit cover photo ...
-                                    </h3>
-                                </div>
-                                <button
-                                    className=" ml-auto bg-transparent border-0 text-black  float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                >
-                                    <span onClick={closeMODAl} className="bg-transparent text-black  h-6 w-6 text-2xl block outline-none focus:outline-none">
-                                        ×
-                                    </span>
-                                </button>
-                            </div>
-                            <div className="flex relative p-6 flex-col w-auto md:w-[600px] gap-3 items-center object-cover " >
-                                <div className='flex justify-center items-center '>
-                                    <label className="flex flex-col rounded-lg border-4 w-full h-30 p-10 group text-center">
-                                        <div className="h-full w-full text-center flex flex-col items-center justify-center  ">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-blue-400 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                                            </svg>
-                                        </div>
-                                        <input
-                                            type="file"
-                                            name='file'
-                                            onChange={(e) => { { setFile(e.target.files[0]) } }}
-                                            className="hidden" />
-                                    </label>
-                                </div>
-                            </div>
-                            <div className="flex items-center justify-center bg-gradient-to-r from-gray-900 bg-gray-600 p-1 border-t border-solid border-slate-200 rounded-b-lg">
-                                <button onClick={(e) => handleEdit(e)} type="button" className="my-5 w-72 flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                            font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300">
-                                    Save Changes
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div> */}
-
-
-
         </>
 
     )

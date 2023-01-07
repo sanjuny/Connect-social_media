@@ -18,7 +18,7 @@ router.post('/addNewPost', upload.single('file'), postUpload)
 
 router.post('/photo', upload.single('file'), (req, res) => {
     let data = {
-        image: req.file.filename
+        image: req.file.filename,
     }
     res.status(200).json(data)
 })
