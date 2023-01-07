@@ -99,6 +99,7 @@ const postSignup = async (req, res) => {
         phone: parseInt(phone),
         password,
       })
+      console.log('newuser',newUser);
       newUser.save().then((OtpResult) => {
         sendOtp(OtpResult, res)
         res.status(200).json({ auth: true, data: OtpResult })
