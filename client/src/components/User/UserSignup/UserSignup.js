@@ -19,6 +19,7 @@ function UserSignup() {
   const [OtpError, setOtpError] = useState('')
   const [UserDetails, setUserDetails] = useState('')
   const [data, setData] = useState({})
+  
   const onSubmit = async (UserRequest) => {
     try {
       const { data } = await Signup(UserRequest)

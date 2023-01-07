@@ -36,7 +36,7 @@ const SignupSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        default: "download.png"
+        default: "sdfgh"
     },
     coverPic: {
         type: String,
