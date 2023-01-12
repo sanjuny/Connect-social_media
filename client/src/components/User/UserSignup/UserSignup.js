@@ -155,7 +155,8 @@ function UserSignup() {
                   className=" border-b border-b-white focus:outline-none block w-full p-4 text-lg rounded-smborder-4 bg-black "
                   {...register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ })} />
                 <error className='text-red-600'>
-                  {errors.email?.type === "required" && "Email is required"}
+                  {errors.
+                  email?.type === "required" && "Email is required"}
                   {errors.email?.type === "pattern" && "Email is invalid"}
                 </error>
               </div>
